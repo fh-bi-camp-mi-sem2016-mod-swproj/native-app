@@ -1,0 +1,3 @@
+rootProject.name = 'findme'
+
+include ':app'
