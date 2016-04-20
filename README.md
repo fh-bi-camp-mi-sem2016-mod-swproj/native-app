@@ -13,7 +13,7 @@ To install those run the following:
 ```bash
 sudo apt-get install nodejs
 sudo apt-get install npm
-npm install react-native
+npm install -g react-native-cli
 ```
 
 ### Project setup
