@@ -31,7 +31,7 @@ The following packages are needed:
 
 - build-tools 23.0.1
 - latest SDK Tools
-- latest SDk Plattform-tools
+- latest SDK Plattform-tools
 - Android 6.0 SDK Platform
 - Android Support Repository
 - Android Support Library
