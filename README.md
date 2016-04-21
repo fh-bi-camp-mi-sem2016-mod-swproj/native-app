@@ -58,6 +58,10 @@ Before running you have to tell Gradle (The build-system of Android) where to
 look for the Android SDK. To do so, go into the `android` folder and create a
 file named `local.properties`. Add `sdk.dir=C:\\Path\\To\\The\\SDK`.
 
+You also need to setup ADB. (Android Debug Bridge) On your Phone, [activate the
+developer settings](http://www.androidcentral.com/how-enable-developer-settings-android-42)
+and check ADB Debugging. On your computer you need to [add ADB to your PATH](http://forum.xda-developers.com/showthread.php?t=1161779).
+
 To run the Application on your phone: open a second terminal, go into the
 project folder and run:
 
