@@ -4,14 +4,18 @@
  */
 
 import React, {AppRegistry, Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Image, Alert,} from 'react-native';
+import ViewContainer from  '../components/frontend/ViewContainer'
+import StatusBarBackground from  '../components/frontend/StatusBarBackground'
+import User from '../components/backend/User.js'
 
-
+User.currentUser = new User("1","Franz","Beckbauer", "Test2173162","13.7.1955","m")
 var bild = {posters: {thumbnail: 'http://q-review.co.uk/wp-content/uploads/2014/03/your-logo-here.png'}};
 
-
-class findme extends Component {
+class LoginScreen extends Component {
     render() {
         return (
+        // <ViewContainer>
+            //<StatusBarBackground styles = {{backgroundColor: "mistyrose"}} />
             <View style={styles.appContainer}>
                 <View style={styles.titleView}>
 
@@ -42,18 +46,21 @@ class findme extends Component {
                         </TextInput>
                     </View>
 
-                <TouchableHighlight style ={styles.button} onPress={this.showAlert}>
+                <TouchableHighlight style ={styles.button} onPress={(event) => this._navigateToProfile()}>
                     <Text style={styles.btnText}> Einloggen </Text>
                 </TouchableHighlight>
 
             </View>
+           // </ViewContainer>
 
 
         );
     }
 
-    showAlert(){
-        Alert.alert('Awesome', 'pushed the Button', [{text: 'ok'}])
+    _navigateToProfile(){
+        this.props.navigator.push({
+            ident: "Profile"
+        })
     }
 }
 
@@ -117,5 +124,4 @@ const styles = StyleSheet.create({
     }
 });
 
-
-AppRegistry.registerComponent('findme', () => findme);
+module.exports = LoginScreen
