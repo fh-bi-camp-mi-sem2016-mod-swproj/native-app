@@ -4,14 +4,18 @@
  */
 
 import React, {AppRegistry, Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Image, Alert,} from 'react-native';
+import ViewContainer from  '../components/ViewContainer'
+import StatusBarBackground from  '../components/StatusBarBackground'
 
 
 var bild = {posters: {thumbnail: 'http://q-review.co.uk/wp-content/uploads/2014/03/your-logo-here.png'}};
 
 
-class findme extends Component {
+class LoginScreen extends Component {
     render() {
         return (
+        // <ViewContainer>
+            //<StatusBarBackground styles = {{backgroundColor: "mistyrose"}} />
             <View style={styles.appContainer}>
                 <View style={styles.titleView}>
 
@@ -47,6 +51,7 @@ class findme extends Component {
                 </TouchableHighlight>
 
             </View>
+           // </ViewContainer>
 
 
         );
@@ -117,5 +122,4 @@ const styles = StyleSheet.create({
     }
 });
 
-
-AppRegistry.registerComponent('findme', () => findme);
+module.exports = LoginScreen
