@@ -4,17 +4,9 @@
  */
 
 import React, {Fetch, AppRegistry, Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Image, Alert, ListView, TouchableOpacity} from 'react-native';
-import ViewContainer from  '../components/ViewContainer'
-import StatusBarBackground from  '../components/StatusBarBackground'
+import ViewContainer from  '../components/frontend/ViewContainer'
+import StatusBarBackground from  '../components/frontend/StatusBarBackground'
 import _ from 'lodash'
-
-const people =[
-    {id: "1", firstName: "Ruben", lastName: "Blabla" , username: "Rblabla" , offence: "Beleidigung" },
-    {id: "2", firstName: "Benedikt", lastName: "Struzek" , username: "Bstruzek" , offence: "Belästigung" },
-    {id: "3", firstName: "Dennis", lastName: "Starke" , username: "Dstarke" , offence: "Geilheit" },
-    {id: "4", firstName: "Florian", lastName: "Eimer" , username: "Feimer" , offence: "Dauerdruck" },
-    {id: "5", firstName: "Fynn", lastName: "Kloepper" , username: "Fkloepper" , offence: "erHatDochKeineAhnung" }
-]
 
 class AdminScreen extends Component {
 
@@ -37,6 +29,7 @@ class AdminScreen extends Component {
         )
     }
 }*/
+    
     constructor(props){
         super(props);
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2});
@@ -51,7 +44,7 @@ class AdminScreen extends Component {
     }
     componentDidMount(){
         this.setState({
-            dataSource:this.state.dataSource.cloneWithRows(this.state.ds)
+            dataSource:this.state.dataSource.cloneWithRows(people)
         })
 
     }
@@ -104,20 +97,7 @@ class AdminScreen extends Component {
 
         Alert.alert('Gemeldeter Benutzer: ','hier steht der gemeldete Benutzer', [{text: 'ok'}])
     }
-
-    showAlert2()
-    {
-        fetch("http://192.168.13.75:5984/findme/hallo", {"method": "GET"})
-            .then((response) => response.json())
-            .then((responseData) => {
-                Alert.alert(
-                    "GET Response",
-                    "Search Query -> " + responseData.search,
-                    [{text: 'ok'}],
-                )
-            })
-            .done();
-    }
+    
 }
 
 const styles = StyleSheet.create({

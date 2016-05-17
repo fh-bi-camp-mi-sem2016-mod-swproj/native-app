@@ -6,9 +6,12 @@
  * https://github.com/facebook/react-native
  */
 
-import React, {AppRegistry, Component, Navigator, StyleSheet} from 'react-native';
+import React, {AppRegistry, Text, Component, Navigator, StyleSheet} from 'react-native';
+import ViewContainer from  './components/frontend/ViewContainer'
+import StatusBarBackground from  './components/frontend/StatusBarBackground'
 import AdminScreen from './screens/AdminScreen'
 import LoginScreen from './screens/LoginScreen'
+import ProfileScreen from './screens/ProfileScreen'
 
 class findme extends Component {
 
@@ -17,26 +20,34 @@ class findme extends Component {
             navigator
         }
         switch (route.ident) {
-//            case "Login":
-//                return [
-//                    <LoginScreen {...globalNavigatorProps} />
-//                ]
+            case "Login":
+                return [
+                    <LoginScreen {...globalNavigatorProps} />
+               ]
             case "Admin":
                 return [
                     <AdminScreen {...globalNavigatorProps} />
                 ]
+            case "Profile":
+                return [
+                    <ProfileScreen {...globalNavigatorProps} />
+                ]
             //More Cases
             default:
-                return [
-                    <LoginScreen {...globalNavigatorProps} />
-                ]
+                return (
+                    <ViewContainer>
+                        <StatusBarBackground/>
+                        <Text> {`Something went Wrong ${route}`}</Text>
+                    </ViewContainer>
+
+                )
         }
     }
 
     render() {
         return (
             <Navigator
-                initialRoute={{ident:"LoginScreen"}}
+                initialRoute={{ident:"Login"}}
                 ref="appNavigator"
                 style={styles.navigatorStyles}
                 renderScene={ this._renderScene } />
