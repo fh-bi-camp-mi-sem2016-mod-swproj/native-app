@@ -3,7 +3,7 @@
  * https://github.com/facebook/react-native
  */
 
-import React, {Fetch, AppRegistry, Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Image, Alert, ListView} from 'react-native';
+import React, { Fetch, AppRegistry, Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Image, Alert, ListView} from 'react-native';
 
 
 class findme extends Component {
@@ -61,7 +61,7 @@ class findme extends Component {
                         renderRow={this.renderRow.bind(this)}>
                     </ListView>
                 </View>
-                <TouchableHighlight style ={styles.button} onPress={this.showAlert2}>
+                <TouchableHighlight style ={styles.button} onPress={()=>this._createUser("test@mail.de","meier70")}>
                     <Text style={styles.btnText}> melden </Text>
                 </TouchableHighlight>
 
@@ -75,19 +75,89 @@ class findme extends Component {
         Alert.alert('Awesome', 'pushed the Button', [{text: 'ok'}])
     }
 
-    showAlert2()
+	
+    _login(pEMail, pPassword)
     {
-        fetch("http://192.168.13.75:5984/findme/hallo", {"method": "GET"})
-            .then((response) => response.json())
-            .then((responseData) => {
-                Alert.alert(
-                    "GET Response",
-                    "Search Query -> " + responseData.search,
-                    [{text: 'ok'}],
-                )
-            })
-            .done();
+        fetch('https://couchdb.cloudno.de/findme/user_' + pEMail)
+            .then((response) => response.text())
+            .then((responseText) => {console.log(responseText);
+
+            //Alert.alert('Rückgabe', pEMail + " - " +  pPassword, [{text: 'ok'}])
+
+            var doctype;
+
+            var id;
+            var firstname;
+            var lastname;
+            var password;
+            var birthdate;
+            var sex;
+
+            JSON.parse(responseText, function(k, v) {
+                if(k == 'doctype'){
+                    doctype = v;
+                } else if(k == '_id'){
+                    id = v;
+                } else if (k == 'firstname'){
+                    firstname = v;
+                } else if (k == 'lastname'){
+                    lastname = v;
+                } else if (k == 'password'){
+                    password = v;
+                } else if (k == 'birthdate'){
+                    birthdate = v;
+                } else if (k == 'sex'){
+                    sex = v;
+                }
+                console.log(k + ": " + v);
+                //Alert.alert('Rückgabe', k+": "+ v , [{text: 'ok'}])
+            });
+
+            if(doctype == 'user') {
+                if (pPassword == password) {
+                    var user = new User(id, firstname, lastname, password, birthdate, sex);
+
+                    Alert.alert('Rückgabe', user.firstname + " " + user.lastname + " hat am "
+                        + user.birthdate + " Geburtstag und ist " + user.sex + ".", [{text: 'ok'}])
+                } else {
+                    Alert.alert('Fehler', "Das Passwort passt nicht zum Benutzer" , [{text: 'ok'}])
+                }
+            } else {
+                Alert.alert('Fehler', "Den Benutzer gibt es nicht!" , [{text: 'ok'}])
+            }
+
+
+		}).catch((error) => {
+			console.warn(error);
+		});
     }
+
+    _createUser(pEMail, pPassword){
+        Alert.alert('Fehler', 'https://couchdb.cloudno.de/findme/user_' + pEMail + ' -d "{ " password " : " pPassword " }" ' , [{text: 'ok'}])
+
+        /*
+        fetch('https://couchdb.cloudno.de/findme/user_' + pEMail + ' -d "{ " password " : " pPassword " }" ', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                _id: 'user_' + pEMail,
+                password: pPassword,
+            })
+        })
+        */
+    }
+}
+
+function User (pID, pFirstname, pLastname, pPassword, pBirthdate, pSex) {
+    this.id = pID;
+    this.firstname = pFirstname;
+    this.lastname = pLastname;
+    this.password = pPassword;
+    this.birthdate = pBirthdate;
+    this.sex = pSex;
 }
 
 const styles = StyleSheet.create({
