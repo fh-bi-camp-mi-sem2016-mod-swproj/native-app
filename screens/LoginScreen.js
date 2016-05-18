@@ -8,10 +8,15 @@ import ViewContainer from  '../components/frontend/ViewContainer'
 import StatusBarBackground from  '../components/frontend/StatusBarBackground'
 import User from '../components/backend/User.js'
 
-User.currentUser = new User("1","Franz","Beckbauer", "Test2173162","13.7.1955","m")
 var bild = {posters: {thumbnail: 'http://q-review.co.uk/wp-content/uploads/2014/03/your-logo-here.png'}};
 
 class LoginScreen extends Component {
+
+    state = {
+        username: '',
+        password: ''
+    };
+
     render() {
         return (
         // <ViewContainer>
@@ -32,8 +37,10 @@ class LoginScreen extends Component {
                         <Text style={styles.text}>
                             Login :
                         </Text>
-                        <TextInput style={styles.input} onChangeText={(text) => this.setState({text})} placeholder="Username">
-
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={username => this.setState({username})}
+                            placeholder="E-Mail">
                         </TextInput>
                     </View>
 
@@ -41,12 +48,14 @@ class LoginScreen extends Component {
                         <Text style={styles.text}>
                             Password :
                         </Text>
-                        <TextInput style={styles.input} onChangeText={(text) => this.setState({text})} placeholder="****">
-
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={password => this.setState({password})}
+                            placeholder="Passwort">
                         </TextInput>
                     </View>
 
-                <TouchableHighlight style ={styles.button} onPress={(event) => this._navigateToProfile()}>
+                <TouchableHighlight style ={styles.button} onPress={()=>this._login(this.state.username ,this.state.password)}>
                     <Text style={styles.btnText}> Einloggen </Text>
                 </TouchableHighlight>
 
@@ -55,6 +64,63 @@ class LoginScreen extends Component {
 
 
         );
+    }
+//onPress={(event) => this._navigateToProfile()}
+    _login(pEMail, pPassword)
+    {
+        fetch('https://couchdb.cloudno.de/findme/user_' + pEMail)
+            .then((response) => response.text())
+            .then((responseText) => {console.log(responseText);
+
+            console.log("Login-Parameter: " + pEMail + " - " +  pPassword);
+
+            var doctype = '';
+
+            var id = '';
+            var firstname = '';
+            var lastname = '';
+            var password = '';
+            var birthdate = '';
+            var sex = '';
+
+            JSON.parse(responseText, function(k, v) {
+                if(k == 'doctype'){
+                    doctype = v;
+                } else if(k == '_id'){
+                    id = v;
+                } else if (k == 'firstname'){
+                    firstname = v;
+                } else if (k == 'lastname'){
+                    lastname = v;
+                } else if (k == 'password'){
+                    password = v;
+                } else if (k == 'birthdate'){
+                    birthdate = v;
+                } else if (k == 'sex'){
+                    sex = v;
+                }
+                console.log(k + ": " + v);
+            });
+
+            if(doctype == 'user') {
+                if (pPassword == password) {
+                    User.currentUser = new User(id, firstname, lastname, password, birthdate, sex);
+
+                    // Debug ausgabe
+                    console.log(User.currentUser.firstname + " " + User.currentUser.lastname + " hat am "
+                       + User.currentUser.birthdate + " Geburtstag und ist " + User.currentUser.sex + ".");
+
+                    this._navigateToProfile();
+                } else {
+                    Alert.alert('Fehler', "Das Passwort passt nicht zum Benutzer" , [{text: 'ok'}])
+                }
+            } else {
+                Alert.alert('Fehler', "Den Benutzer gibt es nicht!" , [{text: 'ok'}])
+            }
+
+        }).catch((error) => {
+            console.warn(error);
+        });
     }
 
     _navigateToProfile(){
@@ -124,4 +190,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = LoginScreen
+module.exports = LoginScreen;
