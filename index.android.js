@@ -12,26 +12,41 @@ import StatusBarBackground from  './components/frontend/StatusBarBackground'
 import AdminScreen from './screens/AdminScreen'
 import LoginScreen from './screens/LoginScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import PraferenzScreen from './screens/PraeferenzScreen'
+import FreundesScreen from './screens/FreundesScreen'
+import HauptMenueScreen from './screens/HauptMenueScreen'
 
 class findme extends Component {
 
     _renderScene(route , navigator) {
         var globalNavigatorProps = {
             navigator
-        }
+        };
         switch (route.ident) {
             case "Login":
                 return [
                     <LoginScreen {...globalNavigatorProps} />
-               ]
+               ];
+            case "Haupt":
+                return [
+                    <HauptMenueScreen {...globalNavigatorProps} />
+                ];
             case "Admin":
                 return [
                     <AdminScreen {...globalNavigatorProps} />
-                ]
+                ];
             case "Profile":
                 return [
                     <ProfileScreen {...globalNavigatorProps} />
-                ]
+                ];
+            case "Praeferenz":
+                return [
+                    <PraferenzScreen {...globalNavigatorProps} />
+                ];
+            case "Freundes":
+                return [
+                    <FreundesScreen {...globalNavigatorProps} />
+                ];
             //More Cases
             default:
                 return (

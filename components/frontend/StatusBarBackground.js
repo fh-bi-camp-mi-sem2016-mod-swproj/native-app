@@ -17,9 +17,9 @@ class StatusBarBackground extends Component {
 const styles = React.StyleSheet.create({
 
     statusBarBackground :{
-        height: 20,
-        backgroundColor: "white"
+        height: 60,
+        backgroundColor: 'red'
     }
-})
+});
 
-module.exports = StatusBarBackground
+module.exports = StatusBarBackground;
