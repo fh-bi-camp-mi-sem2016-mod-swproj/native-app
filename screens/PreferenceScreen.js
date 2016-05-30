@@ -7,7 +7,7 @@ import ViewContainer from  '../components/frontend/ViewContainer'
 import StatusBarBackground from  '../components/frontend/StatusBarBackground'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 
-class PraeferenzScreen extends Component {
+class PreferenceScreen extends Component {
     
 
     render() {
@@ -92,4 +92,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = PraeferenzScreen;
+module.exports = PreferenceScreen;

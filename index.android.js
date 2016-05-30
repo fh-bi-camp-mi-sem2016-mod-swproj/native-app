@@ -12,9 +12,9 @@ import StatusBarBackground from  './components/frontend/StatusBarBackground'
 import AdminScreen from './screens/AdminScreen'
 import LoginScreen from './screens/LoginScreen'
 import ProfileScreen from './screens/ProfileScreen'
-import PraferenzScreen from './screens/PraeferenzScreen'
-import FreundesScreen from './screens/FriendScreen'
-import HauptMenueScreen from './screens/MainScreen'
+import PreferenceScreen from './screens/PreferenceScreen'
+import FriendScreen from './screens/FriendScreen'
+import MainScreen from './screens/MainScreen'
 
 class findme extends Component {
 
@@ -27,9 +27,9 @@ class findme extends Component {
                 return [
                     <LoginScreen {...globalNavigatorProps} />
                ];
-            case "Haupt":
+            case "Main":
                 return [
-                    <HauptMenueScreen {...globalNavigatorProps} />
+                    <MainScreen {...globalNavigatorProps} />
                 ];
             case "Admin":
                 return [
@@ -39,13 +39,13 @@ class findme extends Component {
                 return [
                     <ProfileScreen {...globalNavigatorProps} />
                 ];
-            case "Praeferenz":
+            case "Preference":
                 return [
-                    <PraferenzScreen {...globalNavigatorProps} />
+                    <PreferenceScreen {...globalNavigatorProps} />
                 ];
             case "Friend":
                 return [
-                    <FreundesScreen {...globalNavigatorProps} />
+                    <FriendScreen {...globalNavigatorProps} />
                 ];
             //More Cases
             default:
