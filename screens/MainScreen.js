@@ -7,7 +7,7 @@ import ViewContainer from  '../components/frontend/ViewContainer'
 import StatusBarBackground from  '../components/frontend/StatusBarBackground'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 
-class HauptMenueScreen extends Component {
+class MainScreen extends Component {
 
 
     render() {
@@ -22,25 +22,25 @@ class HauptMenueScreen extends Component {
                         </Text>
                     </View>
                  <ButtonContainer>
-                     <TouchableHighlight onPress={(event) => this._navigateToProfile()}>
+                     <TouchableHighlight onPress={(event) => this._navigateToProfileScreen()}>
                          <Text style={styles.btnText}> Zum Profile </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
 
                  <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToPraeferenzScreen()}>
+                    <TouchableHighlight onPress={(event) => this._navigateTopPeferenceScreen()}>
                         <Text style={styles.btnText}> Zu den Praeferenzen </Text>
                     </TouchableHighlight>
                  </ButtonContainer>
 
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToFreundes()}>
+                    <TouchableHighlight onPress={(event) => this._navigateToFriendScreen()}>
                         <Text style={styles.btnText}> Zum FreundesKreis </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
 
                  <ButtonContainer>
-                     <TouchableHighlight onPress={(event) => this._navigateToLogin()}>
+                     <TouchableHighlight onPress={(event) => this._navigateToLoginScreen()}>
                         <Text style={styles.btnText}> Log Out </Text>
                     </TouchableHighlight>
                  </ButtonContainer>
@@ -50,22 +50,22 @@ class HauptMenueScreen extends Component {
 
         );
     }
-    _navigateToLogin(){
+    _navigateToLoginScreen(){
         this.props.navigator.push({
             ident: "Login"
         })
     }
-    _navigateToFreundes(){
+    _navigateToFriendScreen(){
         this.props.navigator.push({
-            ident: "Freundes"
+            ident: "Friend"
         })
     }
-    _navigateToPraeferenzScreen(){
+    _navigateTopPeferenceScreen(){
         this.props.navigator.push({
-            ident: "Praeferenz"
+            ident: "Preference"
         })
     }
-    _navigateToProfile(){
+    _navigateToProfileScreen(){
         this.props.navigator.push({
             ident: "Profile"
         })
@@ -101,4 +101,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = HauptMenueScreen;
+module.exports = MainScreen;

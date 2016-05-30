@@ -80,7 +80,7 @@ class ProfileScreen extends Component {
                 </View>
 
                  <ButtonContainer>
-                     <TouchableHighlight style ={styles.button} onPress={(event) => this._navigateToHauptMenue()}>
+                     <TouchableHighlight style ={styles.button} onPress={(event) => this._navigateToMainMenue()}>
                           <Text style={styles.btnText}> Back </Text>
                      </TouchableHighlight>
                  </ButtonContainer>
@@ -89,10 +89,10 @@ class ProfileScreen extends Component {
              </ViewContainer>
         )
     }
-    _navigateToHauptMenue(){
+    _navigateToMainMenue(){
         User.currentUser="";
         this.props.navigator.push({
-            ident: "Haupt"
+            ident: "Main"
         })
     }
 }

@@ -112,7 +112,7 @@ class LoginScreen extends Component {
                     console.log(User.currentUser.firstname + " " + User.currentUser.lastname + " hat am "
                        + User.currentUser.birthdate + " Geburtstag und ist " + User.currentUser.sex + ".");
 
-                    this._navigateToHauptMenue();
+                    this._navigateToMainMenue();
                 } else {
                     Alert.alert('Fehler', "Das Passwort passt nicht zum Benutzer" , [{text: 'ok'}])
                 }
@@ -125,9 +125,9 @@ class LoginScreen extends Component {
         });
     }
 
-    _navigateToHauptMenue(){
+    _navigateToMainMenue(){
         this.props.navigator.push({
-            ident: "Haupt"
+            ident: "Main"
         })
     }
 }

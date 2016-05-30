@@ -13,8 +13,8 @@ import AdminScreen from './screens/AdminScreen'
 import LoginScreen from './screens/LoginScreen'
 import ProfileScreen from './screens/ProfileScreen'
 import PraferenzScreen from './screens/PraeferenzScreen'
-import FreundesScreen from './screens/FreundesScreen'
-import HauptMenueScreen from './screens/HauptMenueScreen'
+import FreundesScreen from './screens/FriendScreen'
+import HauptMenueScreen from './screens/MainScreen'
 
 class findme extends Component {
 
@@ -43,7 +43,7 @@ class findme extends Component {
                 return [
                     <PraferenzScreen {...globalNavigatorProps} />
                 ];
-            case "Freundes":
+            case "Friend":
                 return [
                     <FreundesScreen {...globalNavigatorProps} />
                 ];

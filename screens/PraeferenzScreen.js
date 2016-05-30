@@ -23,7 +23,7 @@ class PraeferenzScreen extends Component {
                     </Text>
                 </View>
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToHauptMenue()}>
+                    <TouchableHighlight onPress={(event) => this._navigateToMainMenue()}>
                         <Text style={styles.btnText}> Back </Text>
                      </TouchableHighlight>
                 </ButtonContainer>
@@ -35,9 +35,9 @@ class PraeferenzScreen extends Component {
 
         );
     }
-    _navigateToHauptMenue(){
+    _navigateToMainMenue(){
         this.props.navigator.push({
-            ident: "Haupt"
+            ident: "Main"
         })
     }
    

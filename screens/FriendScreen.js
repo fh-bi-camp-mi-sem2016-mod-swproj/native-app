@@ -7,7 +7,7 @@ import StatusBarBackground from  '../components/frontend/StatusBarBackground'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 
 
-class FreundesScreen extends Component {
+class FriendScreen extends Component {
 
 
     render() {
@@ -22,7 +22,7 @@ class FreundesScreen extends Component {
                          </Text>
                      </View>
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToHauptMenue()}>
+                    <TouchableHighlight onPress={(event) => this._navigateToMainMenue()}>
                         <Text style={styles.btnText}> Back </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
@@ -32,9 +32,9 @@ class FreundesScreen extends Component {
 
         );
     }
-    _navigateToHauptMenue(){
+    _navigateToMainMenue(){
         this.props.navigator.push({
-            ident: "Haupt"
+            ident: "Main"
         })
     }
 
@@ -77,4 +77,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = FreundesScreen;
+module.exports = FriendScreen;
