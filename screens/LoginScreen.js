@@ -5,7 +5,8 @@
 
 import React, {AppRegistry, Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Image, Alert,} from 'react-native';
 import ViewContainer from  '../components/frontend/ViewContainer'
-import StatusBarBackground from  '../components/frontend/StatusBarBackground'
+import ButtonContainer from '../components/frontend/ButtonContainer'
+
 import User from '../components/backend/User.js'
 
 var bild = {posters: {thumbnail: 'http://q-review.co.uk/wp-content/uploads/2014/03/your-logo-here.png'}};
@@ -13,15 +14,14 @@ var bild = {posters: {thumbnail: 'http://q-review.co.uk/wp-content/uploads/2014/
 class LoginScreen extends Component {
 
     state = {
-        username: '',
-        password: ''
+        //zum Testen
+        username: 'test@mail.de',
+        password: 'meier70'
     };
 
     render() {
         return (
-        // <ViewContainer>
-            //<StatusBarBackground styles = {{backgroundColor: "mistyrose"}} />
-            <View style={styles.appContainer}>
+        <ViewContainer>
                 <View style={styles.titleView}>
 
                     <Image style={styles.thumbnail}
@@ -54,18 +54,20 @@ class LoginScreen extends Component {
                             placeholder="Passwort">
                         </TextInput>
                     </View>
+                <ButtonContainer>
+                    <TouchableHighlight onPress={()=>this._login(this.state.username ,this.state.password)}>
+                        <Text style={styles.btnText}>
+                            Einloggen
+                        </Text>
+                     </TouchableHighlight>
+                </ButtonContainer>
 
-                <TouchableHighlight style ={styles.button} onPress={()=>this._login(this.state.username ,this.state.password)}>
-                    <Text style={styles.btnText}> Einloggen </Text>
-                </TouchableHighlight>
-
-            </View>
-           // </ViewContainer>
+            </ViewContainer>
 
 
         );
     }
-//onPress={(event) => this._navigateToProfile()}
+
     _login(pEMail, pPassword)
     {
         fetch('https://couchdb.cloudno.de/findme/user_' + pEMail)
@@ -110,7 +112,7 @@ class LoginScreen extends Component {
                     console.log(User.currentUser.firstname + " " + User.currentUser.lastname + " hat am "
                        + User.currentUser.birthdate + " Geburtstag und ist " + User.currentUser.sex + ".");
 
-                    this._navigateToProfile();
+                    this._navigateToMainMenue();
                 } else {
                     Alert.alert('Fehler', "Das Passwort passt nicht zum Benutzer" , [{text: 'ok'}])
                 }
@@ -123,17 +125,15 @@ class LoginScreen extends Component {
         });
     }
 
-    _navigateToProfile(){
+    _navigateToMainMenue(){
         this.props.navigator.push({
-            ident: "Profile"
+            ident: "Main"
         })
     }
 }
 
 const styles = StyleSheet.create({
-    appContainer: {
-        flex: 1
-    },
+
     titleView:{
         justifyContent: 'center',
         alignItems: 'center',
@@ -172,15 +172,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#fff',
         alignSelf: 'center',
-        marginTop:6
-    },
-    button: {
-        flex: 2,
-        height: 36,
-        backgroundColor: '#48afdb',
-        justifyContent: 'center',
-        borderRadius: 4,
-        margin: 75
     },
     text: {
         flexDirection: 'row',
