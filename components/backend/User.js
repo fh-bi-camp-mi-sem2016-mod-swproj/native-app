@@ -2,15 +2,13 @@
  * Created by Dennis on 17.05.2016.
  */
 
-'use strict'
+'use strict';
 import React, { Component } from 'react-native'
-
-
     
 class User {
     
     currentUser="";
-    
+
     user= {
         id:"",
         firstname:"",
@@ -18,7 +16,7 @@ class User {
         password:"",
         birthdate:"",
         sex:""
-    }
+    };
 
     constructor(pID, pFirstname, pLastname, pPassword, pBirthdate, pSex) {
 
@@ -31,4 +29,4 @@ class User {
         
     }
 }
-module.exports = User
+module.exports = User;
