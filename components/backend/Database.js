@@ -2,22 +2,42 @@
  * Created by dbene on 20.05.2016.
  */
 
+var Database = (function () {
+    var instance;
+
+    function createInstance() {
+        var object = new DatabaseClass("couchdb.cloudno.de", "bst.findme", "UmqWPQloCk", "findme");
+        return object;
+    }
+
+    return {
+        getInstance: function () {
+            if (!instance) {
+                instance = createInstance();
+            }
+            return instance;
+        }
+    };
+})();
+
 'use strict';
 import React, { Component, Alert } from 'react-native';
+import UserClass from './User';
 import User from './User';
 
-class Database {
+class DatabaseClass {
+
     connection = {
         server:"",
         user:"",
-        password:"",
+        apikey:"",
         database:""
     };
 
-    constructor(pServer, pUser, pPassword, pDatabase) {
+    constructor(pServer, pUser, pApiKey, pDatabase) {
         this.connection.server = pServer;
         this.connection.user = pUser;
-        this.connection.password = pPassword;
+        this.connection.apikey = pApiKey;
         this.connection.database = pDatabase;
     }
 
@@ -28,7 +48,7 @@ class Database {
 
          var test = "https://"
          + this.connection.user + ":"
-         + this.connection.password + "@"
+         + this.connection.apikey + "@"
          + this.connection.server + "/"
          + this.connection.database + "/"
          + docID;
@@ -44,7 +64,7 @@ class Database {
                 var firstname = '';
                 var lastname = '';
                 var password = '';
-                var birthdate = '';
+                var birthday = '';
                 var sex = '';
 
                 JSON.parse(responseText, function(k, v) {
@@ -59,7 +79,7 @@ class Database {
                     } else if (k == 'password'){
                         password = v;
                     } else if (k == 'birthdate'){
-                        birthdate = v;
+                        birthday = v;
                     } else if (k == 'sex'){
                         sex = v;
                     }
@@ -68,11 +88,14 @@ class Database {
                 if(doctype == 'user') {
                     if (pPassword == password) {
 
-                        User.currentUser = new User(id, firstname, lastname, password, birthdate, sex);
+                        var userVar = User.getInstance();
 
-                        // Debug ausgabe
-                        console.log(User.currentUser.firstname + " " + User.currentUser.lastname + " hat am "
-                            + User.currentUser.birthdate + " Geburtstag und ist " + User.currentUser.sex + ".");
+                        userVar.id = id;
+                        userVar.firstname = firstname;
+                        userVar.lastname = lastname;
+                        userVar.password = password;
+                        userVar.birthday = birthday;
+                        userVar.sex = sex;
 
                     } else {
                         Alert.alert('Fehler', "Das Passwort passt nicht zum Benutzer" , [{text: 'ok'}])
@@ -84,10 +107,6 @@ class Database {
             }).catch((error) => {
             console.warn(error);
         });
-
-        // Debug ausgabe
-        console.log(User.currentUser.firstname + " " + User.currentUser.lastname + " hat am "
-            + User.currentUser.birthdate + " Geburtstag und ist " + User.currentUser.sex + ".");
 
         return result;
     }
@@ -126,4 +145,4 @@ class Database {
 
 }
 
-module.exports = Database;
+module.exports = Database, DatabaseClass;
