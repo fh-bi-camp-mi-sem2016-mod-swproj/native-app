@@ -18,7 +18,7 @@ class MainScreen extends Component {
                             Welcome to Find.me
                         </Text>
                         <Text style={styles.titleText}>
-                            Hauptmenue:
+                            Mainmenue:
                         </Text>
                     </View>
                  <ButtonContainer>
@@ -44,6 +44,10 @@ class MainScreen extends Component {
                         <Text style={styles.btnText}> Log Out </Text>
                     </TouchableHighlight>
                  </ButtonContainer>
+
+                 <ViewContainer>
+                     
+                 </ViewContainer>
                  <StatusBarBackground />
              </ViewContainer>
 

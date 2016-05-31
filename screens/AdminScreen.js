@@ -71,10 +71,7 @@ class AdminScreen extends Component {
                     <Text style={styles.titleText}>
                         Administration
                     </Text>
-                    <ListView
-                        //style = {{marginTop: 100}}
-                        //dataSource={this.state.peopleDataSource}
-                        //renderRow={(person) =>{ return this._renderPersonRow(person)}}/>
+                    <ListView>
                         dataSource={this.state.dataSource}
                         renderRow={this.renderRow.bind(this)}>
                     </ListView>
@@ -189,4 +186,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = AdminScreen
+module.exports = AdminScreen;

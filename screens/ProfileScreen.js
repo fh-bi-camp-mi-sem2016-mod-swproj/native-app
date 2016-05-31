@@ -84,7 +84,9 @@ class ProfileScreen extends Component {
                           <Text style={styles.btnText}> Back </Text>
                      </TouchableHighlight>
                  </ButtonContainer>
+                <ViewContainer>
 
+                </ViewContainer>
                 <StatusBarBackground  />
              </ViewContainer>
         )

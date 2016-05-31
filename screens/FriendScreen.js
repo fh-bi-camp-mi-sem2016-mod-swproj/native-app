@@ -13,33 +13,48 @@ class FriendScreen extends Component {
     render() {
         return (
             <ViewContainer>
-                    <View style={styles.titleView}>
-                        <Text>
-                            Welcome to Find.me
-                        </Text>
-                        <Text style={styles.titleText}>
-                           FreundesKreis:
-                         </Text>
-                     </View>
+                <View style={styles.titleView}>
+                    <Text style={styles.titleText}>
+                        Welcome to Find.me
+                    </Text>
+                    <Text style={styles.titleText}>
+                        FriendZone:
+                    </Text>
+                </View>
+                <ButtonContainer>
+                    <TouchableHighlight onPress={(event) => this._navigateToSearchScreen()}>
+                        <Text style={styles.btnText}> suchen </Text>
+                    </TouchableHighlight>
+                </ButtonContainer>
+                <ViewContainer>
+
+
+                </ViewContainer>
                 <ButtonContainer>
                     <TouchableHighlight onPress={(event) => this._navigateToMainMenue()}>
                         <Text style={styles.btnText}> Back </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
                 <StatusBarBackground />
-             </ViewContainer>
+            </ViewContainer>
 
 
         );
     }
-    _navigateToMainMenue(){
+
+    _navigateToMainMenue() {
         this.props.navigator.push({
             ident: "Main"
         })
     }
 
-}
+    _navigateToSearchScreen() {
+        this.props.navigator.push({
+            ident: "UserSearch"
+        })
 
+    }
+}
 const styles = StyleSheet.create({
 
     titleView:{
