@@ -7,7 +7,8 @@ import ViewContainer from  '../components/frontend/ViewContainer'
 import StatusBarBackground from  '../components/frontend/StatusBarBackground'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 
-import User from '../components/backend/User.js'
+import User from './../components/backend/User'
+import UserClass from './../components/backend/User'
 
 
 class ProfileScreen extends Component {
@@ -30,7 +31,7 @@ class ProfileScreen extends Component {
                         Id:
                     </Text>
                     <Text style={styles.input}>
-                        {User.currentUser.id}
+                        {User.getInstance().id}
                     </Text>
                 </View>
 
@@ -39,7 +40,7 @@ class ProfileScreen extends Component {
                         Firstname
                     </Text>
                     <Text style={styles.input}>
-                        {User.currentUser.firstname}
+                        {User.getInstance().firstname}
                     </Text>
                 </View>
 
@@ -48,7 +49,7 @@ class ProfileScreen extends Component {
                         Lastname:
                     </Text>
                     <Text style={styles.input}>
-                        {User.currentUser.lastname}
+                        {User.getInstance().lastname}
                     </Text>
                 </View>
 
@@ -57,7 +58,7 @@ class ProfileScreen extends Component {
                         Password:
                     </Text>
                     <Text style={styles.input}>
-                        {User.currentUser.password}
+                        {User.getInstance().password}
                     </Text>
                 </View>
 
@@ -66,7 +67,7 @@ class ProfileScreen extends Component {
                         Birthday:
                     </Text>
                     <Text style={styles.input}>
-                        {User.currentUser.birthdate}
+                        {User.getInstance().birthday}
                     </Text>
                 </View>
 
@@ -75,7 +76,7 @@ class ProfileScreen extends Component {
                         Sex:
                     </Text>
                     <Text style={styles.input}>
-                        {User.currentUser.sex}
+                        {User.getInstance().sex}
                     </Text>
                 </View>
 
@@ -90,7 +91,8 @@ class ProfileScreen extends Component {
         )
     }
     _navigateToMainMenue(){
-        User.currentUser="";
+        User.getInstance(1);
+
         this.props.navigator.push({
             ident: "Main"
         })
