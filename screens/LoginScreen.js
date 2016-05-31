@@ -7,7 +7,8 @@ import React, {AppRegistry, Component, StyleSheet, Text, View, TouchableHighligh
 import ViewContainer from  '../components/frontend/ViewContainer'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 
-import User from '../components/backend/User.js'
+import Database from './../components/backend/Database'
+import DatabaseClass from './../components/backend/Database'
 
 var bild = {posters: {thumbnail: 'http://q-review.co.uk/wp-content/uploads/2014/03/your-logo-here.png'}};
 
@@ -15,8 +16,8 @@ class LoginScreen extends Component {
 
     state = {
         //zum Testen
-        username: 'test@mail.de',
-        password: 'meier70'
+        username: 'franz.lauter@mail.de',
+        password: 'paSswottt'
     };
 
     render() {
@@ -70,59 +71,9 @@ class LoginScreen extends Component {
 
     _login(pEMail, pPassword)
     {
-        fetch('https://couchdb.cloudno.de/findme/user_' + pEMail)
-            .then((response) => response.text())
-            .then((responseText) => {console.log(responseText);
+        Database.getInstance()._login(pEMail,pPassword);
 
-            console.log("Login-Parameter: " + pEMail + " - " +  pPassword);
-
-            var doctype = '';
-
-            var id = '';
-            var firstname = '';
-            var lastname = '';
-            var password = '';
-            var birthdate = '';
-            var sex = '';
-
-            JSON.parse(responseText, function(k, v) {
-                if(k == 'doctype'){
-                    doctype = v;
-                } else if(k == '_id'){
-                    id = v;
-                } else if (k == 'firstname'){
-                    firstname = v;
-                } else if (k == 'lastname'){
-                    lastname = v;
-                } else if (k == 'password'){
-                    password = v;
-                } else if (k == 'birthdate'){
-                    birthdate = v;
-                } else if (k == 'sex'){
-                    sex = v;
-                }
-                console.log(k + ": " + v);
-            });
-
-            if(doctype == 'user') {
-                if (pPassword == password) {
-                    User.currentUser = new User(id, firstname, lastname, password, birthdate, sex);
-
-                    // Debug ausgabe
-                    console.log(User.currentUser.firstname + " " + User.currentUser.lastname + " hat am "
-                       + User.currentUser.birthdate + " Geburtstag und ist " + User.currentUser.sex + ".");
-
-                    this._navigateToMainMenue();
-                } else {
-                    Alert.alert('Fehler', "Das Passwort passt nicht zum Benutzer" , [{text: 'ok'}])
-                }
-            } else {
-                Alert.alert('Fehler', "Den Benutzer gibt es nicht!" , [{text: 'ok'}])
-            }
-
-        }).catch((error) => {
-            console.warn(error);
-        });
+        this._navigateToMainMenue();
     }
 
     _navigateToMainMenue(){
@@ -171,7 +122,7 @@ const styles = StyleSheet.create({
     btnText: {
         fontSize: 18,
         color: '#fff',
-        alignSelf: 'center',
+        alignSelf: 'center'
     },
     text: {
         flexDirection: 'row',

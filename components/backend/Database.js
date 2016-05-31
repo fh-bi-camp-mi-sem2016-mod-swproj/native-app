@@ -43,17 +43,16 @@ class DatabaseClass {
 
     _login(pEMail, pPassword)
     {
-        var result = 'failed';
         var docID = "/user_" + pEMail;
 
-         var test = "https://"
+         var document = "https://"
          + this.connection.user + ":"
          + this.connection.apikey + "@"
          + this.connection.server + "/"
          + this.connection.database + "/"
          + docID;
 
-        fetch(test)
+        fetch(document)
             .then((response) => response.text())
             .then((responseText) => {
                 console.log(responseText);
@@ -88,7 +87,7 @@ class DatabaseClass {
                 if(doctype == 'user') {
                     if (pPassword == password) {
 
-                        var userVar = User.getInstance();
+                        var userVar = User.getInstance(0);
 
                         userVar.id = id;
                         userVar.firstname = firstname;
@@ -107,40 +106,6 @@ class DatabaseClass {
             }).catch((error) => {
             console.warn(error);
         });
-
-        return result;
-    }
-
-
-    _getDocument(pID)
-    {
-        var result = "getDocument failed";
-
-        var document = "https://"
-            + this.connection.user + ":"
-            + this.connection.password + "@"
-            + this.connection.server + "/"
-            + this.connection.database + "/"
-            + pID;
-
-        fetch(document)
-            .then((response) => response.text())
-            .then((responseText) => {
-
-                result = responseText;
-
-                // wird korrekt ausgegeben
-                console.log(result);
-
-
-            }).catch((error) => {
-            console.warn(error);
-        });
-
-        // result hat immernoch den wert "getDocument failed"
-        Alert.alert('_getDocument', result , [{text: 'ok'}]);
-
-        return result;
     }
 
 }

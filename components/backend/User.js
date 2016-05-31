@@ -11,8 +11,8 @@ var User = (function () {
     }
 
     return {
-        getInstance: function () {
-            if (!instance) {
+        getInstance: function (pReset) {
+            if (!instance || pReset == 1) {
                 instance = createInstance();
             }
             return instance;
