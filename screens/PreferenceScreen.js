@@ -126,14 +126,11 @@ class PreferenceScreen extends Component {
             ident: "Main"
         })
     }
-<<<<<<< HEAD
+
     saveAlert(pAge, pEyecolor, pHaircolor, pSex, pBodyheight, pFigure){
         Alert.alert('Praeferenz:', pAge +"\n "+pEyecolor+"\n "+pHaircolor+"\n "+pSex+"\n "+pBodyheight+"\n "+pFigure, [{text: 'saved'}])
     }
-=======
-   
->>>>>>> upstream/master
-}
+    
 
 const styles = StyleSheet.create({
 
