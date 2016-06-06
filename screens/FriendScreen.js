@@ -55,6 +55,7 @@ class FriendScreen extends Component {
 
     }
 }
+
 const styles = StyleSheet.create({
 
     titleView:{

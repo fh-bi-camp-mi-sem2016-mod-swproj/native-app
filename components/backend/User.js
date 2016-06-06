@@ -1,34 +1,34 @@
 /**
- * Created by Dennis on 17.05.2016.
+ * Created dbene on 31.05.2016.
  */
 
-'use strict'
-import React, { Component } from 'react-native'
+var User = (function () {
+    var instance;
 
+    function createInstance() {
+        var object = new UserClass();
+        return object;
+    }
 
-    
-class User {
-    
-    currentUser="";
-    
+    return {
+        getInstance: function (pReset) {
+            if (!instance || pReset == 1) {
+                instance = createInstance();
+            }
+            return instance;
+        }
+    };
+})();
+
+class UserClass {
     user= {
         id:"",
         firstname:"",
         lastname:"",
         password:"",
-        birthdate:"",
+        birthday:"",
         sex:""
-    }
-
-    constructor(pID, pFirstname, pLastname, pPassword, pBirthdate, pSex) {
-
-        this.id = pID;
-        this.firstname = pFirstname;
-        this.lastname = pLastname;
-        this.password = pPassword;
-        this.birthdate = pBirthdate;
-        this.sex = pSex;
-        
-    }
+    };
 }
-module.exports = User
+
+module.exports = User, UserClass;

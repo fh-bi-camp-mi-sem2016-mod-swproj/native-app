@@ -48,6 +48,7 @@ class MainScreen extends Component {
                  <ViewContainer>
                      
                  </ViewContainer>
+                 
                  <StatusBarBackground />
              </ViewContainer>
 

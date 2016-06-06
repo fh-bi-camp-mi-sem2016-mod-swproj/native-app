@@ -126,9 +126,13 @@ class PreferenceScreen extends Component {
             ident: "Main"
         })
     }
+<<<<<<< HEAD
     saveAlert(pAge, pEyecolor, pHaircolor, pSex, pBodyheight, pFigure){
         Alert.alert('Praeferenz:', pAge +"\n "+pEyecolor+"\n "+pHaircolor+"\n "+pSex+"\n "+pBodyheight+"\n "+pFigure, [{text: 'saved'}])
     }
+=======
+   
+>>>>>>> upstream/master
 }
 
 const styles = StyleSheet.create({
@@ -139,6 +143,14 @@ const styles = StyleSheet.create({
         paddingTop:30,
         paddingBottom: 10
     },
+<<<<<<< HEAD
+=======
+    thumbnail: {
+        marginBottom: 10,
+        width: 300,
+        height: 200
+    },
+>>>>>>> upstream/master
     titleText: {
         flex: 1,
         fontSize: 20,
@@ -147,8 +159,13 @@ const styles = StyleSheet.create({
     },
     inputContainerView: {
         flexDirection: 'row',
+<<<<<<< HEAD
         marginTop: 5,
         padding:5
+=======
+        marginTop: 10,
+        padding:10
+>>>>>>> upstream/master
     },
     input: {
         height: 36,
