@@ -2,33 +2,119 @@
  * Created by Dennis on 18.05.2016.
  */
 
-import React, {AppRegistry, Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Image, Alert,} from 'react-native';
+import React, {Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Alert} from 'react-native';
 import ViewContainer from  '../components/frontend/ViewContainer'
 import StatusBarBackground from  '../components/frontend/StatusBarBackground'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 
 class PreferenceScreen extends Component {
-    
+
+    state = {
+        //zum Testen
+        age: '18',
+        eyecolor: 'blau',
+        haircolor: 'blond',
+        sex: 'm',
+        bodyheight: '180',
+        figure: 'schlank'
+    };
 
     render() {
         return (
             <ViewContainer>
 
-                <View style={styles.titleView}>
-                    <Text style={styles.titleText}>
-                        Welcome to Find.me
-                    </Text>
-                        <Text style={styles.titleText}>
-                        Praeferenz:
-                    </Text>
-                </View>
-                <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToMainMenue()}>
-                        <Text style={styles.btnText}> Back </Text>
-                     </TouchableHighlight>
-                </ButtonContainer>
+                <ViewContainer>
 
-                <StatusBarBackground/>
+                    <View style={styles.titleView}>
+                        <Text style={styles.titleText}>
+                            Praeferenz:
+                        </Text>
+                    </View>
+
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Alter
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={age => this.setState({age})}
+                            placeholder="searched age">
+                        </TextInput>
+                    </View>
+
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Augenfarbe:
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={eyecolor => this.setState({eyecolor})}
+                            placeholder="searched eyecolor">
+                        </TextInput>
+                    </View>
+
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Harrfarbe:
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={haircolor => this.setState({haircolor})}
+                            placeholder="searched haircolor">
+                        </TextInput>
+                    </View>
+
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Geschlecht:
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={sex => this.setState({sex})}
+                            placeholder="searched sex">
+                        </TextInput>
+                    </View>
+
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Körpergröße:
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={bodyheight => this.setState({bodyheight})}
+                            placeholder="searched bodyheight">
+                        </TextInput>
+                    </View>
+
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Statur:
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={figure => this.setState({figure})}
+                            placeholder="searched figure">
+                        </TextInput>
+                    </View>
+
+                    <ButtonContainer>
+                        <TouchableHighlight onPress={() => this.saveAlert(this.state.age, this.state.eyecolor, this.state.haircolor, this.state.sex, this.state.bodyheight, this.state.figure)}>
+                            <Text style={styles.btnText}>
+                                Speichern
+                            </Text>
+                        </TouchableHighlight>
+                    </ButtonContainer>
+
+                    <ButtonContainer>
+                        <TouchableHighlight onPress={(event) => this._navigateToMainMenue()}>
+                            <Text style={styles.btnText}>
+                             Back
+                            </Text>
+                        </TouchableHighlight>
+                    </ButtonContainer>
+
+                </ViewContainer>
+                    <StatusBarBackground/>
 
             </ViewContainer>
 
@@ -40,7 +126,10 @@ class PreferenceScreen extends Component {
             ident: "Main"
         })
     }
-   
+
+    saveAlert(pAge, pEyecolor, pHaircolor, pSex, pBodyheight, pFigure){
+        Alert.alert('Praeferenz:', pAge +"\n "+pEyecolor+"\n "+pHaircolor+"\n "+pSex+"\n "+pBodyheight+"\n "+pFigure, [{text: 'saved'}])
+    }
 }
 
 const styles = StyleSheet.create({
@@ -51,11 +140,6 @@ const styles = StyleSheet.create({
         paddingTop:30,
         paddingBottom: 10
     },
-    thumbnail: {
-        marginBottom: 10,
-        width: 300,
-        height: 200
-    },
     titleText: {
         flex: 1,
         fontSize: 20,
@@ -64,8 +148,8 @@ const styles = StyleSheet.create({
     },
     inputContainerView: {
         flexDirection: 'row',
-        marginTop: 10,
-        padding:10
+        marginTop: 5,
+        padding:5
     },
     input: {
         height: 36,

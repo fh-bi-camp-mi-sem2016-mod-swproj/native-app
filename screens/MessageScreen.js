@@ -1,44 +1,56 @@
 /**
- * Created by Dennis on 18.05.2016.
+ * Created by Dennis on 06.06.2016.
  */
-import React, {AppRegistry, Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Image, Alert,} from 'react-native';
+import React, {Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Alert,} from 'react-native';
 import ViewContainer from  '../components/frontend/ViewContainer'
 import StatusBarBackground from  '../components/frontend/StatusBarBackground'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 
 
-class FriendScreen extends Component {
+class MessageScreen extends Component {
 
+    state = {
+        //zum Testen
+        message: 'Test'
+    };
 
     render() {
         return (
             <ViewContainer>
+
                 <View style={styles.titleView}>
                     <Text style={styles.titleText}>
-                        Welcome to Find.me
-                    </Text>
-                    <Text style={styles.titleText}>
-                        FriendZone:
+                        Message:
                     </Text>
                 </View>
+
+                <Text style={styles.text}>
+                    User:
+                </Text>
+
+                <ViewContainer>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={suchstring => this.setState({message})}
+                        placeholder="Message">
+                    </TextInput>
+                </ViewContainer>
+
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToSearchScreen()}>
-                        <Text style={styles.btnText}> suchen </Text>
+                    <TouchableHighlight onPress={() => this._showMessage(this.state.message)}>
+                        <Text style={styles.btnText}> Senden </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
-                <ViewContainer>
 
-
-                </ViewContainer>
                 <ButtonContainer>
                     <TouchableHighlight onPress={(event) => this._navigateToMainMenue()}>
                         <Text style={styles.btnText}> Back </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
+
                 <StatusBarBackground />
+
             </ViewContainer>
-
-
         );
     }
 
@@ -48,12 +60,10 @@ class FriendScreen extends Component {
         })
     }
 
-    _navigateToSearchScreen() {
-        this.props.navigator.push({
-            ident: "UserSearch"
-        })
-
+    _showMessage(pInput){
+        Alert.alert('Nachricht:', pInput , [{text: 'gesendet'}])
     }
+
 }
 
 const styles = StyleSheet.create({
@@ -93,4 +103,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = FriendScreen;
+module.exports = MessageScreen;

@@ -18,7 +18,7 @@ class MainScreen extends Component {
                             Welcome to Find.me
                         </Text>
                         <Text style={styles.titleText}>
-                            Hauptmenue:
+                            Mainmenue:
                         </Text>
                     </View>
                  <ButtonContainer>
@@ -26,6 +26,12 @@ class MainScreen extends Component {
                          <Text style={styles.btnText}> Zum Profile </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
+
+                 <ButtonContainer>
+                     <TouchableHighlight onPress={(event) => this._navigateToMessageScreen()}>
+                         <Text style={styles.btnText}> Zu den Nachrichten </Text>
+                     </TouchableHighlight>
+                 </ButtonContainer>
 
                  <ButtonContainer>
                     <TouchableHighlight onPress={(event) => this._navigateTopPeferenceScreen()}>
@@ -44,6 +50,11 @@ class MainScreen extends Component {
                         <Text style={styles.btnText}> Log Out </Text>
                     </TouchableHighlight>
                  </ButtonContainer>
+
+                 <ViewContainer>
+                     
+                 </ViewContainer>
+                 
                  <StatusBarBackground />
              </ViewContainer>
 
@@ -68,6 +79,11 @@ class MainScreen extends Component {
     _navigateToProfileScreen(){
         this.props.navigator.push({
             ident: "Profile"
+        })
+    }
+    _navigateToMessageScreen(){
+        this.props.navigator.push({
+            ident: "Message"
         })
     }
 }

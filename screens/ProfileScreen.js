@@ -86,6 +86,10 @@ class ProfileScreen extends Component {
                      </TouchableHighlight>
                  </ButtonContainer>
 
+                <ViewContainer>
+
+                </ViewContainer>
+
                 <StatusBarBackground  />
              </ViewContainer>
         )
