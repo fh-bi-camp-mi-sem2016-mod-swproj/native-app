@@ -28,6 +28,12 @@ class MainScreen extends Component {
                 </ButtonContainer>
 
                  <ButtonContainer>
+                     <TouchableHighlight onPress={(event) => this._navigateToMessageScreen()}>
+                         <Text style={styles.btnText}> Zu den Nachrichten </Text>
+                     </TouchableHighlight>
+                 </ButtonContainer>
+
+                 <ButtonContainer>
                     <TouchableHighlight onPress={(event) => this._navigateTopPeferenceScreen()}>
                         <Text style={styles.btnText}> Zu den Praeferenzen </Text>
                     </TouchableHighlight>
@@ -73,6 +79,11 @@ class MainScreen extends Component {
     _navigateToProfileScreen(){
         this.props.navigator.push({
             ident: "Profile"
+        })
+    }
+    _navigateToMessageScreen(){
+        this.props.navigator.push({
+            ident: "Message"
         })
     }
 }
