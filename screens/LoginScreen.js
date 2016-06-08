@@ -10,8 +10,6 @@ import ButtonContainer from '../components/frontend/ButtonContainer'
 import Database from './../components/backend/Database'
 import DatabaseClass from './../components/backend/Database'
 
-var bild = {posters: {thumbnail: 'http://q-review.co.uk/wp-content/uploads/2014/03/your-logo-here.png'}};
-
 class LoginScreen extends Component {
 
     state = {
@@ -26,7 +24,7 @@ class LoginScreen extends Component {
                 <View style={styles.titleView}>
 
                     <Image style={styles.thumbnail}
-                           source={{uri: bild.posters.thumbnail}}
+                           source={require('./icon.png')}
                     />
 
                     <Text style={styles.titleText}>
@@ -106,7 +104,8 @@ const styles = StyleSheet.create({
         paddingBottom: 10
     },
     thumbnail: {
-        marginBottom: 10,
+        resizeMode: 'contain',
+        marginBottom: 50,
         width: 300,
         height: 200
     },
