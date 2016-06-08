@@ -11,7 +11,9 @@ class RegisterScreen extends Component {
     state = {
         //zum Testen
         fName: 'Dennis',
-        lName: 'Meier',
+        lName: 'Starke',
+        uName: "dstarke",
+        pass: "1234",
         age: '28',
         haircolor: 'blond',
         sex: 'm',
@@ -29,115 +31,139 @@ class RegisterScreen extends Component {
                     </Text>
                 </View>
 
-                <Text style={styles.text}>
-                    Vorname :
-                </Text>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Vorname :
+                    </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={fName => this.setState({fName})}
+                            placeholder="Vorname">
+                        </TextInput>
+                </View>
 
-                <ViewContainer>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={fName => this.setState({fName})}
-                        placeholder="Vorname">
-                    </TextInput>
-                </ViewContainer>
-
-                <Text style={styles.text}>
-                    Vorname :
-                </Text>
-
-                <ViewContainer>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Nachname :
+                    </Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={nName => this.setState({nName})}
                         placeholder="Nachname">
                     </TextInput>
-                </ViewContainer>
+                </View>
 
-                <Text style={styles.text}>
-                    Haarfarbe :
-                </Text>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Benutzername :
+                    </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={uName => this.setState({uName})}
+                        placeholder="Username">
+                    </TextInput>
+                </View>
 
-                <ViewContainer>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Passwort :
+                    </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={pass => this.setState({pass})}
+
+                        placeholder="Passwort">
+                    </TextInput>
+                </View>
+
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Haarfarbe :
+                    </Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={haircolor => this.setState({haircolor})}
                         placeholder="Haarfarbe">
                     </TextInput>
-                </ViewContainer>
+                </View>
 
-                <Text style={styles.text}>
-                    Alter :
-                </Text>
-
-                <ViewContainer>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Alter :
+                    </Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={age => this.setState({age})}
                         placeholder="Alter">
                     </TextInput>
-                </ViewContainer>
+                </View>
 
-                <Text style={styles.text}>
-                    Geschlecht :
-                </Text>
-
-                <ViewContainer>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Geschlecht :
+                    </Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={sex => this.setState({sex})}
                         placeholder="Geschlecht">
                     </TextInput>
-                </ViewContainer>
+                </View>
 
-                <Text style={styles.text}>
-                    Größe :
-                </Text>
-
-                <ViewContainer>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Größe :
+                    </Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={bodyheight => this.setState({bodyheight})}
                         placeholder="Groeße">
                     </TextInput>
-                </ViewContainer>
+                </View>
 
-                <Text style={styles.text}>
-                    Figur :
-                </Text>
-
-                <ViewContainer>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Figur :
+                    </Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={figure => this.setState({figure})}
                         placeholder="Figur">
                     </TextInput>
+                </View>
+
+                <ViewContainer>
+
                 </ViewContainer>
 
                 <ButtonContainer>
-                    <TouchableHighlight onPress={() => this._saveRegAlert(this.state.fName, this.state.lName, this.state.age, this.state.eyecolor, this.state.haircolor, this.state.sex, this.state.bodyheight, this.state.figure)}>
+                    <TouchableHighlight onPress={() => this._saveRegAlert(this.state.fName, this.state.lName, this.state.uName, this.state.pass, this.state.age, this.state.eyecolor, this.state.haircolor, this.state.sex, this.state.bodyheight, this.state.figure)}>
                         <Text style={styles.btnText}> Registrieren </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
 
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToMainMenue()}>
+                    <TouchableHighlight onPress={(event) => this._navigateToLoginScreen()}>
                         <Text style={styles.btnText}> Back </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
 
+                <ViewContainer>
+
+                </ViewContainer>
                 <StatusBarBackground />
 
             </ViewContainer>
         );
     }
 
-    _navigateToMainMenue() {
+    _navigateToLoginScreen() {
         this.props.navigator.push({
-            ident: "Main"
+            ident: "Login"
         })
     }
-    _saveRegAlert(pFName, pLName, pAge, pEyecolor, pHaircolor, pSex, pBodyheight, pFigure){
-        Alert.alert('Sie wurden mit folgenden Angaben:', pFName +"\n"+ pLName +"\n"+ pAge +"\n "+ pEyecolor +"\n "+ pHaircolor +"\n "+ pSex +"\n "+ pBodyheight +"\n "+ pFigure, [{text: 'erfolgreich registriert'}])
+
+    _saveRegAlert(pFName, pLName, pUsername, pPasswort, pAge, pEyecolor, pHaircolor, pSex, pBodyheight, pFigure){
+        Alert.alert('Sie wurden mit folgenden Angaben:', pFName +"\n"+ pLName +"\n"+ pUsername +"\n"+ pPasswort +"\n"+ pAge +"\n"+ pEyecolor +"\n"+ pHaircolor +"\n"+ pSex +"\n"+ pBodyheight +"\n"+ pFigure, [{text: 'erfolgreich registriert'}])
     }
 }
 
@@ -147,7 +173,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop:30,
-        paddingBottom: 10
+        paddingBottom: 20
     },
     titleText: {
         flex: 1,
@@ -156,21 +182,19 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     inputContainerView: {
-        flexDirection: 'row',
-        marginTop: 5,
-        padding:5
+        flexDirection: 'row'
     },
     input: {
         height: 36,
         padding: 4,
         marginRight: 50,
+
         flex: 4,
         fontSize: 18,
-        borderWidth: 1,
         borderColor: '#000000',
-        borderRadius: 4,
         color: '#000000',
-        textAlign: 'center'
+        textAlign: 'center',
+        alignSelf: "flex-end"
     },
     btnText: {
         fontSize: 18,
@@ -178,6 +202,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     text: {
+        width: 100,
         flexDirection: 'row',
         padding: 5,
         height: 20,

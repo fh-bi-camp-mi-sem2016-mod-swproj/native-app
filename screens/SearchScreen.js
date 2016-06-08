@@ -74,7 +74,7 @@ class SearchScreen extends Component {
                     </ListView>
                 </ViewContainer>
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToMainFriendScreen()}>
+                    <TouchableHighlight onPress={(event) => this._navigateToFriendScreen()}>
                         <Text style={styles.btnText}> Back </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
@@ -86,7 +86,7 @@ class SearchScreen extends Component {
 
         );
     }
-    _navigateToMainFriendScreen(){
+    _navigateToFriendScreen(){
         this.props.navigator.push({
             ident: "Friend"
         })
