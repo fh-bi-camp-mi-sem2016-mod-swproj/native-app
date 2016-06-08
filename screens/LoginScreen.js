@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     input: {
         height: 36,
         padding: 4,
-        marginRight: 50,
+        marginRight: 70,
         flex: 4,
         fontSize: 18,
         borderWidth: 1,
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     text: {
+        width: 100,
         flexDirection: 'row',
         padding: 5,
         height: 20,
