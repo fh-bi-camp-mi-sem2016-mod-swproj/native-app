@@ -63,6 +63,14 @@ class LoginScreen extends Component {
                      </TouchableHighlight>
                 </ButtonContainer>
 
+             <ButtonContainer>
+                    <TouchableHighlight onPress={(event) => this._navigateToRegisterScreen()}>
+                      <Text style={styles.btnText}>
+                          Registrieren
+                        </Text>
+                   </TouchableHighlight>
+               </ButtonContainer>
+
             </ViewContainer>
 
 
@@ -79,6 +87,12 @@ class LoginScreen extends Component {
     _navigateToMainMenue(){
         this.props.navigator.push({
             ident: "Main"
+        })
+    }
+
+    _navigateToRegisterScreen(){
+        this.props.navigator.push({
+            ident: "Register"
         })
     }
 }

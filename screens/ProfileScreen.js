@@ -1,7 +1,7 @@
 /**
  * Created by Dennis on 17.05.2016.
  */
-import React, {AppRegistry, Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Image, Alert, Label} from 'react-native';
+import React, {Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Alert, Label} from 'react-native';
 
 import ViewContainer from  '../components/frontend/ViewContainer'
 import StatusBarBackground from  '../components/frontend/StatusBarBackground'
@@ -119,8 +119,7 @@ const styles = StyleSheet.create({
     },
     inputContainerView: {
         flexDirection: 'row',
-        marginTop: 5,
-        padding:10
+        padding: 5
     },
     input: {
         height: 20,
@@ -139,8 +138,7 @@ const styles = StyleSheet.create({
     text: {
         flexDirection: 'row',
         padding: 5,
-        height: 20,
-        margin: 10
+        height: 20
     }
 });
 

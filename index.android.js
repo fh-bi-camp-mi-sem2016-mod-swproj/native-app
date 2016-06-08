@@ -17,6 +17,7 @@ import FriendScreen from './screens/FriendScreen'
 import MainScreen from './screens/MainScreen'
 import SearchScreen from './screens/SearchScreen'
 import MessageScreen from './screens/MessageScreen'
+import RegisterScreen from './screens/RegisterScreen'
 
 class findme extends Component {
 
@@ -55,7 +56,11 @@ class findme extends Component {
                 ];
             case "Message":
                 return [
-                    <MessageScreen{...globalNavigatorProps} />
+                    <MessageScreen {...globalNavigatorProps} />
+                ];
+            case "Register":
+                return [
+                    <RegisterScreen {...globalNavigatorProps} />
                 ];
             //More Cases
             default:

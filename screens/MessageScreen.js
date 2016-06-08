@@ -11,6 +11,7 @@ class MessageScreen extends Component {
 
     state = {
         //zum Testen
+        user: 'Heinz',
         message: 'Test'
     };
 
@@ -20,7 +21,7 @@ class MessageScreen extends Component {
 
                 <View style={styles.titleView}>
                     <Text style={styles.titleText}>
-                        Message:
+                        MessageScreen
                     </Text>
                 </View>
 
@@ -31,13 +32,25 @@ class MessageScreen extends Component {
                 <ViewContainer>
                     <TextInput
                         style={styles.input}
-                        onChangeText={suchstring => this.setState({message})}
+                        onChangeText={user => this.setState({user})}
+                        placeholder="User">
+                    </TextInput>
+                </ViewContainer>
+
+                <Text style={styles.text}>
+                    Message:
+                </Text>
+
+                <ViewContainer>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={message => this.setState({message})}
                         placeholder="Message">
                     </TextInput>
                 </ViewContainer>
 
                 <ButtonContainer>
-                    <TouchableHighlight onPress={() => this._showMessage(this.state.message)}>
+                    <TouchableHighlight onPress={() => this._showUserMessage(this.state.user, this.state.message)}>
                         <Text style={styles.btnText}> Senden </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
@@ -60,8 +73,8 @@ class MessageScreen extends Component {
         })
     }
 
-    _showMessage(pInput){
-        Alert.alert('Nachricht:', pInput , [{text: 'gesendet'}])
+    _showUserMessage(pInputUser, pInputMessage){
+        Alert.alert('Nachricht:',"User: "+ pInputUser + "\nNachricht: " +pInputMessage, [{text: 'gesendet'}])
     }
 
 }
@@ -73,11 +86,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop:30,
         paddingBottom: 10
-    },
-    thumbnail: {
-        marginBottom: 10,
-        width: 300,
-        height: 200
     },
     titleText: {
         flex: 1,
