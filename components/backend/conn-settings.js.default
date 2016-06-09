@@ -1,0 +1,9 @@
+var connSettings = {
+    url: "",
+    user: "",
+    password: "",
+    database: ""
+};
+
+exports.default = connSettings;
+module.exports = exports.default;
