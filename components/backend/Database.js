@@ -5,7 +5,6 @@
 'use strict';
 
 import CouchDbApi from '../../node_modules/findme-react-couchdb-api'
-import DaoManager from '../../node_modules/findme-react-couchdb-api'
 
 var Database = (function () {
     var instance;
