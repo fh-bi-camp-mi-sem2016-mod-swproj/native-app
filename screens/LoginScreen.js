@@ -8,14 +8,15 @@ import ViewContainer from  '../components/frontend/ViewContainer'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 
 import Database from './../components/backend/Database'
-import DatabaseClass from './../components/backend/Database'
+
+import User from './../components/backend/User'
 
 class LoginScreen extends Component {
 
     state = {
         //zum Testen
-        username: 'franz.lauter@mail.de',
-        password: 'paSswottt'
+        username: 'bertha59',
+        password: '13224'
     };
 
     render() {
@@ -54,7 +55,8 @@ class LoginScreen extends Component {
                         </TextInput>
                     </View>
                 <ButtonContainer>
-                    <TouchableHighlight onPress={()=>this._login(this.state.username ,this.state.password)}>
+                    <TouchableHighlight
+                        onPress={()=>this._login(this.state.username ,this.state.password, this._navigateToMainMenue())}>
                         <Text style={styles.btnText}>
                             Einloggen
                         </Text>
@@ -75,11 +77,49 @@ class LoginScreen extends Component {
         );
     }
 
-    _login(pEMail, pPassword)
-    {
-        Database.getInstance()._login(pEMail,pPassword);
+    _login(pUser, pPassword, pCallback) {
+        var callbacks = {
+            success: function (data) {
+                console.log(data);
 
-        this._navigateToMainMenue();
+                if (data.length == 0) {
+                    // User nicht gefunden
+                    Alert.alert('Benutzer', "Ein Benutzer mit diesem Namen konnte nicht gefunden werden.", [{text: 'ok'}]);
+                } else if (data.length == 1) {
+                    // Normaler Benutzer
+
+                    var receivedUser = data[0];
+
+                    if (receivedUser.password === pPassword) {
+                        // Login erfolgreich
+
+                        var user = User.getInstance();
+                        user.currentUSER.user = receivedUser;
+
+                        console.log(user.login + " hat sich erfolgreich eingeloggt");
+
+                        pCallback;
+                    } else {
+                        // Passwort falsch
+                        console.log("Passwort falsch");
+                        Alert.alert('Passwort', "Das Passwort passt nicht zum angegebenen Benutzer.", [{text: 'ok'}]);
+                    }
+
+                } else if (data.length > 1) {
+                    // Fehler
+                    Alert.alert('Fehler', "Es wurden mehrere Benutzer mit diesem Namen gefunden.", [{text: 'ok'}]);
+                }
+
+
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+            }
+        };
+
+        var db = Database.getInstance();
+        db.user.findByLogin(pUser, callbacks);
     }
 
     _navigateToMainMenue(){

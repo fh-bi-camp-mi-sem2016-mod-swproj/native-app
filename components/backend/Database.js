@@ -2,11 +2,17 @@
  * Created by dbene on 20.05.2016.
  */
 
+'use strict';
+
+import CouchDbApi from '../../node_modules/findme-react-couchdb-api'
+
 var Database = (function () {
     var instance;
 
     function createInstance() {
-        var object = new DatabaseClass("couchdb.cloudno.de", "bst.findme", "UmqWPQloCk", "findme");
+        var connSettings = require("./conn-settings.js");
+
+        var object = new DatabaseClass(connSettings);
         return object;
     }
 
@@ -20,93 +26,20 @@ var Database = (function () {
     };
 })();
 
-'use strict';
-import React, { Component, Alert } from 'react-native';
-import UserClass from './User';
-import User from './User';
 
 class DatabaseClass {
+    user;
+    msg;
+    pic;
 
-    connection = {
-        server:"",
-        user:"",
-        apikey:"",
-        database:""
-    };
+    constructor(connSettings) {
+        var dm = new CouchDbApi.DaoManager(connSettings);
 
-    constructor(pServer, pUser, pApiKey, pDatabase) {
-        this.connection.server = pServer;
-        this.connection.user = pUser;
-        this.connection.apikey = pApiKey;
-        this.connection.database = pDatabase;
+        this.user = dm.getDao(CouchDbApi.UserDAO);
+        this.msg = dm.getDao(CouchDbApi.MessageDAO);
+        this.pic = dm.getDao(CouchDbApi.PictureDAO);
     }
 
-    _login(pEMail, pPassword)
-    {
-        var docID = "/user_" + pEMail;
-
-         var document = "https://"
-         + this.connection.user + ":"
-         + this.connection.apikey + "@"
-         + this.connection.server + "/"
-         + this.connection.database + "/"
-         + docID;
-
-        fetch(document)
-            .then((response) => response.text())
-            .then((responseText) => {
-                console.log(responseText);
-
-                var doctype = '';
-
-                var id = '';
-                var firstname = '';
-                var lastname = '';
-                var password = '';
-                var birthday = '';
-                var sex = '';
-
-                JSON.parse(responseText, function(k, v) {
-                    if(k == 'doctype'){
-                        doctype = v;
-                    } else if(k == '_id'){
-                        id = v;
-                    } else if (k == 'firstname'){
-                        firstname = v;
-                    } else if (k == 'lastname'){
-                        lastname = v;
-                    } else if (k == 'password'){
-                        password = v;
-                    } else if (k == 'birthdate'){
-                        birthday = v;
-                    } else if (k == 'sex'){
-                        sex = v;
-                    }
-                });
-
-                if(doctype == 'user') {
-                    if (pPassword == password) {
-
-                        var userVar = User.getInstance(0);
-
-                        userVar.id = id;
-                        userVar.firstname = firstname;
-                        userVar.lastname = lastname;
-                        userVar.password = password;
-                        userVar.birthday = birthday;
-                        userVar.sex = sex;
-
-                    } else {
-                        Alert.alert('Fehler', "Das Passwort passt nicht zum Benutzer" , [{text: 'ok'}])
-                    }
-                } else {
-                    Alert.alert('Fehler', "Den Benutzer gibt es nicht!" , [{text: 'ok'}])
-                }
-
-            }).catch((error) => {
-            console.warn(error);
-        });
-    }
 
 }
 
