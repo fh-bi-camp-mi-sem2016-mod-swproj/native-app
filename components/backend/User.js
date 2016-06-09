@@ -21,13 +21,13 @@ var User = (function () {
 })();
 
 class UserClass {
-    user= {
-        id:"",
-        firstname:"",
-        lastname:"",
-        password:"",
-        birthday:"",
-        sex:""
+    currentUSER= {
+        user:'',
+        profile:'',
+        friends:'',
+        messagesToMe:'',
+        messagesFromMe:'',
+        preferences:''
     };
 }
 
