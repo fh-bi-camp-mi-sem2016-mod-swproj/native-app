@@ -40,3 +40,6 @@ buck-out/
 android/app/libs
 android/keystores/debug.keystore
 /nbproject/private/
+
+# Database Access
+components/backend/conn-settings.js
