@@ -4,22 +4,21 @@
 
 import React, {Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Alert,} from 'react-native';
 import ViewContainer from  '../components/frontend/ViewContainer'
-import StatusBarBackground from  '../components/frontend/StatusBarBackground'
 import ButtonContainer from '../components/frontend/ButtonContainer'
+
+import Database from './../components/backend/Database'
 
 class RegisterScreen extends Component {
 
     state = {
-        //zum Testen
-        fName: 'Dennis',
-        lName: 'Starke',
-        uName: "dstarke",
-        pass: "1234",
-        age: '28',
-        haircolor: 'blond',
-        sex: 'm',
-        bodyheight: '180',
-        figure: 'schlank'
+
+        user : {
+            doctype: "user",
+            password: "",
+            passwordTest: "",
+            login: "",
+            role: 0,
+         }
     };
 
     render() {
@@ -34,33 +33,11 @@ class RegisterScreen extends Component {
 
                 <View style={styles.inputContainerView}>
                     <Text style={styles.text}>
-                        Vorname :
-                    </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={fName => this.setState({fName})}
-                            placeholder="Vorname">
-                        </TextInput>
-                </View>
-
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Nachname :
+                        Login :
                     </Text>
                     <TextInput
                         style={styles.input}
-                        onChangeText={nName => this.setState({nName})}
-                        placeholder="Nachname">
-                    </TextInput>
-                </View>
-
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Benutzername :
-                    </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={uName => this.setState({uName})}
+                        onChangeText={login => this.setState({login})}
                         placeholder="Username">
                     </TextInput>
                 </View>
@@ -71,73 +48,33 @@ class RegisterScreen extends Component {
                     </Text>
                     <TextInput
                         style={styles.input}
-                        onChangeText={pass => this.setState({pass})}
-
-                        placeholder="Passwort">
+                        onChangeText={password => this.setState({password})}
+                        placeholder="Passwort"
+                        secureTextEntry = {true}>
                     </TextInput>
                 </View>
 
                 <View style={styles.inputContainerView}>
                     <Text style={styles.text}>
-                        Haarfarbe :
+                        Passwort wdh:
                     </Text>
                     <TextInput
                         style={styles.input}
-                        onChangeText={haircolor => this.setState({haircolor})}
-                        placeholder="Haarfarbe">
-                    </TextInput>
-                </View>
-
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Alter :
-                    </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={age => this.setState({age})}
-                        placeholder="Alter">
-                    </TextInput>
-                </View>
-
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Geschlecht :
-                    </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={sex => this.setState({sex})}
-                        placeholder="Geschlecht">
-                    </TextInput>
-                </View>
-
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Größe :
-                    </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={bodyheight => this.setState({bodyheight})}
-                        placeholder="Groeße">
-                    </TextInput>
-                </View>
-
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Figur :
-                    </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={figure => this.setState({figure})}
-                        placeholder="Figur">
+                        onChangeText={passwordTest => this.setState({passwordTest})}
+                        placeholder="Passwort"
+                        secureTextEntry = {true}>
                     </TextInput>
                 </View>
 
                 <ViewContainer>
 
                 </ViewContainer>
+                <ViewContainer>
+
+                </ViewContainer>
 
                 <ButtonContainer>
-                    <TouchableHighlight onPress={() => this._saveRegAlert(this.state.fName, this.state.lName, this.state.uName, this.state.pass, this.state.age, this.state.eyecolor, this.state.haircolor, this.state.sex, this.state.bodyheight, this.state.figure)}>
+                    <TouchableHighlight onPress={() => this._createUser(this.state.login, this.state.password, this.state.passwordTest, this._navigateToLoginScreen())}>
                         <Text style={styles.btnText}> Registrieren </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
@@ -151,7 +88,6 @@ class RegisterScreen extends Component {
                 <ViewContainer>
 
                 </ViewContainer>
-                <StatusBarBackground />
 
             </ViewContainer>
         );
@@ -163,8 +99,71 @@ class RegisterScreen extends Component {
         })
     }
 
-    _saveRegAlert(pFName, pLName, pUsername, pPasswort, pAge, pEyecolor, pHaircolor, pSex, pBodyheight, pFigure){
-        Alert.alert('Sie wurden mit folgenden Angaben:', pFName +"\n"+ pLName +"\n"+ pUsername +"\n"+ pPasswort +"\n"+ pAge +"\n"+ pEyecolor +"\n"+ pHaircolor +"\n"+ pSex +"\n"+ pBodyheight +"\n"+ pFigure, [{text: 'erfolgreich registriert'}])
+    _createUser(pUsername, pPassword, pPasswordTest, pCallback ) {
+
+        var fehler = false;
+        var db = null;
+        var callbacks = {
+            success: function (data) {
+                console.log(data);
+
+                if (data.length == 0) {
+                    // Username frei
+
+                    var callbacksCreate = {
+                        success: function (data) {
+                            console.log(data);
+                            Alert.alert('Benutzer', "Der Benutzer "+ pUsername + " wurde erfolgreich erstellt", [{text: 'ok'}]);
+
+                            pCallback();
+                        },
+                        error: function (error) {
+                            console.log(error);
+                            // Verursacht einen fehler
+                            // Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+                        }
+                    };
+
+                    var newUser = {
+                        doctype: "user",
+                        login: pUsername,
+                        password: pPassword,
+                        role: 0
+                    };
+                    db.user.create(newUser, callbacksCreate);
+
+                } else if (data.length >= 1) {
+                    // Username schon belegt
+                    Alert.alert('Benutzer', "Der gewaehlte Benutzername ist schon belegt.", [{text: 'ok'}]);
+                }
+
+
+               //pCallback();
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+            }
+        };
+
+        if ( pUsername == null ) {
+            Alert.alert('Fehler', "Kein Username eingegeben" , [{text: 'ok'}]);
+            fehler = true;
+        }
+        else if ( pPassword == null ) {
+            Alert.alert('Fehler', "Kein Password eingegeben" , [{text: 'ok'}]);
+            fehler = true;
+        }
+        else if ( pPassword != pPasswordTest){
+            Alert.alert('Fehler', "Password nicht Identisch" , [{text: 'ok'}]);
+            fehler = true;
+        }
+        else if ( fehler == false ) {
+
+            db = Database.getInstance();
+            db.user.findByLogin(pUsername, callbacks);
+
+        }
     }
 }
 
@@ -174,7 +173,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop:30,
-        paddingBottom: 20
+        paddingBottom: 30
     },
     titleText: {
         flex: 1,
@@ -186,7 +185,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     input: {
-        height: 36,
+        height: 30,
         padding: 4,
         marginRight: 50,
 

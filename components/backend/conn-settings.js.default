@@ -1,5 +1,7 @@
 var connSettings = {
-    url: "",
+    protocol: "",
+    url: "e",
+    port: ,
     user: "",
     password: "",
     database: ""
