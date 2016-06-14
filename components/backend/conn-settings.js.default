@@ -1,6 +1,6 @@
 var connSettings = {
     protocol: "",
-    url: "e",
+    url: "",
     port: ,
     user: "",
     password: "",

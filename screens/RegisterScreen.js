@@ -101,7 +101,6 @@ class RegisterScreen extends Component {
 
     _createUser(pUsername, pPassword, pPasswordTest, pCallback ) {
 
-        var fehler = false;
         var db = null;
         var callbacks = {
             success: function (data) {
@@ -148,17 +147,14 @@ class RegisterScreen extends Component {
 
         if ( pUsername == null ) {
             Alert.alert('Fehler', "Kein Username eingegeben" , [{text: 'ok'}]);
-            fehler = true;
         }
         else if ( pPassword == null ) {
             Alert.alert('Fehler', "Kein Password eingegeben" , [{text: 'ok'}]);
-            fehler = true;
         }
         else if ( pPassword != pPasswordTest){
             Alert.alert('Fehler', "Password nicht Identisch" , [{text: 'ok'}]);
-            fehler = true;
         }
-        else if ( fehler == false ) {
+        else {
 
             db = Database.getInstance();
             db.user.findByLogin(pUsername, callbacks);
