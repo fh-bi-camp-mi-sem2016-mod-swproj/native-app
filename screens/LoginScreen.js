@@ -15,8 +15,8 @@ class LoginScreen extends Component {
 
     state = {
         //zum Testen
-        username: 'bertha59',
-        password: '13224'
+        username: '',
+        password: ''
     };
 
     render() {
@@ -51,7 +51,8 @@ class LoginScreen extends Component {
                         <TextInput
                             style={styles.input}
                             onChangeText={password => this.setState({password})}
-                            placeholder="Passwort">
+                            placeholder="Passwort"
+                            secureTextEntry = {true}>
                         </TextInput>
                     </View>
                 <ButtonContainer>
@@ -77,7 +78,7 @@ class LoginScreen extends Component {
         );
     }
 
-    _login(pUser, pPassword, pCallback) {
+    _login(self, pUser, pPassword) {
         var callbacks = {
             success: function (data) {
                 console.log(data);
@@ -98,7 +99,7 @@ class LoginScreen extends Component {
 
                         console.log(user.login + " hat sich erfolgreich eingeloggt");
 
-                        pCallback;
+                        self._navigateToLoginScreen();
                     } else {
                         // Passwort falsch
                         console.log("Passwort falsch");

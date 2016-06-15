@@ -28,39 +28,39 @@ class findme extends Component {
         switch (route.ident) {
             case "Login":
                 return [
-                    <LoginScreen {...globalNavigatorProps} />
+                    <LoginScreen key="login" {...globalNavigatorProps} />
                ];
             case "Main":
                 return [
-                    <MainScreen {...globalNavigatorProps} />
+                    <MainScreen key="main" {...globalNavigatorProps} />
                 ];
             case "Admin":
                 return [
-                    <AdminScreen {...globalNavigatorProps} />
+                    <AdminScreen key="admin" {...globalNavigatorProps} />
                 ];
             case "Profile":
                 return [
-                    <ProfileScreen {...globalNavigatorProps} />
+                    <ProfileScreen key="profile" {...globalNavigatorProps} />
                 ];
             case "Preference":
                 return [
-                    <PreferenceScreen {...globalNavigatorProps} />
+                    <PreferenceScreen key="preferences" {...globalNavigatorProps} />
                 ];
             case "Friend":
                 return [
-                    <FriendScreen {...globalNavigatorProps} />
+                    <FriendScreen key="friend" {...globalNavigatorProps} />
                 ];
             case "UserSearch":
                 return [
-                    <SearchScreen {...globalNavigatorProps} />
+                    <SearchScreen key="searcb" {...globalNavigatorProps} />
                 ];
             case "Message":
                 return [
-                    <MessageScreen {...globalNavigatorProps} />
+                    <MessageScreen key="message" {...globalNavigatorProps} />
                 ];
             case "Register":
                 return [
-                    <RegisterScreen {...globalNavigatorProps} />
+                    <RegisterScreen key="register" {...globalNavigatorProps} />
                 ];
             //More Cases
             default:
