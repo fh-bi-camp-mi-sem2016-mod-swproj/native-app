@@ -3,13 +3,18 @@
  */
 import React, {Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Alert} from 'react-native';
 import ViewContainer from  '../components/frontend/ViewContainer'
-import StatusBarBackground from  '../components/frontend/StatusBarBackground'
 import ButtonContainer from '../components/frontend/ButtonContainer'
+import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 
+var instanz = null;
 
 class MessageScreen extends Component {
 
-    state = {
+    constructor(props) {
+        super(props);
+        instanz = this;
+    }
+        state = {
         //zum Testen
         user: 'Heinz',
         message: 'Test'
@@ -19,6 +24,14 @@ class MessageScreen extends Component {
         return (
             <ViewContainer>
 
+                <Icon.ToolbarAndroid
+                    style={styles.toolbarView}
+                    actions={[
+                        {title: 'Back', iconName:'arrow-left', iconSize: 30,  show: 'always'},
+                        {title: 'newMessage', icon: require('./icon.png'), show: 'always'}
+                    ]}
+                    onActionSelected={this._onActionSelected}
+                />
                 <View style={styles.titleView}>
                     <Text style={styles.titleText}>
                         MessageScreen
@@ -60,9 +73,6 @@ class MessageScreen extends Component {
                         <Text style={styles.btnText}> Back </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
-
-                <StatusBarBackground />
-
             </ViewContainer>
         );
     }
@@ -77,6 +87,15 @@ class MessageScreen extends Component {
         Alert.alert('Nachricht:',"User: "+ pInputUser + "\nNachricht: " +pInputMessage, [{text: 'gesendet'}])
     }
 
+    _onActionSelected(position) {
+        if (position === 0) { // index of 'Settings'
+            instanz._navigateToMainMenue();
+
+        }
+        if (position === 1) {
+            Alert.alert('Nachricht:',"User: "+ "blabla"+ "\nNachricht: " + "blubla", [{text: 'gesendet'}])
+        }
+    }
 }
 
 const styles = StyleSheet.create({
@@ -108,6 +127,10 @@ const styles = StyleSheet.create({
         padding: 5,
         height: 20,
         margin: 10
+    },
+    toolbarView: {
+        height: 50,
+        marginRight: 250
     }
 });
 
