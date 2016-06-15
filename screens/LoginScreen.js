@@ -3,13 +3,21 @@
  * https://github.com/facebook/react-native
  */
 
-import React, {Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Image, Alert,} from 'react-native';
-import ViewContainer from  '../components/frontend/ViewContainer'
-import ButtonContainer from '../components/frontend/ButtonContainer'
-
-import Database from './../components/backend/Database'
-
-import User from './../components/backend/User'
+import React, {
+    Component,
+    StyleSheet,
+    Text,
+    View,
+    TouchableHighlight,
+    button,
+    TextInput,
+    Image,
+    Alert
+} from "react-native";
+import ViewContainer from "../components/frontend/ViewContainer";
+import ButtonContainer from "../components/frontend/ButtonContainer";
+import Database from "./../components/backend/Database";
+import User from "./../components/backend/User";
 
 class LoginScreen extends Component {
 
@@ -57,7 +65,7 @@ class LoginScreen extends Component {
                     </View>
                 <ButtonContainer>
                     <TouchableHighlight
-                        onPress={()=>this._login(this.state.username ,this.state.password, this._navigateToMainMenue())}>
+                        onPress={()=>this._login(this, this.state.username ,this.state.password)}>
                         <Text style={styles.btnText}>
                             Einloggen
                         </Text>
