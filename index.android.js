@@ -77,7 +77,7 @@ class findme extends Component {
     render() {
         return (
             <Navigator
-                initialRoute={{ident:"Message"}}
+                initialRoute={{ident:"Login"}}
                 ref="appNavigator"
                 style={styles.navigatorStyles}
                 renderScene={ this._renderScene } />
