@@ -74,7 +74,7 @@ class RegisterScreen extends Component {
                 </ViewContainer>
 
                 <ButtonContainer>
-                    <TouchableHighlight onPress={() => this._createUser(this.state.login, this.state.password, this.state.passwordTest, this._navigateToLoginScreen())}>
+                    <TouchableHighlight onPress={() => this._createUser(this, this.state.login, this.state.password, this.state.passwordTest)}>
                         <Text style={styles.btnText}> Registrieren </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
@@ -99,7 +99,7 @@ class RegisterScreen extends Component {
         })
     }
 
-    _createUser(pUsername, pPassword, pPasswordTest, pCallback ) {
+    _createUser(self, pUsername, pPassword, pPasswordTest) {
 
         var db = null;
         var callbacks = {
@@ -114,7 +114,7 @@ class RegisterScreen extends Component {
                             console.log(data);
                             Alert.alert('Benutzer', "Der Benutzer "+ pUsername + " wurde erfolgreich erstellt", [{text: 'ok'}]);
 
-                            pCallback();
+                            self._navigateToLoginScreen();
                         },
                         error: function (error) {
                             console.log(error);
