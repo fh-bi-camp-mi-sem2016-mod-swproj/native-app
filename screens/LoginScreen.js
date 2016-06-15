@@ -120,6 +120,7 @@ class LoginScreen extends Component {
                         } else {
                             self._getProfile();
 						}
+                        self._navigateToMainMenue();
                     } else {
                         // Passwort falsch
                         console.log("Passwort falsch");
