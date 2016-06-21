@@ -11,14 +11,14 @@ import User from './../components/backend/User'
 
 import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 
-var posteingang = null;
+var instance = null;
 var data = null;
 
 class MessageScreen extends Component {
 
     constructor(props) {
         super(props);
-        posteingang = this;
+        instance = this;
 
         data =[{User: "Ruben", Info: "beleidigung"},
             {User: "Bene", Info: "belästigung"},
@@ -113,15 +113,17 @@ class MessageScreen extends Component {
     }
 
     _onActionSelected(position) {
-        if (position === 0) { // index of 'Settings'
-            posteingang._navigateToMainMenue();
-        }
-        if (position === 1) {
-            posteingang.navigateToNewMessageScreen();
-        }
-        if ( position === 2 ) {
-            Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
-            posteingang._navigateToLoginScreen();
+        switch(position) {
+            case 0:
+                instance._navigateToMainMenue();
+                break;
+            case 1:
+                instance.navigateToNewMessageScreen();
+                break;
+            case 2:
+                Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
+                instance._navigateToLoginScreen();
+                break;
         }
     }
     _add(){

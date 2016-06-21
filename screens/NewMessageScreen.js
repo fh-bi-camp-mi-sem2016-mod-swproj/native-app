@@ -6,13 +6,13 @@ import ViewContainer from  '../components/frontend/ViewContainer'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 
-var instanz = null;
+var instance = null;
 
 class NewMessageScreen extends Component {
 
     constructor(props) {
         super(props);
-        instanz = this;
+        instance = this;
     }
     state = {
         //zum Testen
@@ -101,15 +101,16 @@ class NewMessageScreen extends Component {
     }
 
     _onActionSelected(position) {
-        if (position === 0) { // index of 'Settings'
-            instanz._navigateBackToMessageScreen();
-
-        }
-        if (position === 1) {
-            instanz._navigateToMainMenue();
-        }
-        if (position === 2) {
-            instanz._navigateToLogInScreen();
+        switch (position) {
+            case 0:
+                instance._navigateBackToMessageScreen();
+                break;
+            case 1:
+                instance._navigateToMainMenue();
+                break;
+            case 2:
+                instance._navigateToLogInScreen();
+                break;
         }
     }
 }
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     },
     toolbarView: {
         height: 50,
-        marginRight: 250
+        marginRight: 200
     }
 });
 
