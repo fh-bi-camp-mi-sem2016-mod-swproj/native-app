@@ -9,7 +9,7 @@ import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 
 
 var data = [];
-var searchInstanz;
+var instance;
 
 class SearchScreen extends Component {
 
@@ -19,7 +19,7 @@ class SearchScreen extends Component {
 
     constructor(props){
         super(props);
-        searchInstanz = this;
+        instance = this;
 
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
@@ -54,8 +54,6 @@ class SearchScreen extends Component {
 
     render() {
         return (
-
-
             <ViewContainer>
 
                 <Icon.ToolbarAndroid
@@ -94,17 +92,21 @@ class SearchScreen extends Component {
                     </ListView>
                 </ViewContainer>
             </ViewContainer>
-
         );
     }
+
     _navigateToFriendScreen(){
-        this.props.navigator.pop()
+        this.props.navigator.pop({
+            ident: "Friend"
+        })
     }
+
     _navigateToMainMenue(){
         this.props.navigator.push({
             ident: "Main"
         })
     }
+
     _navigateToLoginScreen(){
         this.props.navigator.push({
             ident: "Login"
@@ -116,15 +118,17 @@ class SearchScreen extends Component {
     }
 
     _onActionSelected(position) {
-        if (position === 0) { // index of 'Settings'
-            searchInstanz._navigateToFriendScreen();
-        }
-        if (position === 1) { // index of 'Settings'
-            searchInstanz._navigateToMainMenue();
-        }
-        if (position === 2) {
-            Alert.alert("","Sie wurden ausgeloggt",[{text: 'ok'}]);
-            searchInstanz._navigateToLoginScreen();
+        switch (position) {
+            case 0:
+                instance._navigateBackToMessageScreen();
+                break;
+            case 1:
+                instance._navigateToMainMenue();
+                break;
+            case 2:
+                Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
+                instance._navigateToLoginScreen();
+                break;
         }
     }
 

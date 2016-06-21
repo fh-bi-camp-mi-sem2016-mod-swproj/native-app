@@ -12,10 +12,9 @@ class MainScreen extends Component {
     constructor(props) {
         super(props);
 
-        mainInstanz = this;
+        instance = this;
     }
-
-
+    
     render() {
         return (
              <ViewContainer>
@@ -101,22 +100,42 @@ class MainScreen extends Component {
     }
 
     _onActionSelected(position) {
+        switch (position) {
+            case 0:
+                instance._navigateToProfileScreen();
+                break;
+            case 1:
+                instance._navigateToMessageScreen();
+                break;
+            case 2:
+                instance._navigateToProfileScreen();
+                break;
+            case 3:
+                instance._navigateToFriendScreen();
+                break;
+            case 4:
+                Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
+                instance._navigateBackToLoginScreen();
+                break;
+        }
+/*
         if (position === 0) { // index of 'Settings'
-            mainInstanz._navigateToProfileScreen();
+            instance._navigateToProfileScreen();
         }
         if (position === 1) {
-            mainInstanz._navigateToMessageScreen();
+            instance._navigateToMessageScreen();
         }
         if (position === 2) {
-            mainInstanz._navigateToProfileScreen();
+            instance._navigateToProfileScreen();
         }
         if (position === 3) {
-            mainInstanz._navigateToFriendScreen();
+            instance._navigateToFriendScreen();
         }
         if (position === 4) {
             Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
-            mainInstanz._navigateBackToLoginScreen();
+            instance._navigateBackToLoginScreen();
         }
+*/
     }
 }
 
