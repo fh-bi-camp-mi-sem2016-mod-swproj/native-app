@@ -1,7 +1,7 @@
 /**
  * Created by Dennis on 17.05.2016.
  */
-'use strict'
+'use strict';
 import React, { Component, View } from 'react-native'
 
 class ViewContainer extends Component {
@@ -20,9 +20,10 @@ const styles = React.StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         justifyContent: "flex-start",
-        alignItems: "stretch"
+        alignItems: "stretch",
+        backgroundColor: "#F5FCFF"
     }
 
 })
 
-module.exports = ViewContainer
+module.exports = ViewContainer;

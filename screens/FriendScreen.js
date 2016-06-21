@@ -1,88 +1,142 @@
 /**
  * Created by Dennis on 18.05.2016.
  */
-import React, {AppRegistry, Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Image, Alert, ListView} from 'react-native';
+import React, {Component, StyleSheet, Text, View, TouchableHighlight, button, Alert, ListView} from 'react-native';
+
 import ViewContainer from  '../components/frontend/ViewContainer'
 import ButtonContainer from '../components/frontend/ButtonContainer'
+import Database from './../components/backend/Database'
+import User from './../components/backend/User'
+import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 
-var data;
+var data = [];
+var incData = [];
+
+var instance;
+var set = 0;
 
 class FriendScreen extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
-        data =[{User: "Ruben", Info: "beleidigung"},
-            {User: "Bene", Info: "belästigung"},
-            {User: "Dennis", Info: "geilheit"},
-            {User: "Florian", Info: "dauerdruck"},
-            {User: "Fynn", Info: "Wasser"}];
+        instance = this;
+        //fügt die Listen beim Laden des Screens hinzu
+        this._addFriendsToListView(instance, "ca5c2c9fb2d201991f8b6f06e62196ff");
 
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
         });
+        var ds1 = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 != r2
+        });
 
         this.state = {
-            dataSource: ds.cloneWithRows(data)
-        }
+            dataSource: ds.cloneWithRows(data),
+            dataSource1: ds1.cloneWithRows(incData)
+        };
+
+        // zum testen
+        User.getInstance().currentUSER.profile = {_id: "ca5c2c9fb2d201991f8b6f06e62196ff", _rev: "1-75814ab18741c8c0fe75e57ceda4319f", doctype: "profile", user_id: "<uuid>", firstname: "bertha", lastname: "meier", email: "bertha@test.de", birthday: -316656000, gender: 0, familystatus: 1, children: 2, aboutme: "fröhlich, erlich", privacy: {friends: 1, pictures: 0}, profilepic: "<uuid>", haircolor: 3, eyecolor: 0, figure: 1};
     }
 
+    // erzeugt die ersten ListView
+    // in ihr stehen die aktuellen Freunde
     renderRow(rowData) {
         return (
-            <View style={styles.inputListView}>
-                <Text style={{fontSize:18}}>
-                    {rowData.User +" "+ rowData.Info}
-                </Text>
+            <View style = {styles.listRow}>
+                    <Text>
+                     {rowData.firstname + " " + rowData.lastname}
+                    </Text>
+                <View style = {styles.iconRow}/>
+                <TouchableHighlight onPress={() => this._setFriend(rowData.profile_id, 2)}>
+                    <Icon name = "minus-square"
+                          size = {20}
+                    />
+                </TouchableHighlight>
             </View>
         )
     }
 
+    // erzeugt die zweite ListView
+    // in ihr stehen die ausstehenden Freundesanfragen
+    renderRow1(rowData) {
+        return (
+            <View style = {styles.listRow}>
+                <Text>
+                    {rowData.firstname + " " + rowData.lastname}
+                </Text>
+                <View style = {styles.iconRow}/>
+                <TouchableHighlight style = {styles.button} onPress={() => this._setFriend(rowData.profile_id, 1)}>
+                    <Icon name = "plus-square"
+                          size = {20}
+                    />
+                </TouchableHighlight>
+
+                <TouchableHighlight style = {styles.button} onPress={() => this._delete(rowData.profile_id, 2)}>
+                    <Icon name = "minus-square"
+                          size = {20}
+                    />
+                </TouchableHighlight>
+            </View>
+        )
+    }
+
+    // Hier passiert der eigentliche Teil
+    // Programmdarstellung
     render() {
         return (
             <ViewContainer>
 
+                <Icon.ToolbarAndroid
+                    style={styles.toolbarView}
+                    actions={[
+                        {title: 'Back', iconName:'arrow-left', iconSize: 30,  show: 'always'},
+                        {title: 'Search', iconName:'user-plus', iconSize: 30, show: 'always'},
+                        {title: 'Log Out', iconName:'sign-out', iconSize: 30,  show: 'always'}
+                    ]}
+                    onActionSelected={this._onActionSelected}
+                />
+
                 <View style={styles.titleView}>
-                    <Text style={styles.titleText}>
-                        Welcome to Find.me
-                    </Text>
                     <Text style={styles.titleText}>
                         FriendZone:
                     </Text>
                 </View>
+
+                <Text style={styles.text}>
+                    Freunde:
+                </Text>
+
+                <ListView
+                    style={styles.marginRow}
+                    dataSource={this.state.dataSource}
+                    renderRow={(rowData) => {return this.renderRow(rowData)}}>
+                </ListView>
+
+                <Text style={styles.text}>
+                    Freundesanfragen:
+                </Text>
+
+                <ListView
+                    style={styles.marginRow}
+                    dataSource={this.state.dataSource1}
+                    renderRow={(rowData) => {return this.renderRow1(rowData)}}>
+                </ListView>
+
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToSearchScreen()}>
-                        <Text style={styles.btnText}> suchen </Text>
-                    </TouchableHighlight>
-                </ButtonContainer>
-                <ViewContainer>
-
-                    <ListView
-                        dataSource={this.state.dataSource}
-                        renderRow={(rowData) => {return this.renderRow(rowData)}}>
-                    </ListView>
-
-                </ViewContainer>
-
-
-                <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._add()}>
-                        <Text style={styles.btnText}> add </Text>
-                    </TouchableHighlight>
-                </ButtonContainer>
-
-                <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToMainMenue()}>
-                        <Text style={styles.btnText}> Back </Text>
+                    <TouchableHighlight onPress={(event) => this._save()}>
+                        <Text style={styles.btnText}> save </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
 
             </ViewContainer>
-
         );
     }
 
+    // Die Navigator
     _navigateToMainMenue() {
-        this.props.navigator.push({
+        this.props.navigator.pop({
             ident: "Main"
         })
     }
@@ -92,17 +146,227 @@ class FriendScreen extends Component {
             ident: "UserSearch"
         })
     }
-    _add(){
+
+    _navigateToLoginScreen() {
+        this.props.navigator.push({
+            ident: "Login"
+        })
+    }
+
+    // Navigator für die ToolbarAndroid
+    // 0 = Links.... u.s.w.
+    _onActionSelected(position) {
+        switch (position) {
+            case 0:
+                instance._navigateToMainMenue();
+                break;
+            case 1:
+                instance._navigateToSearchScreen();
+                break;
+            case 2:
+                instance._navigateToLoginScreen();
+        }
+    }
+
+    //Setz im CurrentUser an der übergebenen Id das Value 0 = angefragt, 1 = befreundet und 2 = abgelehnt
+    _setFriend(pProfileId, pValue) {
+        Alert.alert('SET:', "Id: " + pProfileId +"\nValue "+pValue, [{text: 'ok'}]);
+        for (var i = 0; i < User.getInstance().currentUSER.friends.friends.length; i++) {
+            if (User.getInstance().currentUSER.friends.friends[i].id == pProfileId) {
+                User.getInstance().currentUSER.friends.friends[i].status = pValue;
+            }
+        }
+    }
+
+    // Die Methode übernimmt das speichern, damit wir nicht andauernt anfragen zum Server
+    // senden ist diese auf einen Button hinterlegt
+    _save() {
+
+        var callbacksSaveOther = {
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        };
+
+        var callbacksOtherFriend = {
+            success: function (data) {
+                console.log(data);
+
+                if (data.length == 1){
+                    var changed = false;
+                    // Die Freundesliste der anderen
+                    var otherFriendlist = data[0];
+                    for(var i = 0; i < otherFriendlist.friends.length; i++) {
+                        if(otherFriendlist.friends[i].id == User.getInstance().currentUSER.profile._id){
+                            for(var j = 0 ; j < User.getInstance().currentUSER.friends.friends.length ; j++){
+                                if(otherFriendlist.profile_id == User.getInstance().currentUSER.friends.friends[j].id){
+                                    var status = User.getInstance().currentUSER.friends.friends[j].status;
+                                    console.log("Status = ", status);
+                                    if(status == 1){
+                                        otherFriendlist.friends[i].status = 1;
+                                        changed = true;
+                                    } else if(status = 2){
+                                        otherFriendlist.friends[i].status = 2;
+                                        changed = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if(changed){
+                        // andere Freundeslise updaten
+                        console.log("gefunden");
+                        var db = Database.getInstance();
+                        db.friends.update(otherFriendlist, callbacksSaveOther);
+                    } else {
+                        console.log("nicht gefunden");
+
+                        var status;
+                        for(var j = 0 ; j < User.getInstance().currentUSER.friends.friends.length ; j++){
+                            if(otherFriendlist.profile_id == User.getInstance().currentUSER.friends.friends[j].id){
+                                status = User.getInstance().currentUSER.friends.friends[j].status;
+                            }
+                        }
+
+                        var row = {
+                            id: User.getInstance().currentUSER.profile._id,
+                            status: status
+                        };
+
+                        otherFriendlist.friends.push(row);
+
+                        var db = Database.getInstance();
+                        db.friends.update(otherFriendlist, callbacksSaveOther);
+                    }
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+            }
+        };
+
+        var callbacks = {
+            success: function (data) {
+                console.log(data);
+
+                var db = Database.getInstance();
+
+                var ownFriendList = User.getInstance().currentUSER.friends;
+
+                for(var i = 0 ; i < ownFriendList.friends.length ; i++){
+                    db.friends.findByProfileId(ownFriendList.friends[i].id, callbacksOtherFriend);
+                }
+
+                User.getInstance().currentUSER.friends._rev = data.rev;
+
+                Alert.alert('Success', "Die Freundesliste wurde erfolgreich gespeichert.", [{text: 'ok'}]);
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Die Freundesliste konnte nicht in die Datenbank geschrieben werden.", [{text: 'ok'}]);
+            }
+        };
+
+        var friendlist = User.getInstance().currentUSER.friends;
+        var db = Database.getInstance();
+        db.friends.update(friendlist, callbacks);
+
+    }
+    
+    _delete(pProfileId, pValue) {
+        var index;
+        for (var i = 0; i < User.getInstance().currentUSER.friends.friends.length; i++) {
+            if ( User.getInstance().currentUSER.friends.friends[i].id == pProfileId ) {
+                index = i;
+                User.getInstance().currentUSER.friends.friends[index].status = pValue;
+            }
+        }
+        Alert.alert('Liste', JSON.stringify(index), [{text: 'ok'}]);
+        delete User.getInstance().currentUSER.friends.friends[index];
+    }
+
+    _addListViewRow(pFirstname, pLastname, pStatus, pProfileId){
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
         });
 
-        //data.push({User: "Test", Info: "Bla"});
-        data = data.concat([{User: "Test2", Info: "Blup"}]);
-        this.setState({dataSource: ds.cloneWithRows(data) });
-        //concat bei Liste
-        Alert.alert('Test', data[5].User+" "+data[5].Info, [{text: 'ok'}]);
-        //Alert.alert('Test', data[6].User+" "+data[6].Info, [{text: 'ok'}]);
+        if ( pStatus == 1){
+            data = data.concat([{firstname: pFirstname, lastname: pLastname, profile_id: pProfileId }]);
+            this.setState({dataSource: ds.cloneWithRows(data)});
+        }
+        else if ( pStatus == 0){
+            incData = incData.concat([{firstname: pFirstname, lastname: pLastname, profile_id: pProfileId }]);
+            this.setState({dataSource1: ds.cloneWithRows(incData)});
+        }
+    }
+
+    _addFriendsToListView(self, pProfileId) {
+
+        var db = null;
+        var callbacks = {
+            success: function (data) {
+                console.log(data);
+
+                if (data.length == 0) {
+                    Alert.alert('Fehler', "Sie können keine Freunde ohne Profile haben", [{text: 'ok'}]);
+                } else if (data.length > 1) {
+                    Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+                }
+                else if (set == 0){
+                    User.getInstance().currentUSER.friends = data[0];
+                    for(var i = 0; i < data[0].friends.length; i++) {
+                        self._addProfile(self, data[0].friends[i].id, data[0].friends[i].status);
+                    }
+                    set = 1;
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+            }
+        };
+        if (pProfileId == null) {
+            Alert.alert('Fehler', "Sie können keine Freunde ohne Profile haben", [{text: 'ok'}]);
+        }
+        else if( set == 0) {
+            db = Database.getInstance();
+            db.friends.findByProfileId(pProfileId, callbacks);
+        }
+    }
+
+    _addProfile(self, pProfileId, pFriendStatus) {
+
+        var db = null;
+        var callbacks = {
+            success: function (data) {
+                console.log(data);
+
+                if (data.length == 0) {
+                    Alert.alert('Fehler', "Ihr Freund hat noch keine ProfilId", [{text: 'ok'}]);
+                } else if (data.length > 1) {
+                    Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+                }
+                else {
+                    self._addListViewRow(data[0].firstname, data[0].lastname, pFriendStatus, pProfileId);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+            }
+        };
+
+        if (pProfileId == null) {
+            Alert.alert('Fehler', "Ihr Freund hat kein Profil", [{text: 'ok'}]);
+        }
+        else {
+            db = Database.getInstance();
+            db.profile.findById(pProfileId, callbacks);
+        }
     }
 }
 
@@ -111,13 +375,8 @@ const styles = StyleSheet.create({
     titleView:{
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop:30,
-        paddingBottom: 10
-    },
-    thumbnail: {
-        marginBottom: 10,
-        width: 300,
-        height: 200
+        paddingTop:10,
+        paddingBottom: 15
     },
     titleText: {
         flex: 1,
@@ -125,28 +384,41 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
         textAlign: 'center'
     },
-    inputContainerView: {
-        flexDirection: 'row',
-        marginTop: 10,
-        padding:10
-    },
     btnText: {
         fontSize: 18,
         color: '#fff',
         alignSelf: 'center'
     },
     text: {
+        width: 200,
         flexDirection: 'row',
-        padding: 5,
-        height: 20,
-        margin: 10
-    },
-    inputListView: {
-        padding: 5,
-        marginRight: 50,
+        fontSize: 20,
         marginLeft: 50,
-        flex: 1,
-        alignSelf: "flex-start"
+        padding: 5,
+        height: 30,
+        margin: 5,
+        fontWeight: 'bold'
+    },
+    listRow: {
+        flexDirection: "row",
+        alignSelf: "flex-start",
+        marginLeft: 50,
+        marginTop: 10,
+        height: 30
+    },
+    iconRow: {
+        padding: 10,
+        marginLeft: 150
+    },
+    toolbarView: {
+        height: 50,
+        marginRight: 200
+    },
+    button: {
+      marginRight: 10
+    },
+    marginRow: {
+        marginBottom: 20
     }
 });
 

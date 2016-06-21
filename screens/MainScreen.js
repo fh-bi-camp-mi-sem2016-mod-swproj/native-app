@@ -2,17 +2,35 @@
  * Created by Dennis on 18.05.2016.
  */
 
-import React, {Component, StyleSheet, Text, View, TouchableHighlight, button} from 'react-native';
+import React, {Component, StyleSheet, Text, View, TouchableHighlight, button, Alert} from 'react-native';
 import ViewContainer from  '../components/frontend/ViewContainer'
-import StatusBarBackground from  '../components/frontend/StatusBarBackground'
+import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 import ButtonContainer from '../components/frontend/ButtonContainer'
 
 class MainScreen extends Component {
+
+    constructor(props) {
+        super(props);
+
+        mainInstanz = this;
+    }
 
 
     render() {
         return (
              <ViewContainer>
+
+                 <Icon.ToolbarAndroid
+                     style={styles.toolbarView}
+                     actions={[
+                        {title: 'Profile', iconName:'user', iconSize: 30,  show: 'always'},
+                        {title: 'Posteingang', iconName:'envelope', iconSize: 30,  show: 'always'},
+                        {title: 'Preference', iconName:'heart', iconSize: 30,  show: 'always'},
+                        {title: 'Friends', iconName:'users', iconSize: 30,  show: 'always'},
+                        {title: 'Log Out', iconName:'sign-out', iconSize: 30,  show: 'always'}
+                    ]}
+                     onActionSelected={this._onActionSelected}
+                 />
                     <View style={styles.titleView}>
                         <Text style={styles.titleText}>
                             Welcome to Find.me
@@ -29,7 +47,7 @@ class MainScreen extends Component {
 
                  <ButtonContainer>
                      <TouchableHighlight onPress={(event) => this._navigateToMessageScreen()}>
-                         <Text style={styles.btnText}> Zu den Nachrichten </Text>
+                         <Text style={styles.btnText}> Posteingang </Text>
                      </TouchableHighlight>
                  </ButtonContainer>
 
@@ -45,24 +63,19 @@ class MainScreen extends Component {
                     </TouchableHighlight>
                 </ButtonContainer>
 
-                 <ButtonContainer>
-                     <TouchableHighlight onPress={(event) => this._navigateToLoginScreen()}>
-                        <Text style={styles.btnText}> Log Out </Text>
-                    </TouchableHighlight>
-                 </ButtonContainer>
-
                  <ViewContainer>
                      
                  </ViewContainer>
-                 
-                 <StatusBarBackground />
              </ViewContainer>
-
-
         );
     }
     _navigateToLoginScreen(){
         this.props.navigator.push({
+            ident: "Login"
+        })
+    }
+    _navigateBackToLoginScreen(){
+        this.props.navigator.pop({
             ident: "Login"
         })
     }
@@ -85,6 +98,25 @@ class MainScreen extends Component {
         this.props.navigator.push({
             ident: "Message"
         })
+    }
+
+    _onActionSelected(position) {
+        if (position === 0) { // index of 'Settings'
+            mainInstanz._navigateToProfileScreen();
+        }
+        if (position === 1) {
+            mainInstanz._navigateToMessageScreen();
+        }
+        if (position === 2) {
+            mainInstanz._navigateToProfileScreen();
+        }
+        if (position === 3) {
+            mainInstanz._navigateToFriendScreen();
+        }
+        if (position === 4) {
+            Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
+            mainInstanz._navigateBackToLoginScreen();
+        }
     }
 }
 
@@ -114,6 +146,10 @@ const styles = StyleSheet.create({
         padding: 5,
         height: 20,
         margin: 10
+    },
+    toolbarView: {
+        height: 50,
+        marginRight: 125
     }
 });
 

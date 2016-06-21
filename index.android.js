@@ -18,6 +18,7 @@ import MainScreen from './screens/MainScreen'
 import SearchScreen from './screens/SearchScreen'
 import MessageScreen from './screens/MessageScreen'
 import RegisterScreen from './screens/RegisterScreen'
+import NewMessageScreen from './screens/NewMessageScreen'
 
 class findme extends Component {
 
@@ -52,11 +53,15 @@ class findme extends Component {
                 ];
             case "UserSearch":
                 return [
-                    <SearchScreen key="searcb" {...globalNavigatorProps} />
+                    <SearchScreen key="search" {...globalNavigatorProps} />
                 ];
             case "Message":
                 return [
                     <MessageScreen key="message" {...globalNavigatorProps} />
+                ];
+            case "NewMessage":
+                return [
+                    <NewMessageScreen key ="newmessage" {...globalNavigatorProps} />
                 ];
             case "Register":
                 return [
@@ -91,6 +96,5 @@ const styles = React.StyleSheet.create({
 
     }
 });
-
 
 AppRegistry.registerComponent('findme', () => findme);
