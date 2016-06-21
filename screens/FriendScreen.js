@@ -12,7 +12,7 @@ import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 var data = [];
 var incData = [];
 
-var friendInstanz;
+var instance;
 var set = 0;
 
 class FriendScreen extends Component {
@@ -20,8 +20,9 @@ class FriendScreen extends Component {
     constructor(props) {
         super(props);
 
-        friendInstanz = this;
-        this._addFriendsToListView(friendInstanz, "ca5c2c9fb2d201991f8b6f06e62196ff");
+        instance = this;
+        //fügt die Listen beim Laden des Screens hinzu
+        this._addFriendsToListView(instance, "ca5c2c9fb2d201991f8b6f06e62196ff");
 
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
@@ -39,6 +40,8 @@ class FriendScreen extends Component {
         User.getInstance().currentUSER.profile = {_id: "ca5c2c9fb2d201991f8b6f06e62196ff", _rev: "1-75814ab18741c8c0fe75e57ceda4319f", doctype: "profile", user_id: "<uuid>", firstname: "bertha", lastname: "meier", email: "bertha@test.de", birthday: -316656000, gender: 0, familystatus: 1, children: 2, aboutme: "fröhlich, erlich", privacy: {friends: 1, pictures: 0}, profilepic: "<uuid>", haircolor: 3, eyecolor: 0, figure: 1};
     }
 
+    // erzeugt die ersten ListView
+    // in ihr stehen die aktuellen Freunde
     renderRow(rowData) {
         return (
             <View style = {styles.listRow}>
@@ -55,6 +58,8 @@ class FriendScreen extends Component {
         )
     }
 
+    // erzeugt die zweite ListView
+    // in ihr stehen die ausstehenden Freundesanfragen
     renderRow1(rowData) {
         return (
             <View style = {styles.listRow}>
@@ -77,6 +82,8 @@ class FriendScreen extends Component {
         )
     }
 
+    // Hier passiert der eigentliche Teil
+    // Programmdarstellung
     render() {
         return (
             <ViewContainer>
@@ -127,6 +134,7 @@ class FriendScreen extends Component {
         );
     }
 
+    // Die Navigator
     _navigateToMainMenue() {
         this.props.navigator.pop({
             ident: "Main"
@@ -145,18 +153,22 @@ class FriendScreen extends Component {
         })
     }
 
+    // Navigator für die ToolbarAndroid
+    // 0 = Links.... u.s.w.
     _onActionSelected(position) {
-        if (position === 0) { // index of 'Settings'
-            friendInstanz._navigateToMainMenue();
-        }
-        if (position === 1) {
-            friendInstanz._navigateToSearchScreen();
-        }
-        if (position === 2) {
-            Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
-            friendInstanz._navigateToLoginScreen();
+        switch (position) {
+            case 0:
+                instance._navigateToMainMenue();
+                break;
+            case 1:
+                instance._navigateToSearchScreen();
+                break;
+            case 2:
+                instance._navigateToLoginScreen();
         }
     }
+
+    //Setz im CurrentUser an der übergebenen Id das Value 0 = angefragt, 1 = befreundet und 2 = abgelehnt
     _setFriend(pProfileId, pValue) {
         Alert.alert('SET:', "Id: " + pProfileId +"\nValue "+pValue, [{text: 'ok'}]);
         for (var i = 0; i < User.getInstance().currentUSER.friends.friends.length; i++) {
@@ -165,6 +177,9 @@ class FriendScreen extends Component {
             }
         }
     }
+
+    // Die Methode übernimmt das speichern, damit wir nicht andauernt anfragen zum Server
+    // senden ist diese auf einen Button hinterlegt
     _save() {
 
         var callbacksSaveOther = {
@@ -182,12 +197,11 @@ class FriendScreen extends Component {
 
                 if (data.length == 1){
                     var changed = false;
+                    // Die Freundesliste der anderen
                     var otherFriendlist = data[0];
                     for(var i = 0; i < otherFriendlist.friends.length; i++) {
-                        console.log("Schleife:");
                         if(otherFriendlist.friends[i].id == User.getInstance().currentUSER.profile._id){
                             for(var j = 0 ; j < User.getInstance().currentUSER.friends.friends.length ; j++){
-                                console.log("Schleife2:");
                                 if(otherFriendlist.profile_id == User.getInstance().currentUSER.friends.friends[j].id){
                                     var status = User.getInstance().currentUSER.friends.friends[j].status;
                                     console.log("Status = ", status);
@@ -262,7 +276,7 @@ class FriendScreen extends Component {
         db.friends.update(friendlist, callbacks);
 
     }
-
+    
     _delete(pProfileId, pValue) {
         var index;
         for (var i = 0; i < User.getInstance().currentUSER.friends.friends.length; i++) {

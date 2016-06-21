@@ -175,7 +175,7 @@ class SearchScreen extends Component {
                     Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
                 }
                 else {
-                    if( (data[0].firstname * " " + data[0].lastname).indexOf(suchstring) > -1 ){
+                    if( (data[0].firstname + " " + data[0].lastname).indexOf(suchstring) > -1 ){
                         self._addSearchedProfilesToListView(data[0].firstname, data[0].lastname, pProfileId);   
                     }
                     else if ( data[0].firstname.indexOf(suchstring) > -1 ){
