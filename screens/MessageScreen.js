@@ -82,6 +82,12 @@ class MessageScreen extends Component {
                     </TouchableHighlight>
                 </ButtonContainer>
 
+                <ButtonContainer>
+                    <TouchableHighlight onPress={(event) => this._navigateToMainMenue()}>
+                        <Text style={styles.btnText}> Back </Text>
+                    </TouchableHighlight>
+                </ButtonContainer>
+
             </ViewContainer>
         );
     }
@@ -109,7 +115,6 @@ class MessageScreen extends Component {
     _onActionSelected(position) {
         if (position === 0) { // index of 'Settings'
             posteingang._navigateToMainMenue();
-
         }
         if (position === 1) {
             posteingang.navigateToNewMessageScreen();
@@ -125,6 +130,8 @@ class MessageScreen extends Component {
         });
             data = data.concat([{firstname: "bla", lastname: "blup", profile_id: "blip" }]);
             this.setState({dataSource: ds.cloneWithRows(data)});
+            instanz._navigateToMainMenue();
+
     }
 }
 
