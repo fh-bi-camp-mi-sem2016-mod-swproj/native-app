@@ -62,6 +62,12 @@ class MainScreen extends Component {
                     </TouchableHighlight>
                 </ButtonContainer>
 
+                 <ButtonContainer>
+                     <TouchableHighlight onPress={(event) => this._navigateToPictureScreen()}>
+                         <Text style={styles.btnText}> Zum Bilder hochladen </Text>
+                     </TouchableHighlight>
+                 </ButtonContainer>
+
                  <ViewContainer>
                      
                  </ViewContainer>
@@ -96,6 +102,12 @@ class MainScreen extends Component {
     _navigateToMessageScreen(){
         this.props.navigator.push({
             ident: "Message"
+        })
+    }
+
+    _navigateToPictureScreen() {
+        this.props.navigator.push({
+            ident: "Picture"
         })
     }
 
