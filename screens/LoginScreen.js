@@ -41,30 +41,31 @@ class LoginScreen extends Component {
                     </Text>
                 </View>
 
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Login :
-                    </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={username => this.setState({username})}
-                        placeholder="E-Mail">
-                    </TextInput>
-                </View>
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Login :
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={username => this.setState({username})}
+                            placeholder="E-Mail">
+                        </TextInput>
+                    </View>
 
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Password :
-                    </Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={password => this.setState({password})}
-                        placeholder="Password"
-                        secureTextEntry={true}>
-                    </TextInput>
-                </View>
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Password :
+                        </Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={password => this.setState({password})}
+                            placeholder="Passwort"
+                            secureTextEntry = {true}>
+                        </TextInput>
+                    </View>
                 <ButtonContainer>
-                    <TouchableHighlight onPress={()=>this._login(this, this.state.username ,this.state.password)}>
+                    <TouchableHighlight
+                        onPress={()=>this._login(this, this.state.username ,this.state.password)}>
                         <Text style={styles.btnText}>
                             Einloggen
                         </Text>
@@ -86,6 +87,7 @@ class LoginScreen extends Component {
     }
 
     _login(self, pUser, pPassword) {
+
         var callbacks = {
             success: function (data) {
                 console.log(data);
@@ -117,7 +119,6 @@ class LoginScreen extends Component {
                     // Fehler
                     Alert.alert('Fehler', "Es wurden mehrere Benutzer mit diesem Namen gefunden.", [{text: 'ok'}]);
                 }
-
 
             },
             error: function (error) {

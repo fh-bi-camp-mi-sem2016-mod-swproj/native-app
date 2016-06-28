@@ -26,11 +26,13 @@ var Database = (function () {
     };
 })();
 
-
 class DatabaseClass {
     user;
     msg;
     pic;
+    profile;
+    friends;
+    pref;
 
     constructor(connSettings) {
         var dm = new CouchDbApi.DaoManager(connSettings);
@@ -38,6 +40,9 @@ class DatabaseClass {
         this.user = dm.getDao(CouchDbApi.UserDAO);
         this.msg = dm.getDao(CouchDbApi.MessageDAO);
         this.pic = dm.getDao(CouchDbApi.PictureDAO);
+        this.profile = dm.getDao(CouchDbApi.ProfileDAO);
+        this.friends = dm.getDao(CouchDbApi.FriendDAO);
+        this.pref = dm.getDao(CouchDbApi.PreferenceDAO);
     }
 }
 
