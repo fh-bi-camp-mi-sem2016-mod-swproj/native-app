@@ -39,8 +39,6 @@ class DatabaseClass {
         this.msg = dm.getDao(CouchDbApi.MessageDAO);
         this.pic = dm.getDao(CouchDbApi.PictureDAO);
     }
-
-
 }
 
 module.exports = Database, DatabaseClass;

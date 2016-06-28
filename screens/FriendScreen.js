@@ -6,9 +6,7 @@ import ViewContainer from  '../components/frontend/ViewContainer'
 import StatusBarBackground from  '../components/frontend/StatusBarBackground'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 
-
 class FriendScreen extends Component {
-
 
     render() {
         return (
@@ -28,7 +26,6 @@ class FriendScreen extends Component {
                 </ButtonContainer>
                 <ViewContainer>
 
-
                 </ViewContainer>
                 <ButtonContainer>
                     <TouchableHighlight onPress={(event) => this._navigateToMainMenue()}>
@@ -37,8 +34,6 @@ class FriendScreen extends Component {
                 </ButtonContainer>
                 <StatusBarBackground />
             </ViewContainer>
-
-
         );
     }
 
@@ -52,12 +47,10 @@ class FriendScreen extends Component {
         this.props.navigator.push({
             ident: "UserSearch"
         })
-
     }
 }
 
 const styles = StyleSheet.create({
-
     titleView:{
         justifyContent: 'center',
         alignItems: 'center',

@@ -9,7 +9,6 @@ import ButtonContainer from '../components/frontend/ButtonContainer'
 
 class MainScreen extends Component {
 
-
     render() {
         return (
              <ViewContainer>
@@ -51,36 +50,38 @@ class MainScreen extends Component {
                     </TouchableHighlight>
                  </ButtonContainer>
 
-                 <ViewContainer>
-                     
-                 </ViewContainer>
-                 
                  <StatusBarBackground />
              </ViewContainer>
 
-
         );
     }
+    
     _navigateToLoginScreen(){
+        User.getInstance(1);
+
         this.props.navigator.push({
             ident: "Login"
         })
     }
+
     _navigateToFriendScreen(){
         this.props.navigator.push({
             ident: "Friend"
         })
     }
+
     _navigateTopPeferenceScreen(){
         this.props.navigator.push({
             ident: "Preference"
         })
     }
+
     _navigateToProfileScreen(){
         this.props.navigator.push({
             ident: "Profile"
         })
     }
+
     _navigateToMessageScreen(){
         this.props.navigator.push({
             ident: "Message"

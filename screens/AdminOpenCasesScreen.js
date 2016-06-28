@@ -23,9 +23,7 @@ import StatusBarBackground from  '../components/frontend/StatusBarBackground'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 import _ from 'lodash'
 
-import Profile from './../components/backend/Profile'
-
-class AdminScreen extends Component {
+class AdminOpenCasesScreen extends Component {
 
     constructor(props) {
         super(props);
@@ -50,6 +48,21 @@ class AdminScreen extends Component {
                 <Text style={{fontSize:18}}>
                     {rowData.User + " " + rowData.Info}
                 </Text>
+                <ButtonContainer>
+                    <TouchableHighlight onPress={(event) => this._fallAblehnen()}>
+                        <Text style={styles.btnText}> Fall ablehnen </Text>
+                    </TouchableHighlight>
+                </ButtonContainer>
+                <ButtonContainer>
+                    <TouchableHighlight onPress={(event) => this._profilVerwarnen()}>
+                        <Text style={styles.btnText}> Profil verwarnen </Text>
+                    </TouchableHighlight>
+                </ButtonContainer>
+                <ButtonContainer>
+                    <TouchableHighlight onPress={(event) => this._profilLoeschen()}>
+                        <Text style={styles.btnText}> Profil löschen </Text>
+                    </TouchableHighlight>
+                </ButtonContainer>
             </View>
         )
     }
@@ -59,19 +72,18 @@ class AdminScreen extends Component {
             <ViewContainer>
                 <View style={styles.titleView}>
                     <Text style={styles.titleText}>
-                        Administration
+                        Offene Fälle
                     </Text>
                 </View>
 
-                <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToAdminOpenCasesMenue()}>
-                        <Text style={styles.btnText}> Offene Fälle </Text>
-                    </TouchableHighlight>
-                </ButtonContainer>
+                <ListView
+                    dataSource={this.state.dataSource}
+                    renderRow={(rowData) => {return this.renderRow(rowData)}}>
+                </ListView>
 
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToLoginScreen()}>
-                        <Text style={styles.btnText}> Log Out </Text>
+                    <TouchableHighlight onPress={(event) => this._navigateToAdminMenue()}>
+                        <Text style={styles.btnText}> Zurück </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
 
@@ -80,34 +92,48 @@ class AdminScreen extends Component {
         );
     }
 
-    _test() {
-        return (
-            <View style={styles.inputListView}>
-                <ListView
-                    dataSource={this.state.dataSource}
-                    renderRow={(rowData) => {return this.renderRow(rowData)}}>
-                </ListView>
-            </View>
-        )
+    _add() {
+        var ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 != r2
+        });
+
+        //data.push({User: "Test", Info: "Bla"});
+        data = data.concat([{User: "Test2", Info: "Blup"}]);
+        this.setState({dataSource: ds.cloneWithRows(data)});
+        //concat bei Liste
+        //Alert.alert('Test', data[5].User+" "+data[5].Info, [{text: 'ok'}]);
+        //Alert.alert('Test', data[6].User+" "+data[6].Info, [{text: 'ok'}]);
     }
 
-    _navigateToAdminOpenCasesMenue() {
+    showAlert() {
+        Alert.alert('Awesome', 'Hier sollte was sinnvolles kommen!', [{text: 'ok'}])
+    }
+
+    showAlertBenutzer() {
+        Alert.alert('Gemeldeter Benutzer: ', 'hier steht der gemeldete Benutzer', [{text: 'ok'}])
+    }
+
+    _fallAblehnen() {
+
+    }
+
+    _profilVerwarnen() {
+
+    }
+
+    _profilLoeschen() {
+
+    }
+
+    _navigateToAdminMenue() {
         this.props.navigator.push({
-            ident: "AdminOpenCases"
+            ident: "Admin"
         })
     }
 
     _navigateToMainMenue() {
         this.props.navigator.push({
             ident: "Main"
-        })
-    }
-
-    _navigateToLoginScreen() {
-        User.getInstance(1);
-        
-        this.props.navigator.push({
-            ident: "Login"
         })
     }
 }
@@ -204,4 +230,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = AdminScreen;
+module.exports = AdminOpenCasesScreen;

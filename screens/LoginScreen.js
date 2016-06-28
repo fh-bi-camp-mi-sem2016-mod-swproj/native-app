@@ -3,25 +3,33 @@
  * https://github.com/facebook/react-native
  */
 
-import React, {Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Image, Alert,} from 'react-native';
-import ViewContainer from  '../components/frontend/ViewContainer'
-import ButtonContainer from '../components/frontend/ButtonContainer'
-
-import Database from './../components/backend/Database'
-
-import User from './../components/backend/User'
+import React, {
+    Component,
+    StyleSheet,
+    Text,
+    View,
+    TouchableHighlight,
+    button,
+    TextInput,
+    Image,
+    Alert
+} from "react-native";
+import ViewContainer from "../components/frontend/ViewContainer";
+import ButtonContainer from "../components/frontend/ButtonContainer";
+import Database from "./../components/backend/Database";
+import User from "./../components/backend/User";
 
 class LoginScreen extends Component {
 
     state = {
         //zum Testen
-        username: 'bertha59',
-        password: '13224'
+        username: '',
+        password: ''
     };
 
     render() {
         return (
-        <ViewContainer>
+            <ViewContainer>
                 <View style={styles.titleView}>
 
                     <Image style={styles.thumbnail}
@@ -29,47 +37,47 @@ class LoginScreen extends Component {
                     />
 
                     <Text style={styles.titleText}>
-                       Welcome to Find.me
+                        Welcome to Find.me
                     </Text>
                 </View>
 
-                    <View style={styles.inputContainerView}>
-                        <Text style={styles.text}>
-                            Login :
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={username => this.setState({username})}
-                            placeholder="E-Mail">
-                        </TextInput>
-                    </View>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Login :
+                    </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={username => this.setState({username})}
+                        placeholder="E-Mail">
+                    </TextInput>
+                </View>
 
-                    <View style={styles.inputContainerView}>
-                        <Text style={styles.text}>
-                            Password :
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={password => this.setState({password})}
-                            placeholder="Passwort">
-                        </TextInput>
-                    </View>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Password :
+                    </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={password => this.setState({password})}
+                        placeholder="Password"
+                        secureTextEntry={true}>
+                    </TextInput>
+                </View>
                 <ButtonContainer>
-                    <TouchableHighlight
-                        onPress={()=>this._login(this.state.username ,this.state.password, this._navigateToMainMenue())}>
+                    <TouchableHighlight onPress={()=>this._login(this, this.state.username ,this.state.password)}>
                         <Text style={styles.btnText}>
                             Einloggen
                         </Text>
-                     </TouchableHighlight>
+                    </TouchableHighlight>
                 </ButtonContainer>
 
-             <ButtonContainer>
+                <ButtonContainer>
                     <TouchableHighlight onPress={(event) => this._navigateToRegisterScreen()}>
-                      <Text style={styles.btnText}>
-                          Registrieren
+                        <Text style={styles.btnText}>
+                            Registrieren
                         </Text>
-                   </TouchableHighlight>
-               </ButtonContainer>
+                    </TouchableHighlight>
+                </ButtonContainer>
 
             </ViewContainer>
 
@@ -77,7 +85,7 @@ class LoginScreen extends Component {
         );
     }
 
-    _login(pUser, pPassword, pCallback) {
+    _login(self, pUser, pPassword) {
         var callbacks = {
             success: function (data) {
                 console.log(data);
@@ -98,7 +106,7 @@ class LoginScreen extends Component {
 
                         console.log(user.login + " hat sich erfolgreich eingeloggt");
 
-                        pCallback;
+                        self._navigateToMainMenue();
                     } else {
                         // Passwort falsch
                         console.log("Passwort falsch");
@@ -122,13 +130,19 @@ class LoginScreen extends Component {
         db.user.findByLogin(pUser, callbacks);
     }
 
-    _navigateToMainMenue(){
+    _navigateToAdminMenue() {
+        this.props.navigator.push({
+            ident: "Admin"
+        })
+    }
+
+    _navigateToMainMenue() {
         this.props.navigator.push({
             ident: "Main"
         })
     }
 
-    _navigateToRegisterScreen(){
+    _navigateToRegisterScreen() {
         this.props.navigator.push({
             ident: "Register"
         })
@@ -137,10 +151,10 @@ class LoginScreen extends Component {
 
 const styles = StyleSheet.create({
 
-    titleView:{
+    titleView: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop:30,
+        paddingTop: 30,
         paddingBottom: 10
     },
     thumbnail: {
@@ -152,13 +166,13 @@ const styles = StyleSheet.create({
     titleText: {
         flex: 1,
         fontSize: 20,
-        fontWeight:'bold',
+        fontWeight: 'bold',
         textAlign: 'center'
     },
     inputContainerView: {
         flexDirection: 'row',
         marginTop: 10,
-        padding:10
+        padding: 10
     },
     input: {
         height: 36,

@@ -121,6 +121,7 @@ class PreferenceScreen extends Component {
 
         );
     }
+    
     _navigateToMainMenue(){
         this.props.navigator.push({
             ident: "Main"

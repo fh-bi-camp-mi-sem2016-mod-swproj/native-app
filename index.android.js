@@ -10,6 +10,7 @@ import React, {AppRegistry, Text, Component, Navigator, StyleSheet} from 'react-
 import ViewContainer from  './components/frontend/ViewContainer'
 import StatusBarBackground from  './components/frontend/StatusBarBackground'
 import AdminScreen from './screens/AdminScreen'
+import AdminOpenCasesScreen from './screens/AdminOpenCasesScreen'
 import LoginScreen from './screens/LoginScreen'
 import ProfileScreen from './screens/ProfileScreen'
 import PreferenceScreen from './screens/PreferenceScreen'
@@ -37,6 +38,10 @@ class findme extends Component {
             case "Admin":
                 return [
                     <AdminScreen {...globalNavigatorProps} />
+                ];
+            case "AdminOpenCases":
+                return [
+                    <AdminOpenCasesScreen {...globalNavigatorProps} />
                 ];
             case "Profile":
                 return [

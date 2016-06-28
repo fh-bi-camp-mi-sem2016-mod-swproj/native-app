@@ -92,9 +92,8 @@ class ProfileScreen extends Component {
              </ViewContainer>
         )
     }
-    _navigateToMainMenue(){
-        User.getInstance(1);
 
+    _navigateToMainMenue(){
         this.props.navigator.push({
             ident: "Main"
         })
