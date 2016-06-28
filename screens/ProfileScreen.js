@@ -84,17 +84,11 @@ class ProfileScreen extends Component {
                      </TouchableHighlight>
                  </ButtonContainer>
 
-                <ViewContainer>
-
                 </ViewContainer>
-
-                <StatusBarBackground  />
-             </ViewContainer>
         )
     }
-    _navigateToMainMenue(){
-        User.getInstance(1);
 
+    _navigateToMainMenue(){
         this.props.navigator.push({
             ident: "Main"
         })

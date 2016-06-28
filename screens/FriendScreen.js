@@ -84,6 +84,7 @@ class FriendScreen extends Component {
 
     // Hier passiert der eigentliche Teil
     // Programmdarstellung
+
     render() {
         return (
             <ViewContainer>
@@ -129,7 +130,6 @@ class FriendScreen extends Component {
                         <Text style={styles.btnText}> save </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
-
             </ViewContainer>
         );
     }
@@ -145,6 +145,7 @@ class FriendScreen extends Component {
         this.props.navigator.push({
             ident: "UserSearch"
         })
+
     }
 
     _navigateToLoginScreen() {
@@ -371,7 +372,6 @@ class FriendScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-
     titleView:{
         justifyContent: 'center',
         alignItems: 'center',

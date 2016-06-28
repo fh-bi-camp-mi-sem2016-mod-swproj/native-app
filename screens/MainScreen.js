@@ -14,47 +14,47 @@ class MainScreen extends Component {
 
         instance = this;
     }
-    
+
     render() {
         return (
-             <ViewContainer>
+            <ViewContainer>
 
-                 <Icon.ToolbarAndroid
-                     style={styles.toolbarView}
-                     actions={[
+                <Icon.ToolbarAndroid
+                    style={styles.toolbarView}
+                    actions={[
                         {title: 'Profile', iconName:'user', iconSize: 30,  show: 'always'},
                         {title: 'Posteingang', iconName:'envelope', iconSize: 30,  show: 'always'},
                         {title: 'Preference', iconName:'heart', iconSize: 30,  show: 'always'},
                         {title: 'Friends', iconName:'users', iconSize: 30,  show: 'always'},
                         {title: 'Log Out', iconName:'sign-out', iconSize: 30,  show: 'always'}
                     ]}
-                     onActionSelected={this._onActionSelected}
-                 />
-                    <View style={styles.titleView}>
-                        <Text style={styles.titleText}>
-                            Welcome to Find.me
-                        </Text>
-                        <Text style={styles.titleText}>
-                            Mainmenue:
-                        </Text>
-                    </View>
-                 <ButtonContainer>
-                     <TouchableHighlight onPress={(event) => this._navigateToProfileScreen()}>
-                         <Text style={styles.btnText}> Zum Profile </Text>
+                    onActionSelected={this._onActionSelected}
+                />
+                <View style={styles.titleView}>
+                    <Text style={styles.titleText}>
+                        Welcome to Find.me
+                    </Text>
+                    <Text style={styles.titleText}>
+                        Mainmenue:
+                    </Text>
+                </View>
+                <ButtonContainer>
+                    <TouchableHighlight onPress={(event) => this._navigateToProfileScreen()}>
+                        <Text style={styles.btnText}> Zum Profile </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
 
-                 <ButtonContainer>
-                     <TouchableHighlight onPress={(event) => this._navigateToMessageScreen()}>
-                         <Text style={styles.btnText}> Posteingang </Text>
-                     </TouchableHighlight>
-                 </ButtonContainer>
+                <ButtonContainer>
+                    <TouchableHighlight onPress={(event) => this._navigateToMessageScreen()}>
+                        <Text style={styles.btnText}> Posteingang </Text>
+                    </TouchableHighlight>
+                </ButtonContainer>
 
-                 <ButtonContainer>
+                <ButtonContainer>
                     <TouchableHighlight onPress={(event) => this._navigateTopPeferenceScreen()}>
                         <Text style={styles.btnText}> Zu den Praeferenzen </Text>
                     </TouchableHighlight>
-                 </ButtonContainer>
+                </ButtonContainer>
 
                 <ButtonContainer>
                     <TouchableHighlight onPress={(event) => this._navigateToFriendScreen()}>
@@ -62,16 +62,16 @@ class MainScreen extends Component {
                     </TouchableHighlight>
                 </ButtonContainer>
 
-                 <ButtonContainer>
-                     <TouchableHighlight onPress={(event) => this._navigateToPictureScreen()}>
-                         <Text style={styles.btnText}> Zum Bilder hochladen </Text>
-                     </TouchableHighlight>
-                 </ButtonContainer>
+                <ButtonContainer>
+                    <TouchableHighlight onPress={(event) => this._navigateToPictureScreen()}>
+                        <Text style={styles.btnText}> Zum Bilder hochladen </Text>
+                    </TouchableHighlight>
+                </ButtonContainer>
 
-                 <ViewContainer>
-                     
-                 </ViewContainer>
-             </ViewContainer>
+                <ViewContainer>
+
+                </ViewContainer>
+            </ViewContainer>
         );
     }
     _navigateToLoginScreen(){
@@ -130,24 +130,24 @@ class MainScreen extends Component {
                 instance._navigateBackToLoginScreen();
                 break;
         }
-/*
-        if (position === 0) { // index of 'Settings'
-            instance._navigateToProfileScreen();
-        }
-        if (position === 1) {
-            instance._navigateToMessageScreen();
-        }
-        if (position === 2) {
-            instance._navigateToProfileScreen();
-        }
-        if (position === 3) {
-            instance._navigateToFriendScreen();
-        }
-        if (position === 4) {
-            Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
-            instance._navigateBackToLoginScreen();
-        }
-*/
+        /*
+         if (position === 0) { // index of 'Settings'
+         instance._navigateToProfileScreen();
+         }
+         if (position === 1) {
+         instance._navigateToMessageScreen();
+         }
+         if (position === 2) {
+         instance._navigateToProfileScreen();
+         }
+         if (position === 3) {
+         instance._navigateToFriendScreen();
+         }
+         if (position === 4) {
+         Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
+         instance._navigateBackToLoginScreen();
+         }
+         */
     }
 }
 

@@ -26,7 +26,6 @@ var Database = (function () {
     };
 })();
 
-
 class DatabaseClass {
     user;
     msg;
@@ -45,7 +44,6 @@ class DatabaseClass {
         this.friends = dm.getDao(CouchDbApi.FriendDAO);
         this.pref = dm.getDao(CouchDbApi.PreferenceDAO);
     }
-
 }
 
 module.exports = Database, DatabaseClass;

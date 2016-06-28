@@ -29,7 +29,7 @@ class LoginScreen extends Component {
 
     render() {
         return (
-        <ViewContainer>
+            <ViewContainer>
                 <View style={styles.titleView}>
 
                     <Image style={styles.thumbnail}
@@ -37,7 +37,7 @@ class LoginScreen extends Component {
                     />
 
                     <Text style={styles.titleText}>
-                       Welcome to Find.me
+                        Welcome to Find.me
                     </Text>
                 </View>
 
@@ -69,16 +69,16 @@ class LoginScreen extends Component {
                         <Text style={styles.btnText}>
                             Einloggen
                         </Text>
-                     </TouchableHighlight>
+                    </TouchableHighlight>
                 </ButtonContainer>
 
-             <ButtonContainer>
+                <ButtonContainer>
                     <TouchableHighlight onPress={(event) => this._navigateToRegisterScreen()}>
-                      <Text style={styles.btnText}>
-                          Registrieren
+                        <Text style={styles.btnText}>
+                            Registrieren
                         </Text>
-                   </TouchableHighlight>
-               </ButtonContainer>
+                    </TouchableHighlight>
+                </ButtonContainer>
 
             </ViewContainer>
 
@@ -87,6 +87,7 @@ class LoginScreen extends Component {
     }
 
     _login(self, pUser, pPassword) {
+
         var callbacks = {
             success: function (data) {
                 console.log(data);
@@ -119,7 +120,6 @@ class LoginScreen extends Component {
                     Alert.alert('Fehler', "Es wurden mehrere Benutzer mit diesem Namen gefunden.", [{text: 'ok'}]);
                 }
 
-
             },
             error: function (error) {
                 console.log(error);
@@ -131,13 +131,19 @@ class LoginScreen extends Component {
         db.user.findByLogin(pUser, callbacks);
     }
 
-    _navigateToMainMenue(){
+    _navigateToAdminMenue() {
+        this.props.navigator.push({
+            ident: "Admin"
+        })
+    }
+
+    _navigateToMainMenue() {
         this.props.navigator.push({
             ident: "Main"
         })
     }
 
-    _navigateToRegisterScreen(){
+    _navigateToRegisterScreen() {
         this.props.navigator.push({
             ident: "Register"
         })
@@ -146,10 +152,10 @@ class LoginScreen extends Component {
 
 const styles = StyleSheet.create({
 
-    titleView:{
+    titleView: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop:30,
+        paddingTop: 30,
         paddingBottom: 10
     },
     thumbnail: {
@@ -161,13 +167,13 @@ const styles = StyleSheet.create({
     titleText: {
         flex: 1,
         fontSize: 20,
-        fontWeight:'bold',
+        fontWeight: 'bold',
         textAlign: 'center'
     },
     inputContainerView: {
         flexDirection: 'row',
         marginTop: 10,
-        padding:10
+        padding: 10
     },
     input: {
         height: 36,
