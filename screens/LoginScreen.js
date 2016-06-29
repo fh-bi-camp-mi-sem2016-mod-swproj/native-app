@@ -120,11 +120,6 @@ class LoginScreen extends Component {
                         } else {
                             self._getProfile();
 						}
-                        if(receivedUser.role === 2) {
-                            self._navigateToAdminMenue();
-                        } else {
-                            self._getProfile();
-                        }
                     } else {
                         // Passwort falsch
                         console.log("Passwort falsch");
