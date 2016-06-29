@@ -11,8 +11,13 @@ import Database from './../components/backend/Database'
 import User from './../components/backend/User'
 
 var instance;
+
 class ChangeProfileScreen extends Component {
 
+    constructor(props) {
+        super(props);
+        instance = this;
+    }
     constructor(props) {
         super(props);
         instance = this;
@@ -56,6 +61,7 @@ class ChangeProfileScreen extends Component {
                     ]}
                     onActionSelected={this._onActionSelected}
                 />
+
             <ScrollView>
                 <View style={styles.titleView}>
                     <Text style={styles.titleText}>
