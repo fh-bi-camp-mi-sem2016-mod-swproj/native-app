@@ -108,7 +108,7 @@ class LoginScreen extends Component {
 
                         console.log(user.login + " hat sich erfolgreich eingeloggt");
 
-						if(receivedUser.role === 1) {
+						if(receivedUser.role === 2) {
 							self._navigateToAdminMenue();
 						} else if(receivedUser.role === 0) {
 							self._navigateToMainMenue();
