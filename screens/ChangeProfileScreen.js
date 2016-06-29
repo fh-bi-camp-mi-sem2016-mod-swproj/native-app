@@ -5,11 +5,18 @@ import React, {Component, StyleSheet, Text, View, TouchableHighlight, button, Te
 
 import ViewContainer from  '../components/frontend/ViewContainer'
 import ButtonContainer from '../components/frontend/ButtonContainer'
+import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 
 import Database from './../components/backend/Database'
 import User from './../components/backend/User'
 
+var instance;
 class ProfileScreen extends Component {
+
+    constructor(props) {
+        super(props);
+        instance = this;
+    }
 
     state = {
 
@@ -41,9 +48,18 @@ class ProfileScreen extends Component {
         return (
             <ViewContainer>
 
+                <Icon.ToolbarAndroid
+                    style={styles.toolbarView}
+                    actions={[
+                        {title: 'Back', iconName:'arrow-left', iconSize: 30,  show: 'always'},
+                        {title: 'Log Out', iconName:'sign-out', iconSize: 30,  show: 'always'}
+                    ]}
+                    onActionSelected={this._onActionSelected}
+                />
+
                 <View style={styles.titleView}>
                     <Text style={styles.titleText}>
-                        Profile:
+                        Ändern Sie Ihre Profildaten
                     </Text>
                 </View>
 
@@ -185,15 +201,9 @@ class ProfileScreen extends Component {
 
                 <ButtonContainer>
                     <TouchableHighlight style ={styles.button} onPress={(event) => this._createProfile(this.state.firstname, this.state.lastname, this.state.email, this.state.birthday, this.state.gender, this.state.familystatus, this.state.children, this.state.aboutme, this.state.haircolor, this.state.eyecolor, this.state.figure)}>
-                        <Text style={styles.btnText}> send </Text>
+                        <Text style={styles.btnText}> Bestätigen </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
-
-                 <ButtonContainer>
-                     <TouchableHighlight style ={styles.button} onPress={(event) => this._navigateToMainMenue()}>
-                          <Text style={styles.btnText}> Back </Text>
-                     </TouchableHighlight>
-                 </ButtonContainer>
 
                 <ViewContainer>
 
@@ -202,11 +212,26 @@ class ProfileScreen extends Component {
         )
     }
     _navigateToMainMenue(){
-        User.getInstance(1);
-
         this.props.navigator.push({
             ident: "Main"
         })
+    }
+    _navigateToLoginScreen() {
+        this.props.navigator.push({
+            ident: "Login"
+        })
+    }
+
+    _onActionSelected(position) {
+        switch (position) {
+            case 0:
+                instance._navigateToMainMenue();
+                break;
+            case 1:
+                Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
+                instance._navigateToLoginScreen();
+                break;
+        }
     }
 
     _createProfile( pFirstname, pLastname, pEmail, pBirthday, pGender, pFamilystatus, pChildren, pAboutme, pHaircolor, pEyecolor, pFigur ) {
@@ -391,6 +416,10 @@ const styles = StyleSheet.create({
     picker: {
         flex: 1,
         width: 200
+    },
+    toolbarView: {
+        height: 50,
+        marginRight: 250
     }
 });
 
