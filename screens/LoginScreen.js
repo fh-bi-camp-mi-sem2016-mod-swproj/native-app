@@ -19,6 +19,8 @@ import ButtonContainer from "../components/frontend/ButtonContainer";
 import Database from "./../components/backend/Database";
 import User from "./../components/backend/User";
 
+var instance;
+
 class LoginScreen extends Component {
 
     state = {
@@ -26,6 +28,11 @@ class LoginScreen extends Component {
         username: '',
         password: ''
     };
+
+    constructor(props) {
+        super(props);
+        instance = this;
+    }
 
     render() {
         return (
@@ -110,8 +117,8 @@ class LoginScreen extends Component {
 
 						if(receivedUser.role === 2) {
 							self._navigateToAdminMenue();
-						} else if(receivedUser.role === 0) {
-							self._navigateToMainMenue();
+                        } else {
+                            self._getProfile();
 						}
                     } else {
                         // Passwort falsch
@@ -135,6 +142,44 @@ class LoginScreen extends Component {
         db.user.findByLogin(pUser, callbacks);
     }
 
+    _getProfile() {
+        var db = Database.getInstance();
+
+        var callbacks = {
+            success: function (data) {
+                console.log(data);
+
+                if (data.length == 0) {
+                    // Kein Profil
+
+                    instance._navigateToCreateProfileScreen();
+
+                } else if (data.length == 1) {
+                    // Profil abfragen
+
+                    User.getInstance().currentUSER.profile = data[0];
+
+                    console.log("Profil des angemeldeten Benutzers:", User.getInstance().currentUSER.profile);
+
+                    instance._navigateToMainMenue();
+
+                } else if (data.length > 1 && User.getInstance().currentUSER.user.role === 1) {
+                    // Fake User verhalten fehlt
+
+                } else {
+                    Alert.alert('Fehler', "Es gab einen Fehler beim Profil abfragen.", [{text: 'ok'}]);
+                }
+
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+            }
+        };
+
+        db.profile.findByUserId(User.getInstance().currentUSER.user._id, callbacks);
+    }
+
     _navigateToAdminMenue() {
         this.props.navigator.push({
             ident: "Admin"
@@ -147,9 +192,16 @@ class LoginScreen extends Component {
         })
     }
 
+    _navigateToCreateProfileScreen() {
+        Alert.alert('Fehler', "_navigateToCreateProfileScreen", [{text: 'ok'}]);
+    }
+
     _navigateToRegisterScreen() {
         this.props.navigator.push({
-            ident: "Register"
+            ident: "Register",
+            passProps: {
+                id: User.getInstance().currentUSER.user._id
+            }
         })
     }
 }
