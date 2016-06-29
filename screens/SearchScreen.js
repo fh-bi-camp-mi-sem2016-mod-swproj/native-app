@@ -252,12 +252,13 @@ class SearchScreen extends Component {
     _onActionSelected(position) {
         switch (position) {
             case 0:
-                instance._navigateBackToMessageScreen();
+                instance._navigateToMainMenue();
                 break;
             case 1:
                 instance._navigateToMainMenue();
                 break;
             case 2:
+                User.getInstance(1);
                 Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
                 instance._navigateToLoginScreen();
                 break;
