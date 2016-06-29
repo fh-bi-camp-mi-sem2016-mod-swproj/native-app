@@ -10,7 +10,7 @@ import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 import User from './../components/backend/User'
 import Database from './../components/backend/Database'
 
-var data = [];
+var listViewData = [];
 var instance;
 
 class SearchScreen extends Component {
@@ -28,7 +28,7 @@ class SearchScreen extends Component {
         });
 
         this.state = {
-            dataSource: ds.cloneWithRows(data)
+            dataSource: ds.cloneWithRows(listViewData)
         }
 
     }
@@ -115,6 +115,9 @@ class SearchScreen extends Component {
                 if (data.length == 0) {
                     Alert.alert('Fehler', "Es wurden keine Personen gefunden.", [{text: 'ok'}]);
                 } else if (data.length > 1) {
+                    // ListView zuruecksetzten
+                    listViewData = [];
+
                     for (var i = 0; i < data.length; i++) {
 
                         var currentprofile = data[i];
@@ -206,8 +209,8 @@ class SearchScreen extends Component {
             rowHasChanged: (r1, r2) => r1 != r2
         });
 
-        data = data.concat([{firstname: pFirstname, lastname: pLastname, profile_id: pProfileId}]);
-        this.setState({dataSource: ds.cloneWithRows(data)});
+        listViewData = listViewData.concat([{firstname: pFirstname, lastname: pLastname, profile_id: pProfileId}]);
+        this.setState({dataSource: ds.cloneWithRows(listViewData)});
     }
 
     _viewProfile(pProfileId) {
@@ -227,7 +230,7 @@ class SearchScreen extends Component {
             }
         })
     }
-    
+
     _navigateToFriendScreen() {
         this.props.navigator.pop({
             ident: "Friend"
