@@ -25,8 +25,8 @@ class LoginScreen extends Component {
 
     state = {
         //zum Testen
-        username: '',
-        password: ''
+        username: 'kheuer',
+        password: '1'
     };
 
     constructor(props) {
@@ -48,28 +48,28 @@ class LoginScreen extends Component {
                     </Text>
                 </View>
 
-                    <View style={styles.inputContainerView}>
-                        <Text style={styles.text}>
-                            Login :
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={username => this.setState({username})}
-                            placeholder="E-Mail">
-                        </TextInput>
-                    </View>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Login :
+                    </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={username => this.setState({username})}
+                        placeholder="E-Mail">
+                    </TextInput>
+                </View>
 
-                    <View style={styles.inputContainerView}>
-                        <Text style={styles.text}>
-                            Password :
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={password => this.setState({password})}
-                            placeholder="Passwort"
-                            secureTextEntry = {true}>
-                        </TextInput>
-                    </View>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Password :
+                    </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={password => this.setState({password})}
+                        placeholder="Passwort"
+                        secureTextEntry = {true}>
+                    </TextInput>
+                </View>
                 <ButtonContainer>
                     <TouchableHighlight
                         onPress={()=>this._login(this, this.state.username ,this.state.password)}>
@@ -120,6 +120,11 @@ class LoginScreen extends Component {
                         } else {
                             self._getProfile();
 						}
+                        if(receivedUser.role === 2) {
+                            self._navigateToAdminMenue();
+                        } else {
+                            self._getProfile();
+                        }
                     } else {
                         // Passwort falsch
                         console.log("Passwort falsch");
@@ -193,7 +198,9 @@ class LoginScreen extends Component {
     }
 
     _navigateToCreateProfileScreen() {
-        Alert.alert('Fehler', "_navigateToCreateProfileScreen", [{text: 'ok'}]);
+        this.props.navigator.push({
+            ident: "ChangeProfile"
+        })
     }
 
     _navigateToRegisterScreen() {
