@@ -10,7 +10,7 @@ import RegisterScreen from './screens/RegisterScreen'
 
 import AdminScreen from './screens/AdminScreen'
 
-import ProfileScreen from './screens/ProfileScreen'
+import ChangeProfileScreen from './screens/ChangeProfileScreen'
 
 import PreferenceScreen from './screens/PreferenceScreen'
 
@@ -44,9 +44,9 @@ class findme extends Component {
                 return [
                     <AdminScreen key="admin" {...globalNavigatorProps} />
                 ];
-            case "Profile":
+            case "ChangeProfile":
                 return [
-                    <ProfileScreen key="profile" {...globalNavigatorProps} />
+                    <ChangeProfileScreen key="changeprofile" {...globalNavigatorProps} />
                 ];
             case "Preference":
                 return [

@@ -40,7 +40,7 @@ class MainScreen extends Component {
                     </Text>
                 </View>
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToProfileScreen()}>
+                    <TouchableHighlight onPress={(event) => this._navigateToChangeProfileScreen()}>
                         <Text style={styles.btnText}> Zum Profile </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
@@ -95,9 +95,9 @@ class MainScreen extends Component {
             ident: "Preference"
         })
     }
-    _navigateToProfileScreen(){
+    _navigateToChangeProfileScreen(){
         this.props.navigator.push({
-            ident: "Profile"
+            ident: "ChangeProfile"
         })
     }
     _navigateToMessageScreen(){
@@ -120,13 +120,13 @@ class MainScreen extends Component {
     _onActionSelected(position) {
         switch (position) {
             case 0:
-                instance._navigateToProfileScreen();
+                instance._navigateToChangeProfileScreen();
                 break;
             case 1:
                 instance._navigateToMessageScreen();
                 break;
             case 2:
-                instance._navigateToProfileScreen();
+                instance._navigateToChangeProfileScreen();
                 break;
             case 3:
                 instance._navigateToFriendScreen();

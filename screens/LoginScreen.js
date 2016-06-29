@@ -19,17 +19,24 @@ import ButtonContainer from "../components/frontend/ButtonContainer";
 import Database from "./../components/backend/Database";
 import User from "./../components/backend/User";
 
+var instance;
+
 class LoginScreen extends Component {
 
     state = {
         //zum Testen
-        username: '',
-        password: ''
+        username: 'kheuer',
+        password: '1'
     };
+
+    constructor(props) {
+        super(props);
+        instance = this;
+    }
 
     render() {
         return (
-        <ViewContainer>
+            <ViewContainer>
                 <View style={styles.titleView}>
 
                     <Image style={styles.thumbnail}
@@ -37,48 +44,48 @@ class LoginScreen extends Component {
                     />
 
                     <Text style={styles.titleText}>
-                       Welcome to Find.me
+                        Welcome to Find.me
                     </Text>
                 </View>
 
-                    <View style={styles.inputContainerView}>
-                        <Text style={styles.text}>
-                            Login :
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={username => this.setState({username})}
-                            placeholder="E-Mail">
-                        </TextInput>
-                    </View>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Login :
+                    </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={username => this.setState({username})}
+                        placeholder="E-Mail">
+                    </TextInput>
+                </View>
 
-                    <View style={styles.inputContainerView}>
-                        <Text style={styles.text}>
-                            Password :
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={password => this.setState({password})}
-                            placeholder="Passwort"
-                            secureTextEntry = {true}>
-                        </TextInput>
-                    </View>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Password :
+                    </Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={password => this.setState({password})}
+                        placeholder="Passwort"
+                        secureTextEntry = {true}>
+                    </TextInput>
+                </View>
                 <ButtonContainer>
                     <TouchableHighlight
                         onPress={()=>this._login(this, this.state.username ,this.state.password)}>
                         <Text style={styles.btnText}>
                             Einloggen
                         </Text>
-                     </TouchableHighlight>
+                    </TouchableHighlight>
                 </ButtonContainer>
 
-             <ButtonContainer>
+                <ButtonContainer>
                     <TouchableHighlight onPress={(event) => this._navigateToRegisterScreen()}>
-                      <Text style={styles.btnText}>
-                          Registrieren
+                        <Text style={styles.btnText}>
+                            Registrieren
                         </Text>
-                   </TouchableHighlight>
-               </ButtonContainer>
+                    </TouchableHighlight>
+                </ButtonContainer>
 
             </ViewContainer>
 
@@ -87,6 +94,7 @@ class LoginScreen extends Component {
     }
 
     _login(self, pUser, pPassword) {
+
         var callbacks = {
             success: function (data) {
                 console.log(data);
@@ -107,7 +115,11 @@ class LoginScreen extends Component {
 
                         console.log(user.login + " hat sich erfolgreich eingeloggt");
 
-                        self._navigateToMainMenue();
+                        if(receivedUser.role === 2) {
+                            self._navigateToAdminMenue();
+                        } else {
+                            self._getProfile();
+                        }
                     } else {
                         // Passwort falsch
                         console.log("Passwort falsch");
@@ -118,7 +130,6 @@ class LoginScreen extends Component {
                     // Fehler
                     Alert.alert('Fehler', "Es wurden mehrere Benutzer mit diesem Namen gefunden.", [{text: 'ok'}]);
                 }
-
 
             },
             error: function (error) {
@@ -131,25 +142,79 @@ class LoginScreen extends Component {
         db.user.findByLogin(pUser, callbacks);
     }
 
-    _navigateToMainMenue(){
+    _getProfile() {
+        var db = Database.getInstance();
+
+        var callbacks = {
+            success: function (data) {
+                console.log(data);
+
+                if (data.length == 0) {
+                    // Kein Profil
+
+                    instance._navigateToCreateProfileScreen();
+
+                } else if (data.length == 1) {
+                    // Profil abfragen
+
+                    User.getInstance().currentUSER.profile = data[0];
+
+                    console.log("Profil des angemeldeten Benutzers:", User.getInstance().currentUSER.profile);
+
+                    instance._navigateToMainMenue();
+
+                } else if (data.length > 1 && User.getInstance().currentUSER.user.role === 1) {
+                    // Fake User verhalten fehlt
+
+                } else {
+                    Alert.alert('Fehler', "Es gab einen Fehler beim Profil abfragen.", [{text: 'ok'}]);
+                }
+
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+            }
+        };
+
+        db.profile.findByUserId(User.getInstance().currentUSER.user._id, callbacks);
+    }
+
+    _navigateToAdminMenue() {
+        this.props.navigator.push({
+            ident: "Admin"
+        })
+    }
+
+    _navigateToMainMenue() {
         this.props.navigator.push({
             ident: "Main"
         })
     }
 
-    _navigateToRegisterScreen(){
+    _navigateToCreateProfileScreen() {
+    //    Alert.alert('Fehler', "_navigateToCreateProfileScreen", [{text: 'ok'}]);
         this.props.navigator.push({
-            ident: "Register"
+            ident: "ChangeProfile"
+        })
+    }
+
+    _navigateToRegisterScreen() {
+        this.props.navigator.push({
+            ident: "Register",
+            passProps: {
+                id: User.getInstance().currentUSER.user._id
+            }
         })
     }
 }
 
 const styles = StyleSheet.create({
 
-    titleView:{
+    titleView: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop:30,
+        paddingTop: 30,
         paddingBottom: 10
     },
     thumbnail: {
@@ -161,13 +226,13 @@ const styles = StyleSheet.create({
     titleText: {
         flex: 1,
         fontSize: 20,
-        fontWeight:'bold',
+        fontWeight: 'bold',
         textAlign: 'center'
     },
     inputContainerView: {
         flexDirection: 'row',
         marginTop: 10,
-        padding:10
+        padding: 10
     },
     input: {
         height: 36,
