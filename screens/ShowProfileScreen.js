@@ -205,6 +205,8 @@ class ShowProfileScreen extends Component {
                 instance._navigateToMainMenue();
                 break;
             case 2:
+                User.getInstance(1);
+                Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
                 instance._navigateToLogInScreen();
                 break;
         }
