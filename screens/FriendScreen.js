@@ -38,6 +38,8 @@ class FriendScreen extends Component {
 
         // zum testen
         User.getInstance().currentUSER.profile = {_id: "ca5c2c9fb2d201991f8b6f06e62196ff", _rev: "1-75814ab18741c8c0fe75e57ceda4319f", doctype: "profile", user_id: "<uuid>", firstname: "bertha", lastname: "meier", email: "bertha@test.de", birthday: -316656000, gender: 0, familystatus: 1, children: 2, aboutme: "fröhlich, erlich", privacy: {friends: 1, pictures: 0}, profilepic: "<uuid>", haircolor: 3, eyecolor: 0, figure: 1};
+
+//        Alert.alert('suc', "erfolg", [{text: 'ok'}]);
     }
 
     // erzeugt die ersten ListView
@@ -45,9 +47,9 @@ class FriendScreen extends Component {
     renderRow(rowData) {
         return (
             <View style = {styles.listRow}>
-                    <Text>
-                     {rowData.firstname + " " + rowData.lastname}
-                    </Text>
+                <Text>
+                    {rowData.firstname + " " + rowData.lastname}
+                </Text>
                 <View style = {styles.iconRow}/>
                 <TouchableHighlight onPress={() => this._setFriend(rowData.profile_id, 2)}>
                     <Icon name = "minus-square"
@@ -125,11 +127,10 @@ class FriendScreen extends Component {
                 </ListView>
 
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._save()}>
-                        <Text style={styles.btnText}> save </Text>
+                    <TouchableHighlight onPress={() => this._reload(instance)}>
+                        <Text style={styles.btnText}> reload </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
-
             </ViewContainer>
         );
     }
@@ -152,6 +153,11 @@ class FriendScreen extends Component {
             ident: "Login"
         })
     }
+    _navigateToMySelf() {
+        this.props.navigator.push({
+            ident: "Friend"
+        })
+    }
 
     // Navigator für die ToolbarAndroid
     // 0 = Links.... u.s.w.
@@ -170,12 +176,13 @@ class FriendScreen extends Component {
 
     //Setz im CurrentUser an der übergebenen Id das Value 0 = angefragt, 1 = befreundet und 2 = abgelehnt
     _setFriend(pProfileId, pValue) {
-        Alert.alert('SET:', "Id: " + pProfileId +"\nValue "+pValue, [{text: 'ok'}]);
+        //    Alert.alert('SET:', "Id: " + pProfileId +"\nValue "+pValue, [{text: 'ok'}]);
         for (var i = 0; i < User.getInstance().currentUSER.friends.friends.length; i++) {
             if (User.getInstance().currentUSER.friends.friends[i].id == pProfileId) {
                 User.getInstance().currentUSER.friends.friends[i].status = pValue;
             }
         }
+        instance._save();
     }
 
     // Die Methode übernimmt das speichern, damit wir nicht andauernt anfragen zum Server
@@ -185,9 +192,11 @@ class FriendScreen extends Component {
         var callbacksSaveOther = {
             success: function (data) {
                 console.log(data);
+
             },
             error: function (error) {
                 console.log(error);
+
             }
         };
 
@@ -204,7 +213,7 @@ class FriendScreen extends Component {
                             for(var j = 0 ; j < User.getInstance().currentUSER.friends.friends.length ; j++){
                                 if(otherFriendlist.profile_id == User.getInstance().currentUSER.friends.friends[j].id){
                                     var status = User.getInstance().currentUSER.friends.friends[j].status;
-                                    console.log("Status = ", status);
+                                    //    console.log("Status = ", status);
                                     if(status == 1){
                                         otherFriendlist.friends[i].status = 1;
                                         changed = true;
@@ -235,6 +244,7 @@ class FriendScreen extends Component {
                             id: User.getInstance().currentUSER.profile._id,
                             status: status
                         };
+                        console.log(row);
 
                         otherFriendlist.friends.push(row);
 
@@ -254,7 +264,6 @@ class FriendScreen extends Component {
                 console.log(data);
 
                 var db = Database.getInstance();
-
                 var ownFriendList = User.getInstance().currentUSER.friends;
 
                 for(var i = 0 ; i < ownFriendList.friends.length ; i++){
@@ -262,7 +271,6 @@ class FriendScreen extends Component {
                 }
 
                 User.getInstance().currentUSER.friends._rev = data.rev;
-
                 Alert.alert('Success', "Die Freundesliste wurde erfolgreich gespeichert.", [{text: 'ok'}]);
             },
             error: function (error) {
@@ -271,22 +279,51 @@ class FriendScreen extends Component {
             }
         };
 
-        var friendlist = User.getInstance().currentUSER.friends;
+//        var friendlist = User.getInstance().currentUSER.friends;
         var db = Database.getInstance();
-        db.friends.update(friendlist, callbacks);
+        db.friends.update(User.getInstance().currentUSER.friends, callbacks);
 
     }
-    
+    _reload(self){
+        console.log( User.getInstance().currentUSER);
+//        self.incData =[];
+//        self.data =[];
+        console.log(self.data);
+        console.log(incData);
+        //fügt die Listen beim Laden des Screens hinzu
+        this._addFriendsToListView(self, "ca5c2c9fb2d201991f8b6f06e62196ff");
+
+        var ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 != r2
+        });
+        var ds1 = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 != r2
+        });
+
+        this.state = {
+            dataSource: ds.cloneWithRows(self.data),
+            dataSource1: ds1.cloneWithRows(incData)
+        };
+        console.log(self.data);
+        console.log(incData);
+        self._navigateToMySelf();
+
+    }
+    // Setzt einen User auf abgelehnt pValue=2
     _delete(pProfileId, pValue) {
         var index;
+        console.log(User.getInstance().currentUSER.friends.friends);
         for (var i = 0; i < User.getInstance().currentUSER.friends.friends.length; i++) {
-            if ( User.getInstance().currentUSER.friends.friends[i].id == pProfileId ) {
-                index = i;
+            index = i;
+            if ( User.getInstance().currentUSER.friends.friends[index].id == pProfileId ) {
                 User.getInstance().currentUSER.friends.friends[index].status = pValue;
+        //        Alert.alert('Delete', pProfileId+" "+ pValue, [{text: 'ok'}]);
             }
+            //Auch im CurrentUser.
         }
-        Alert.alert('Liste', JSON.stringify(index), [{text: 'ok'}]);
-        delete User.getInstance().currentUSER.friends.friends[index];
+        console.log(User.getInstance().currentUSER.friends.friends);
+        //    Alert.alert('Liste', JSON.stringify(index), [{text: 'ok'}]);
+        instance._save();
     }
 
     _addListViewRow(pFirstname, pLastname, pStatus, pProfileId){
@@ -304,6 +341,7 @@ class FriendScreen extends Component {
         }
     }
 
+
     _addFriendsToListView(self, pProfileId) {
 
         var db = null;
@@ -317,7 +355,11 @@ class FriendScreen extends Component {
                     Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
                 }
                 else if (set == 0){
+                    //User.getInstance().currentUSER.friends = "";
                     User.getInstance().currentUSER.friends = data[0];
+                    console.log("friendlist loaded from database");
+                    console.log("eigene freundesliste:", User.getInstance().currentUSER.friends);
+
                     for(var i = 0; i < data[0].friends.length; i++) {
                         self._addProfile(self, data[0].friends[i].id, data[0].friends[i].status);
                     }
@@ -352,6 +394,7 @@ class FriendScreen extends Component {
                 }
                 else {
                     self._addListViewRow(data[0].firstname, data[0].lastname, pFriendStatus, pProfileId);
+                    //Currentuser uch bearbeiten
                 }
             },
             error: function (error) {
@@ -415,7 +458,7 @@ const styles = StyleSheet.create({
         marginRight: 200
     },
     button: {
-      marginRight: 10
+        marginRight: 10
     },
     marginRow: {
         marginBottom: 20

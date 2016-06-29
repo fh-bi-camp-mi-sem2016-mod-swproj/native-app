@@ -12,19 +12,15 @@ import User from './../components/backend/User'
 import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 
 var instance = null;
-var data = null;
+var data = [];
 
-class MessageScreen extends Component {
+class MessageInScreen extends Component {
 
     constructor(props) {
         super(props);
         instance = this;
 
-        data =[{User: "Ruben", Info: "beleidigung"},
-            {User: "Bene", Info: "belästigung"},
-            {User: "Dennis", Info: "geilheit"},
-            {User: "Florian", Info: "dauerdruck"},
-            {User: "Fynn", Info: "Wasser"}];
+        this._showUserMessage(instance, "48cf296b53896d16da217994e001b058");
 
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
@@ -34,12 +30,12 @@ class MessageScreen extends Component {
             dataSource: ds.cloneWithRows(data)
         }
     }
- 
+
     renderRow(rowData) {
         return (
             <View style = {styles.listRow}>
                 <Text>
-                    {rowData.User + " " + rowData.Info}
+                    {rowData.title + " " + rowData.content}
                 </Text>
                 <View style = {styles.Icon}/>
                 <TouchableHighlight onPress={() => this._showUserMessage(this.state.user, this.state.message)}>
@@ -60,6 +56,7 @@ class MessageScreen extends Component {
                     actions={[
                         {title: 'Back', iconName:'arrow-left', iconSize: 30,  show: 'always'},
                         {title: 'NewMessage', iconName:'envelope-square', iconSize: 30,  show: 'always'},
+                        {title: 'MessageOut', iconName:'inbox', iconSize: 30,  show: 'always'},
                         {title: 'Log Out', iconName:'sign-out', iconSize: 30,  show: 'always'}
                     ]}
                     onActionSelected={this._onActionSelected}
@@ -76,18 +73,6 @@ class MessageScreen extends Component {
                     renderRow={(rowData) => {return this.renderRow(rowData)}}>
                 </ListView>
 
-                <ButtonContainer>
-                    <TouchableHighlight onPress={() => this._showUserMessage(this.state.user, this.state.message)}>
-                        <Text style={styles.btnText}> Senden </Text>
-                    </TouchableHighlight>
-                </ButtonContainer>
-
-                <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToMainMenue()}>
-                        <Text style={styles.btnText}> Back </Text>
-                    </TouchableHighlight>
-                </ButtonContainer>
-
             </ViewContainer>
         );
     }
@@ -102,15 +87,48 @@ class MessageScreen extends Component {
             ident: "Login"
         })
     }
-    navigateToNewMessageScreen() {
+    _navigateToNewMessageScreen() {
         this.props.navigator.push({
             ident: "NewMessage"
         })
     }
-
-    _showUserMessage(pInputUser, pInputMessage){
-        Alert.alert('Nachricht:',"User: "+ pInputUser + "\nNachricht: " +pInputMessage, [{text: 'gesendet'}])
+    _navigateToMessageOutScreen() {
+        this.props.navigator.push({
+            ident: "Outbox"
+        })
     }
+
+    _showUserMessage(self, pID){
+        // Alert.alert('Nachricht:',"User: "+ pInputUser + "\nNachricht: " +pInputMessage, [{text: 'gesendet'}])
+
+        var callbacks = {
+            success: function (data) {
+                console.log(data);
+
+                //Alert.alert('Benutzer', JSON.stringify(data), [{text: 'ok'}]);
+                if (data.length == 0) {
+                    // User nicht gefunden
+                    //Alert.alert('Benutzer', "Ein Benutzer mit diesem Namen konnte nicht gefunden werden.", [{text: 'ok'}]);
+                } else if (data.length >= 1) {
+                    for(var i = 0; i < data.length; i++){
+                        console.log(data[i]);
+                        self._addListViewRow("Titel: " + data[i].title,"\n Nachricht: " + data[i].content);
+                        //Alert.alert('msg', JSON.stringify(data[i]), [{text: 'ok'}]);
+
+                    }
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+            }
+        };
+
+        var db = Database.getInstance();
+        db.msg.findByTo(pID, callbacks);
+    }
+
+
 
     _onActionSelected(position) {
         switch(position) {
@@ -118,22 +136,25 @@ class MessageScreen extends Component {
                 instance._navigateToMainMenue();
                 break;
             case 1:
-                instance.navigateToNewMessageScreen();
+                instance._navigateToNewMessageScreen();
                 break;
             case 2:
+                instance._navigateToMessageOutScreen();
+                break;
+            case 3:
                 Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
                 instance._navigateToLoginScreen();
                 break;
         }
     }
-    _add(){
+
+    _addListViewRow(pTitle, pContent){
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
         });
-            data = data.concat([{firstname: "bla", lastname: "blup", profile_id: "blip" }]);
-            this.setState({dataSource: ds.cloneWithRows(data)});
-            instanz._navigateToMainMenue();
 
+        data = data.concat([{title: pTitle, content: pContent}]);
+        this.setState({dataSource: ds.cloneWithRows(data)});
     }
 }
 
@@ -173,7 +194,7 @@ const styles = StyleSheet.create({
         alignSelf: "flex-start",
         marginLeft: 50,
         marginTop: 10,
-        height: 30
+        height: 50
     },
     Icon: {
         padding: 10,
@@ -181,7 +202,7 @@ const styles = StyleSheet.create({
     },
     toolbarView: {
         height: 50,
-        marginRight: 200
+        marginRight: 150
     },
     button: {
         marginRight: 10
@@ -191,4 +212,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = MessageScreen;
+module.exports = MessageInScreen;
