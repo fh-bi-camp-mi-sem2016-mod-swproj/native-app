@@ -1,5 +1,5 @@
 /**
- * Created by Dennis on 31.05.2016.
+ * Created by Benedikt on 29.06.2016.
  */
 
 import React, {Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, ListView, Alert} from 'react-native';
@@ -7,6 +7,8 @@ import ViewContainer from  '../components/frontend/ViewContainer'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 
+import User from './../components/backend/User'
+import Database from './../components/backend/Database'
 
 var data = [];
 var instance;
@@ -28,6 +30,7 @@ class SearchScreen extends Component {
         this.state = {
             dataSource: ds.cloneWithRows(data)
         }
+
     }
 
     renderRow(rowData) {
@@ -37,13 +40,20 @@ class SearchScreen extends Component {
                     {rowData.firstname + " " + rowData.lastname}
                 </Text>
                 <View style = {styles.iconRow}/>
-                <TouchableHighlight onPress={() => this._setFriend(rowData.profile_id, 2)}>
+
+                <TouchableHighlight onPress={() => this._viewProfile(rowData.profile_id)}>
+                    <Icon name="user"
+                          size={20}
+                    />
+                </TouchableHighlight>
+
+                <TouchableHighlight onPress={() => this._sendFriendRequest(rowData.profile_id)}>
                     <Icon name = "plus-square"
                           size = {20}
                     />
                 </TouchableHighlight>
 
-                <TouchableHighlight style = {styles.button} onPress={() => this._delete(rowData.profile_id, 2)}>
+                <TouchableHighlight style={styles.button} onPress={() => this._sendMessage(rowData.profile_id)}>
                     <Icon name = "envelope-square"
                           size = {20}
                     />
@@ -79,7 +89,7 @@ class SearchScreen extends Component {
                 </View>
 
                 <ButtonContainer>
-                    <TouchableHighlight onPress= {() => this.showAlert(this.state.suchstring)}>
+                    <TouchableHighlight onPress={() => this._search(this.state.suchstring)}>
                         <Text style={styles.btnText}> search </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
@@ -95,26 +105,145 @@ class SearchScreen extends Component {
         );
     }
 
-    _navigateToFriendScreen(){
+    _search(suchstring) {
+        console.log("Eingabe-Suche", suchstring);
+
+        var callbacks = {
+            success: function (data) {
+                console.log(data);
+
+                if (data.length == 0) {
+                    Alert.alert('Fehler', "Es wurden keine Personen gefunden.", [{text: 'ok'}]);
+                } else if (data.length > 1) {
+                    for (var i = 0; i < data.length; i++) {
+
+                        var currentprofile = data[i];
+
+                        if (
+                            currentprofile.firstname.toUpperCase().includes(suchstring.toUpperCase()) ||
+                            currentprofile.lastname.toUpperCase().includes(suchstring.toUpperCase()) ||
+                            (currentprofile.firstname.toUpperCase() + " " + currentprofile.lastname.toUpperCase()).includes(suchstring.toUpperCase())) {
+
+                            console.log("Profil:", currentprofile);
+
+                            instance._addListViewRow(currentprofile.firstname, currentprofile.lastname, currentprofile._id);
+
+                        }
+                    }
+                }
+
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+            }
+        };
+
+        var db = Database.getInstance();
+        db.profile.findAll(callbacks);
+
+    }
+
+    _sendFriendRequest(pProfileId) {
+        var db = Database.getInstance();
+
+        var callbacksUpdateOtherFriendList = {
+            success: function (data) {
+                console.log(data);
+                Alert.alert('Erfolg', "Freundschaftsanfrage wurde erfolgreich erstellt.", [{text: 'ok'}]);
+
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+            }
+        };
+
+        var callbacks = {
+            success: function (data) {
+                console.log(data);
+
+                if (data.length == 0) {
+                    Alert.alert('Fehler', "Die gewählte Person hat noch keine Freundesliste.", [{text: 'ok'}]);
+                } else if (data.length > 1) {
+                    Alert.alert('Fehler', "Die gewählte Person hat mehrere Freundeslisten. Das ist nicht gut.", [{text: 'ok'}]);
+                } else {
+                    var otherFriendList = data[0];
+
+                    var found = false;
+                    for (var i = 0; i < otherFriendList.friends.length; i++) {
+                        if (otherFriendList.friends[i].id == User.getInstance().currentUSER.profile._id) {
+                            found = true;
+                        }
+                    }
+
+                    if (!found) {
+                        var me = {
+                            "id": User.getInstance().currentUSER.profile._id,
+                            "status": 0
+                        };
+
+                        otherFriendList.friends.push(me);
+
+                        console.log(otherFriendList);
+                        db.friends.update(otherFriendList, callbacksUpdateOtherFriendList);
+                    } else {
+                        Alert.alert('Fehler', "Eine Freundesanfrage ist schon vorhanden.", [{text: 'ok'}]);
+                    }
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+            }
+        };
+
+        db.friends.findByProfileId(pProfileId, callbacks);
+    }
+
+    _addListViewRow(pFirstname, pLastname, pProfileId) {
+        var ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 != r2
+        });
+
+        data = data.concat([{firstname: pFirstname, lastname: pLastname, profile_id: pProfileId}]);
+        this.setState({dataSource: ds.cloneWithRows(data)});
+    }
+
+    _viewProfile(pProfileId) {
+        this.props.navigator.push({
+            ident: "Profile",
+            passProps: {
+                id: pProfileId
+            }
+        })
+    }
+
+    _sendMessage(pProfileId) {
+        this.props.navigator.push({
+            ident: "NewMessage",
+            passProps: {
+                id: pProfileId
+            }
+        })
+    }
+    
+    _navigateToFriendScreen() {
         this.props.navigator.pop({
             ident: "Friend"
         })
     }
 
-    _navigateToMainMenue(){
+    _navigateToMainMenue() {
         this.props.navigator.push({
             ident: "Main"
         })
     }
 
-    _navigateToLoginScreen(){
+    _navigateToLoginScreen() {
         this.props.navigator.push({
             ident: "Login"
         })
-    }
-
-    showAlert(pSearchString){
-        Alert.alert('User:', pSearchString , [{text: 'ok'}])
     }
 
     _onActionSelected(position) {
@@ -132,81 +261,6 @@ class SearchScreen extends Component {
         }
     }
 
-    _addSearchedProfilesToListView(self, pProfileId) {
-
-        var db = null;
-        var callbacks = {
-            success: function (data) {
-                console.log(data);
-
-                if (data.length == 0) {
-                    Alert.alert('Fehler', "Sie können keine Freunde ohne Profile haben", [{text: 'ok'}]);
-                } else if (data.length > 1) {
-                    Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
-                }
-                else if (set == 0){
-                    User.getInstance().currentUSER.friends = data[0];
-                    for(var i = 0; i < data[0].friends.length; i++) {
-                        self._searchProfiles(self, data[0].friends[i].id, data[0].friends[i].status);
-                    }
-                    set = 1;
-                }
-            },
-            error: function (error) {
-                console.log(error);
-                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
-            }
-        };
-        if (pProfileId == null) {
-            Alert.alert('Fehler', "Sie können keine Freunde ohne Profile haben", [{text: 'ok'}]);
-        }
-        else if( set == 0) {
-            db = Database.getInstance();
-            db.friends.findByProfileId(pProfileId, callbacks);
-        }
-    }
-
-    _searchProfiles(self, pProfileId) {
-
-        var db = null;
-        var callbacks = {
-            success: function (data) {
-                console.log(data);
-
-                if (data.length == 0) {
-                    Alert.alert('Fehler', "Ihr Freund hat noch keine ProfilId", [{text: 'ok'}]);
-                } else if (data.length > 1) {
-                    Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
-                }
-                else {
-                    if( (data[0].firstname + " " + data[0].lastname).indexOf(suchstring) > -1 ){
-                        self._addSearchedProfilesToListView(data[0].firstname, data[0].lastname, pProfileId);   
-                    }
-                    else if ( data[0].firstname.indexOf(suchstring) > -1 ){
-                        self._addSearchedProfilesToListView(data[0].firstname, data[0].lastname, pProfileId);
-                    }
-                    else if ( data[0].lastname.indexOf(suchstring) > -1 ){
-                        self._addSearchedProfilesToListView(data[0].lastname, data[0].lastname,  pProfileId);
-                    }
-                    else {
-                        Alert.alert('Fehler', "Die gesuchte Person existiert nicht", [{text: 'ok'}]);
-                    }
-                }
-            },
-            error: function (error) {
-                console.log(error);
-                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
-            }
-        };
-
-        if (pProfileId == null) {
-            Alert.alert('Fehler', "Ihr Freund hat kein Profil", [{text: 'ok'}]);
-        }
-        else {
-            db = Database.getInstance();
-            db.profile.findById(pProfileId, callbacks);
-        }
-    }
 }
 
 const styles = StyleSheet.create({
