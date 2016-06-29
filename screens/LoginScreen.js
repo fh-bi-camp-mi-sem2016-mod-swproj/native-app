@@ -63,6 +63,7 @@ class LoginScreen extends Component {
                             secureTextEntry = {true}>
                         </TextInput>
                     </View>
+
                 <ButtonContainer>
                     <TouchableHighlight
                         onPress={()=>this._login(this, this.state.username ,this.state.password)}>
@@ -81,8 +82,6 @@ class LoginScreen extends Component {
                 </ButtonContainer>
 
             </ViewContainer>
-
-
         );
     }
 
