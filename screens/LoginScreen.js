@@ -108,7 +108,11 @@ class LoginScreen extends Component {
 
                         console.log(user.login + " hat sich erfolgreich eingeloggt");
 
-                        self._navigateToMainMenue();
+                        if(receivedUser.role === 1) {
+                            self._navigateToAdminMenue();
+                        }else if(receivedUser.role === 0) {
+                            self._navigateToMainMenue();
+                        }
                     } else {
                         // Passwort falsch
                         console.log("Passwort falsch");
