@@ -147,8 +147,6 @@ class ShowProfileScreen extends Component {
     _parseTimestamp(pTimestamp) {
         var date = new Date(pTimestamp * 1000);
 
-        Alert.alert('pTimestamp', pTimestamp.toString(), [{text: 'ok'}]);
-
         return date.toLocaleDateString();
     }
 

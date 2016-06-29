@@ -69,6 +69,12 @@ class MainScreen extends Component {
                     </TouchableHighlight>
                 </ButtonContainer>
 
+                <ButtonContainer>
+                    <TouchableHighlight onPress={(event) => this._navigateToShowProfileScreen()}>
+                        <Text style={styles.btnText}> Profil anzeigen </Text>
+                    </TouchableHighlight>
+                </ButtonContainer>
+
                 <ViewContainer>
 
                 </ViewContainer>
@@ -108,6 +114,12 @@ class MainScreen extends Component {
     _navigateToPictureScreen() {
         this.props.navigator.push({
             ident: "Picture"
+        })
+    }
+
+    _navigateToShowProfileScreen() {
+        this.props.navigator.push({
+            ident: "ShowProfileScreen"
         })
     }
 
