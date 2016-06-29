@@ -76,12 +76,6 @@ class AdminOpenCasesScreen extends Component {
                     </Text>
                 </View>
 
-                <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._getCases(this)}>
-                        <Text style={styles.btnText}> Aktualisieren </Text>
-                    </TouchableHighlight>
-                </ButtonContainer>
-
                 <ListView
                     dataSource={this.state.dataSource}
                     renderRow={(rowData) => {return this.renderRow(rowData)}}>
@@ -97,52 +91,7 @@ class AdminOpenCasesScreen extends Component {
             </ViewContainer>
         );
     }
-
-    _getCases(self) {
-
-        var callbacks = {
-            success: function (data) {
-                console.log(data);
-
-                if (data.length == 0) {
-                    // User nicht gefunden
-                    Alert.alert('Benutzer', "Ein Benutzer mit diesem Namen konnte nicht gefunden werden.", [{text: 'ok'}]);
-                } else if (data.length == 1) {
-                    // Normaler Benutzer
-
-                    var receivedUser = data[0];
-
-                    if (receivedUser.password === pPassword) {
-                        // Login erfolgreich
-
-                        var user = User.getInstance();
-                        user.currentUSER.user = receivedUser;
-
-                        console.log(user.login + " hat sich erfolgreich eingeloggt");
-
-                        self._navigateToMainMenue();
-                    } else {
-                        // Passwort falsch
-                        console.log("Passwort falsch");
-                        Alert.alert('Passwort', "Das Passwort passt nicht zum angegebenen Benutzer.", [{text: 'ok'}]);
-                    }
-
-                } else if (data.length > 1) {
-                    // Fehler
-                    Alert.alert('Fehler', "Es wurden mehrere Benutzer mit diesem Namen gefunden.", [{text: 'ok'}]);
-                }
-
-            },
-            error: function (error) {
-                console.log(error);
-                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
-            }
-        };
-
-        var db = Database.getInstance();
-        db.user.findAll(callbacks);
-    }
-
+    
     _add() {
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
