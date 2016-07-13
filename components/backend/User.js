@@ -29,6 +29,10 @@ class UserClass {
         messagesFromMe:'',
         preferences:''
     };
+    
+    tag = {
+        userid: ''
+    };
 }
 
 module.exports = User, UserClass;
