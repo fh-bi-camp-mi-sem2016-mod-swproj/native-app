@@ -42,7 +42,7 @@ class MainScreen extends Component {
                     </Text>
                 </View>
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToChangeProfileScreen()}>
+                    <TouchableHighlight onPress={(event) => this._navigateToProfileScreen()}>
                         <Text style={styles.btnText}> Zum Profile </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
@@ -54,7 +54,7 @@ class MainScreen extends Component {
                 </ButtonContainer>
 
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateTopPeferenceScreen()}>
+                    <TouchableHighlight onPress={(event) => this._navigateToPeferenceScreen()}>
                         <Text style={styles.btnText}> Zu den Praeferenzen </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
@@ -98,14 +98,15 @@ class MainScreen extends Component {
             ident: "Friend"
         })
     }
-    _navigateTopPeferenceScreen(){
+    _navigateToPeferenceScreen(){
         this.props.navigator.push({
             ident: "Preference"
         })
     }
-    _navigateToChangeProfileScreen(){
+    _navigateToProfileScreen(){
+        User.getInstance().tag.profileForShowProfile = User.getInstance().currentUSER.profile;
         this.props.navigator.push({
-            ident: "ChangeProfile"
+            ident: "Profile"
         })
     }
     _navigateToMessageScreen(){
@@ -122,20 +123,20 @@ class MainScreen extends Component {
     _navigateToShowProfileScreen() {
         User.getInstance().tag.profileForShowProfile = User.getInstance().currentUSER.profile;
         this.props.navigator.push({
-            ident: "ProfileScreen"
+            ident: "Profile"
         })
     }
 
     _onActionSelected(position) {
         switch (position) {
             case 0:
-                instance._navigateToChangeProfileScreen();
+                instance._navigateToProfileScreen();
                 break;
             case 1:
                 instance._navigateToMessageScreen();
                 break;
             case 2:
-                instance._navigateToChangeProfileScreen();
+                instance._navigateToPeferenceScreen();
                 break;
             case 3:
                 instance._navigateToFriendScreen();
