@@ -25,8 +25,8 @@ class LoginScreen extends Component {
 
     state = {
         //zum Testen
-        username: 'kheuer',
-        password: '1'
+        username: '',
+        password: ''
     };
 
     constructor(props) {
