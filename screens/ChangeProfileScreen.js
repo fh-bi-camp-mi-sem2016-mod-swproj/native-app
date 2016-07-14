@@ -1,7 +1,7 @@
 /**
  * Created by Dennis on 17.05.2016.
  */
-import React, {Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Alert, Label, Picker} from 'react-native';
+import React, {Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Alert, Label, Picker, ScrollView, trimLeft} from 'react-native';
 
 import ViewContainer from  '../components/frontend/ViewContainer'
 import ButtonContainer from '../components/frontend/ButtonContainer'
@@ -11,7 +11,7 @@ import Database from './../components/backend/Database'
 import User from './../components/backend/User'
 
 var instance;
-class ProfileScreen extends Component {
+class ChangeProfileScreen extends Component {
 
     constructor(props) {
         super(props);
@@ -56,7 +56,7 @@ class ProfileScreen extends Component {
                     ]}
                     onActionSelected={this._onActionSelected}
                 />
-
+            <ScrollView>
                 <View style={styles.titleView}>
                     <Text style={styles.titleText}>
                         Ändern Sie Ihre Profildaten
@@ -92,7 +92,7 @@ class ProfileScreen extends Component {
                     <TextInput
                         style={styles.input}
                         onChangeText={email => this.setState({email})}
-                        placeholder="email">
+                        placeholder="Email">
                     </TextInput>
                 </View>
 
@@ -103,7 +103,7 @@ class ProfileScreen extends Component {
                     <TextInput
                         style={styles.input}
                         onChangeText={birthday => this.setState({birthday})}
-                        placeholder="birthday">
+                        placeholder="Geburtstag">
                     </TextInput>
                 </View>
 
@@ -115,8 +115,8 @@ class ProfileScreen extends Component {
                         style={styles.picker}
                         selectedValue={this.state.gender}
                         onValueChange={(gen) => this.setState({gender: gen})}>
-                        <Picker.Item label="weiblich" value= "0" />
-                        <Picker.Item label="maennlich" value= "1" />
+                        <Picker.Item label="Weiblich" value= "0" />
+                        <Picker.Item label="Maennlich" value= "1" />
                     </Picker>
                 </View>
 
@@ -128,7 +128,7 @@ class ProfileScreen extends Component {
                         style={styles.picker}
                         selectedValue={this.state.familystatus}
                         onValueChange={(fam) => this.setState({familystatus: fam})}>
-                        <Picker.Item label="single" value= "0" />
+                        <Picker.Item label="Single" value= "0" />
                         <Picker.Item label="Geschieden" value= "1" />
                         <Picker.Item label="Verheiratet" value= "2" />
                     </Picker>
@@ -208,6 +208,7 @@ class ProfileScreen extends Component {
                 <ViewContainer>
 
                 </ViewContainer>
+                </ScrollView>
              </ViewContainer>
         )
     }
@@ -262,6 +263,7 @@ class ProfileScreen extends Component {
                             haircolor: pHaircolor,
                             eyecolor: pEyecolor,
                             figure: pFigur
+
                 };
 
                 if(data.length == 0) {
@@ -281,21 +283,27 @@ class ProfileScreen extends Component {
                             myprofile.email = pEmail;
                         }
                         if(pChildren != null) {
-                            myprofile.children = pChildren;
+                            myprofile.children = parseInt(pChildren);
                         }
                         if(pAboutme != null) {
                             myprofile.aboutme = pAboutme;
                         }
                         if( pBirthday != null) {
-                            myprofile.birthday = pBirthday;
+                            var datestr = pBirthday;
+                            var date = (new Date(datestr.split(".")).getTime() / 1000).toFixed(0);
+                            console.log(date);
+                            myprofile.birthday = date;
                         }
-                        myprofile.gender = pGender;
-                        myprofile.familystatus = pFamilystatus;
-                        myprofile.haircolor = pHaircolor;
-                        myprofile.eyecolor = pEyecolor;
-                        myprofile.figure = pFigur;
+                        myprofile.gender = parseInt(pGender);
+                        myprofile.familystatus = parseInt(pFamilystatus);
+                        myprofile.haircolor = parseInt(pHaircolor);
+                        myprofile.eyecolor = parseInt(pEyecolor);
+                        myprofile.figure = parseInt(pFigur);
+
+
 
                         db.profile.update(myprofile, callbacksUpdate);
+                        instance._navigateToMainMenue();
                     }
 
                 }
@@ -380,7 +388,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop:10,
-        paddingBottom: 5
+        paddingBottom: 50
     },
     titleText: {
         flex: 1,
@@ -397,7 +405,6 @@ const styles = StyleSheet.create({
         marginRight: 70,
         flex: 4,
         fontSize: 18,
-        borderWidth: 1,
         borderColor: '#000000',
         borderRadius: 4,
         color: '#000000',
@@ -409,6 +416,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     text: {
+        width: 100,
         flexDirection: 'row',
         padding: 5,
         height: 20
@@ -423,4 +431,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = ProfileScreen;
+module.exports = ChangeProfileScreen;

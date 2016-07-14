@@ -21,9 +21,6 @@ class FriendScreen extends Component {
         super(props);
 
         instance = this;
-        //fügt die Listen beim Laden des Screens hinzu
-        this._addFriendsToListView(instance, "ca5c2c9fb2d201991f8b6f06e62196ff");
-
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
         });
@@ -35,11 +32,6 @@ class FriendScreen extends Component {
             dataSource: ds.cloneWithRows(data),
             dataSource1: ds1.cloneWithRows(incData)
         };
-
-        // zum testen
-        User.getInstance().currentUSER.profile = {_id: "ca5c2c9fb2d201991f8b6f06e62196ff", _rev: "1-75814ab18741c8c0fe75e57ceda4319f", doctype: "profile", user_id: "<uuid>", firstname: "bertha", lastname: "meier", email: "bertha@test.de", birthday: -316656000, gender: 0, familystatus: 1, children: 2, aboutme: "fröhlich, erlich", privacy: {friends: 1, pictures: 0}, profilepic: "<uuid>", haircolor: 3, eyecolor: 0, figure: 1};
-
-//        Alert.alert('suc', "erfolg", [{text: 'ok'}]);
     }
 
     // erzeugt die ersten ListView
