@@ -10,7 +10,9 @@ import React, {
     button,
     TextInput,
     Alert,
-    Label
+    Label,
+    Image,
+    ScrollView
 } from 'react-native';
 
 import ViewContainer from  '../components/frontend/ViewContainer'
@@ -28,117 +30,134 @@ class ProfileScreen extends Component {
     constructor(props) {
         super(props);
         instance = this;
+
+        instance._loadPictures();
     }
+
+    state = {
+        avatarSource: {uri: 'http://elbe203.startdedicated.de:15984/findme/ca5c2c9fb2d201991f8b6f06e62231e5/findme_platzhalter.png'}
+    };
 
     render() {
         return (
             <ViewContainer>
+                <ScrollView>
 
-                <Icon.ToolbarAndroid
-                    style={styles.toolbarView}
-                    actions={[
-                        {title: 'Back', iconName:'arrow-left', iconSize: 30,  show: 'always'},
-                        {title: 'Home', iconName:'home', iconSize: 30,  show: 'always'},
-                        {title: 'Logout', iconName:'sign-out', iconSize: 30,  show: 'always'}
-                    ]}
-                    onActionSelected={this._onActionSelected}
-                />
+                    <Icon.ToolbarAndroid
+                        style={styles.toolbarView}
+                        actions={[
+                            {title: 'Back', iconName:'arrow-left', iconSize: 30,  show: 'always'},
+                            {title: 'ChangeProfile', iconName:'edit', iconSize: 30,  show: 'always'},
+                            {title: 'Home', iconName:'home', iconSize: 30,  show: 'always'},
+                            {title: 'Logout', iconName:'sign-out', iconSize: 30,  show: 'always'}
+                        ]}
+                        onActionSelected={this._onActionSelected}
+                    />
 
-                <View style={styles.titleView}>
+                    <View style={styles.titleView}>
+                        <Text style={styles.titleText}>
+                            Profile:
+                        </Text>
 
-                    <Text style={styles.titleText}>
-                        Welcome to Find.me
-                    </Text>
-                    <Text style={styles.titleText}>
-                        Profile:
-                    </Text>
-                </View>
+                        <Image style={styles.thumbnail}
+                               source={this.state.avatarSource}
+                               style={{width: 300, height: 300}}
+                        />
+                    </View>
 
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Vorname:
-                    </Text>
-                    <Text style={styles.input}>
-                        {User.getInstance().tag.profileForShowProfile.firstname}
-                    </Text>
-                </View>
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Vorname:
+                        </Text>
+                        <Text style={styles.input}>
+                            {User.getInstance().tag.profileForShowProfile.firstname}
+                        </Text>
+                    </View>
 
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Nachname:
-                    </Text>
-                    <Text style={styles.input}>
-                        {User.getInstance().tag.profileForShowProfile.lastname}
-                    </Text>
-                </View>
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Nachname:
+                        </Text>
+                        <Text style={styles.input}>
+                            {User.getInstance().tag.profileForShowProfile.lastname}
+                        </Text>
+                    </View>
 
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        E-Mail:
-                    </Text>
-                    <Text style={styles.input}>
-                        {User.getInstance().tag.profileForShowProfile.email}
-                    </Text>
-                </View>
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            E-Mail:
+                        </Text>
+                        <Text style={styles.input}>
+                            {User.getInstance().tag.profileForShowProfile.email}
+                        </Text>
+                    </View>
 
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Geburtstag:
-                    </Text>
-                    <Text style={styles.input}>
-                        {instance._parseTimestamp(User.getInstance().tag.profileForShowProfile.birthday)}
-                    </Text>
-                </View>
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Geburtstag:
+                        </Text>
+                        <Text style={styles.input}>
+                            {instance._parseTimestamp(User.getInstance().tag.profileForShowProfile.birthday)}
+                        </Text>
+                    </View>
 
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Geschlecht:
-                    </Text>
-                    <Text style={styles.input}>
-                        {instance._parseGender(User.getInstance().tag.profileForShowProfile.gender)}
-                    </Text>
-                </View>
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Geschlecht:
+                        </Text>
+                        <Text style={styles.input}>
+                            {instance._parseGender(User.getInstance().tag.profileForShowProfile.gender)}
+                        </Text>
+                    </View>
 
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Familienstatus:
-                    </Text>
-                    <Text style={styles.input}>
-                        {instance._parseFamilystatus(User.getInstance().tag.profileForShowProfile.familystatus)}
-                    </Text>
-                </View>
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Familienstatus:
+                        </Text>
+                        <Text style={styles.input}>
+                            {instance._parseFamilystatus(User.getInstance().tag.profileForShowProfile.familystatus)}
+                        </Text>
+                    </View>
 
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Kinder:
-                    </Text>
-                    <Text style={styles.input}>
-                        {User.getInstance().tag.profileForShowProfile.children}
-                    </Text>
-                </View>
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Kinder:
+                        </Text>
+                        <Text style={styles.input}>
+                            {User.getInstance().tag.profileForShowProfile.children}
+                        </Text>
+                    </View>
 
-                <View style={styles.inputContainerView}>
-                    <Text style={styles.text}>
-                        Über mich:
-                    </Text>
-                    <Text style={styles.input}>
-                        {User.getInstance().tag.profileForShowProfile.aboutme}
-                    </Text>
-                </View>
+                    <View style={styles.inputContainerView}>
+                        <Text style={styles.text}>
+                            Über mich:
+                        </Text>
+                        <Text style={styles.input}>
+                            {User.getInstance().tag.profileForShowProfile.aboutme}
+                        </Text>
+                    </View>
 
-                <ButtonContainer>
-                    <TouchableHighlight style={styles.button}
-                                        onPress={(event) => this._navigateToChangeProfileScreen()}>
-                        <Text style={styles.btnText}> Eigenes Profil ändern </Text>
-                    </TouchableHighlight>
-                </ButtonContainer>
+                    <ButtonContainer>
+                        <TouchableHighlight style={styles.button}
+                                            onPress={(event) => this._loadProfilPicture()}>
+                            <Text style={styles.btnText}> Bilder laden </Text>
+                        </TouchableHighlight>
+                    </ButtonContainer>
 
-                <ButtonContainer>
-                    <TouchableHighlight style={styles.button} onPress={(event) => this._navigateBackToLastScreen()}>
-                        <Text style={styles.btnText}> Zurück </Text>
-                    </TouchableHighlight>
-                </ButtonContainer>
+                    <ButtonContainer>
+                        <TouchableHighlight style={styles.button}
+                                            onPress={(event) => this._navigateToChangeProfileScreen()}>
+                            <Text style={styles.btnText}> Eigenes Profil ändern </Text>
+                        </TouchableHighlight>
+                    </ButtonContainer>
 
+                    <ButtonContainer>
+                        <TouchableHighlight style={styles.button} onPress={(event) => this._navigateBackToLastScreen()}>
+                            <Text style={styles.btnText}> Zurück </Text>
+                        </TouchableHighlight>
+                    </ButtonContainer>
+
+                </ScrollView>
             </ViewContainer>
 
         );
@@ -168,10 +187,64 @@ class ProfileScreen extends Component {
             case 0:
                 return "Weiblich";
             case 1:
-                return "Weiblich";
+                return "Männlich";
             default:
                 return "Sonstiges";
         }
+    }
+
+
+    _loadPictures() {
+        instance._loadAvatar();
+        //instance._loadProfilPicture();
+    }
+
+    _loadAvatar() {
+        var db = Database.getInstance();
+
+        var callbacksAvatar = {
+            success: function (data) {
+                console.log(data);
+
+                if (data.length == 1 && typeof data[0] != 'object') {
+                    instance.state.avatarSource = {uri: data[0]};
+                    instance.forceUpdate();
+                }
+
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+            }
+        };
+
+        if (User.getInstance().tag.profileForShowProfile.profilepic != "<uuid>") {
+            db.pic.findAttachmentURLsById(User.getInstance().tag.profileForShowProfile.profilepic, callbacksAvatar);
+        }
+    }
+
+    _loadProfilPicture() {
+        var db = Database.getInstance();
+
+        var callbacks = {
+            success: function (data) {
+                console.log(data);
+
+
+                if (data.length == 1 && typeof data[0] != 'object') {
+                    Alert.alert('data', JSON.stringify(data), [{text: 'ok'}]);
+                    //instance.state.avatarSource = {uri: data[0]};
+                    //instance.forceUpdate();
+                }
+
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+            }
+        };
+
+        db.pic.findAttachmentURLsByProfile(User.getInstance().tag.profileForShowProfile._id, callbacks);
     }
 
     _navigateToMainMenue() {
@@ -202,7 +275,7 @@ class ProfileScreen extends Component {
                 instance._navigateBackToLastScreen();
                 break;
             case 1:
-                instance._navigateToMainMenue();
+                instance._navigateToChangeProfileScreen();
                 break;
             case 2:
                 User.getInstance(1);
@@ -240,7 +313,7 @@ const styles = StyleSheet.create({
     },
     toolbarView: {
         height: 50,
-        marginRight: 200
+        marginRight: 150
     },
     inputContainerView: {
         flexDirection: 'row',
