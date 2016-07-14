@@ -20,6 +20,7 @@ import ButtonContainer from '../components/frontend/ButtonContainer'
 import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 
 import User from './../components/backend/User'
+import Database from "./../components/backend/Database"
 
 var instance;
 
