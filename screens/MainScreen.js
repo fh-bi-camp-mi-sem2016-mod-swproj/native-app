@@ -7,6 +7,8 @@ import ViewContainer from  '../components/frontend/ViewContainer'
 import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 import ButtonContainer from '../components/frontend/ButtonContainer'
 
+import User from './../components/backend/User'
+
 class MainScreen extends Component {
 
     constructor(props) {
@@ -118,8 +120,9 @@ class MainScreen extends Component {
     }
 
     _navigateToShowProfileScreen() {
+        User.getInstance().tag.profileForShowProfile = User.getInstance().currentUSER.profile;
         this.props.navigator.push({
-            ident: "ShowProfileScreen"
+            ident: "ProfileScreen"
         })
     }
 

@@ -29,6 +29,10 @@ class UserClass {
         messagesFromMe:'',
         preferences:''
     };
+    
+    tag = {
+        profileForShowProfile: ''
+    };
 }
 
 module.exports = User, UserClass;

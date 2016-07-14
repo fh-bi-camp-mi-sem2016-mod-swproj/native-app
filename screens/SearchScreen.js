@@ -41,7 +41,7 @@ class SearchScreen extends Component {
                 </Text>
                 <View style = {styles.iconRow}/>
 
-                <TouchableHighlight onPress={() => this._viewProfile(rowData.profile_id)}>
+                <TouchableHighlight onPress={() => this._viewProfile(rowData.profile)}>
                     <Icon name="user"
                           size={20}
                     />
@@ -129,7 +129,7 @@ class SearchScreen extends Component {
 
                             console.log("Profil:", currentprofile);
 
-                            instance._addListViewRow(currentprofile.firstname, currentprofile.lastname, currentprofile._id);
+                            instance._addListViewRow(currentprofile.firstname, currentprofile.lastname, currentprofile._id, currentprofile);
 
                         }
                     }
@@ -204,21 +204,26 @@ class SearchScreen extends Component {
         db.friends.findByProfileId(pProfileId, callbacks);
     }
 
-    _addListViewRow(pFirstname, pLastname, pProfileId) {
+    _addListViewRow(pFirstname, pLastname, pProfileId, pProfile) {
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
         });
 
-        listViewData = listViewData.concat([{firstname: pFirstname, lastname: pLastname, profile_id: pProfileId}]);
+        listViewData = listViewData.concat([{
+            firstname: pFirstname,
+            lastname: pLastname,
+            profile_id: pProfileId,
+            profile: pProfile
+        }]);
         this.setState({dataSource: ds.cloneWithRows(listViewData)});
     }
 
-    _viewProfile(pProfileId) {
+    _viewProfile(pProfile) {
+        User.getInstance().tag.profileForShowProfile = pProfile;
+        //Alert.alert("pProfile", JSON.stringify(User.getInstance().tag.profileForShowProfile), [{text: 'ok'}]);
+
         this.props.navigator.push({
-            ident: "Profile",
-            passProps: {
-                id: pProfileId
-            }
+            ident: "ProfileScreen"
         })
     }
 

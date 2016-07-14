@@ -18,7 +18,7 @@ import NewMessageScreen from './screens/NewMessageScreen'
 import MessageOutScreen from './screens/MessageOutScreen'
 
 import PictureScreen from './screens/PictureScreen'
-import ShowProfileScreen from './screens/ShowProfileScreen'
+import ProfileScreen from './screens/ProfileScreen'
 
 class findme extends Component {
 
@@ -79,9 +79,9 @@ class findme extends Component {
                 return [
                     <PictureScreen key="picture" {...globalNavigatorProps} />
                 ];
-            case "ShowProfileScreen":
+            case "ProfileScreen":
                 return [
-                    <ShowProfileScreen key="showprofile" {...globalNavigatorProps} />
+                    <ProfileScreen key="profile" {...globalNavigatorProps} />
                 ];
             //More Cases
             default:
