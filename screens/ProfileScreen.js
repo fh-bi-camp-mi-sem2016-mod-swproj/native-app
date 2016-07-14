@@ -154,13 +154,10 @@ class ProfileScreen extends Component {
         switch (pStatus) {
             case 0:
                 return "Single";
-                break;
             case 1:
                 return "Geschieden";
-                break;
             case 2:
                 return "Verheiratet";
-                break;
             default:
                 return "It's complicated";
         }
@@ -170,10 +167,8 @@ class ProfileScreen extends Component {
         switch (pGender) {
             case 0:
                 return "Weiblich";
-                break;
             case 1:
                 return "Weiblich";
-                break;
             default:
                 return "Sonstiges";
         }
