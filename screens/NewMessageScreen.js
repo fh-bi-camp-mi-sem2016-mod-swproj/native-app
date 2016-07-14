@@ -6,6 +6,9 @@ import ViewContainer from  '../components/frontend/ViewContainer'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 
+import Database from './../components/backend/Database'
+import User from './../components/backend/User'
+
 var instance = null;
 
 class NewMessageScreen extends Component {
@@ -13,13 +16,10 @@ class NewMessageScreen extends Component {
     constructor(props) {
         super(props);
         instance = this;
-
-        // zum testen
-        User.getInstance().currentUSER.profile = {_id: "ca5c2c9fb2d201991f8b6f06e62196ff", _rev: "1-75814ab18741c8c0fe75e57ceda4319f", doctype: "profile", user_id: "<uuid>", firstname: "bertha", lastname: "meier", email: "bertha@test.de", birthday: -316656000, gender: 0, familystatus: 1, children: 2, aboutme: "fröhlich, erlich", privacy: {friends: 1, pictures: 0}, profilepic: "<uuid>", haircolor: 3, eyecolor: 0, figure: 1};
     }
+
     state = {
-        //zum Testen
-        user: '',
+        title: '',
         message: ''
     };
 
@@ -45,30 +45,30 @@ class NewMessageScreen extends Component {
 
                 <View style={styles.inputContainerView}>
                     <Text style={styles.text}>
-                        User:
+                        Title:
                     </Text>
                     <TextInput
                         style={styles.input}
-                        onChangeText={user => this.setState({user})}
-                        placeholder="User">
+                        onChangeText={title => this.setState({title})}
+                        placeholder="Title">
                     </TextInput>
                 </View>
 
                 <View style={styles.inputContainerView}>
                     <Text style={styles.text}>
-                        Message:
+                        Nachricht:
                     </Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={message => this.setState({message})}
-                        placeholder="Message">
+                        placeholder="Nachricht">
                     </TextInput>
                 </View>
                 <ViewContainer>
 
                 </ViewContainer>
                 <ButtonContainer>
-                    <TouchableHighlight onPress={() => this._showUserMessage(this.state.user, this.state.message)}>
+                    <TouchableHighlight onPress={() => this._createNewMessage(this.state.title, this.state.message)}>
                         <Text style={styles.btnText}> Senden </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
@@ -101,10 +101,6 @@ class NewMessageScreen extends Component {
         })
     }
 
-    _showUserMessage(pInputUser, pInputMessage){
-        Alert.alert('Nachricht:',"User: "+ pInputUser + "\nNachricht: " +pInputMessage, [{text: 'gesendet'}])
-    }
-
     _onActionSelected(position) {
         switch (position) {
             case 0:
@@ -122,21 +118,22 @@ class NewMessageScreen extends Component {
                 break;
         }
     }
-    _createNewMessage(self, pUsername, pMessage) {
 
-        var db = null;
+    _createNewMessage(pTitle, pMessage) {
+        var db = Database.getInstance();
+
         var callbacks = {
             success: function (data) {
                 console.log(data);
 
                 if (data.length == 0) {
-                    // Username frei
+                    Alert.alert('Benutzer', "Der Benutzer existiert nicht", [{text: 'ok'}]);
+
+                } else if (data.length >= 1) {
 
                     var callbacksCreate = {
                         success: function (data) {
                             console.log(data);
-                            //Alert.alert('Benutzer', "Der Benutzer "+ pUsername + " wurde erfolgreich erstellt", [{text: 'ok'}]);
-
                         },
                         error: function (error) {
                             console.log(error);
@@ -144,24 +141,22 @@ class NewMessageScreen extends Component {
                         }
                     };
 
+                    var now = new Date().getTime();
+
                     var newMessage = {
                         doctype: "msg",
-                        timestamp: -1,
-                        from: user.currentUSER.profile._id,
-                        to: "<uuid>",
-                        title: "",
-                        content: "",
+                        timestamp: now,
+                        from: User.getInstance().currentUSER.profile._id,
+                        to: User.getInstance().tag.profileForNewMessage,
+                        title: pTitle,
+                        content: pMessage,
                         archivedFrom: false,
                         archivedTo: false,
                         deletedFrom: false,
                         deletedTo: false
-
                     };
-                    db.msg.create(newMessage, callbacksCreate);
 
-                } else if (data.length >= 1) {
-                    // Username schon belegt
-                    Alert.alert('Benutzer', "Der Benutzername existiert nicht", [{text: 'ok'}]);
+                    db.msg.create(newMessage, callbacksCreate);
                 }
             },
             error: function (error) {
@@ -170,17 +165,14 @@ class NewMessageScreen extends Component {
             }
         };
 
-        if ( pUsername == null ) {
+        if ( pTitle == null ) {
             Alert.alert('Fehler', "Kein Username eingegeben" , [{text: 'ok'}]);
         }
         else if ( pMessage == null ) {
             Alert.alert('Fehler', "Keine Nachricht eingegeben" , [{text: 'ok'}]);
         }
         else {
-            // noch nicht richtig
-            db = Database.getInstance();
-            db.user.findByLogin(pUsername, callbacks);
-
+            db.profile.findById(User.getInstance().tag.profileForNewMessage, callbacks);
         }
     }
 }

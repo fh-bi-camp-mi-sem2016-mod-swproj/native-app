@@ -31,7 +31,8 @@ class UserClass {
     };
     
     tag = {
-        profileForShowProfile: ''
+        profileForShowProfile: '',
+        profileForNewMessage: ''
     };
 }
 
