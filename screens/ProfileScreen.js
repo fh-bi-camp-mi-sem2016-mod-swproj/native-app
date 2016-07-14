@@ -23,7 +23,7 @@ import Database from "./../components/backend/Database";
 
 var instance;
 
-class ShowProfileScreen extends Component {
+class ProfileScreen extends Component {
 
     constructor(props) {
         super(props);
@@ -59,7 +59,7 @@ class ShowProfileScreen extends Component {
                         Vorname:
                     </Text>
                     <Text style={styles.input}>
-                        {User.getInstance().currentUSER.profile.firstname}
+                        {User.getInstance().tag.profileForShowProfile.firstname}
                     </Text>
                 </View>
 
@@ -68,7 +68,7 @@ class ShowProfileScreen extends Component {
                         Nachname:
                     </Text>
                     <Text style={styles.input}>
-                        {User.getInstance().currentUSER.profile.lastname}
+                        {User.getInstance().tag.profileForShowProfile.lastname}
                     </Text>
                 </View>
 
@@ -77,7 +77,7 @@ class ShowProfileScreen extends Component {
                         E-Mail:
                     </Text>
                     <Text style={styles.input}>
-                        {User.getInstance().currentUSER.profile.email}
+                        {User.getInstance().tag.profileForShowProfile.email}
                     </Text>
                 </View>
 
@@ -86,7 +86,7 @@ class ShowProfileScreen extends Component {
                         Geburtstag:
                     </Text>
                     <Text style={styles.input}>
-                        {instance._parseTimestamp(User.getInstance().currentUSER.profile.birthday)}
+                        {instance._parseTimestamp(User.getInstance().tag.profileForShowProfile.birthday)}
                     </Text>
                 </View>
 
@@ -95,7 +95,7 @@ class ShowProfileScreen extends Component {
                         Geschlecht:
                     </Text>
                     <Text style={styles.input}>
-                        {instance._parseGender(User.getInstance().currentUSER.profile.gender)}
+                        {instance._parseGender(User.getInstance().tag.profileForShowProfile.gender)}
                     </Text>
                 </View>
 
@@ -104,7 +104,7 @@ class ShowProfileScreen extends Component {
                         Familienstatus:
                     </Text>
                     <Text style={styles.input}>
-                        {instance._parseFamilystatus(User.getInstance().currentUSER.profile.familystatus)}
+                        {instance._parseFamilystatus(User.getInstance().tag.profileForShowProfile.familystatus)}
                     </Text>
                 </View>
 
@@ -113,7 +113,7 @@ class ShowProfileScreen extends Component {
                         Kinder:
                     </Text>
                     <Text style={styles.input}>
-                        {User.getInstance().currentUSER.profile.children}
+                        {User.getInstance().tag.profileForShowProfile.children}
                     </Text>
                 </View>
 
@@ -122,20 +122,20 @@ class ShowProfileScreen extends Component {
                         Über mich:
                     </Text>
                     <Text style={styles.input}>
-                        {User.getInstance().currentUSER.profile.aboutme}
+                        {User.getInstance().tag.profileForShowProfile.aboutme}
                     </Text>
                 </View>
 
                 <ButtonContainer>
                     <TouchableHighlight style={styles.button}
                                         onPress={(event) => this._navigateToCreateProfileScreen()}>
-                        <Text style={styles.btnText}> Change </Text>
+                        <Text style={styles.btnText}> Eigenes Profil ändern </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
 
                 <ButtonContainer>
-                    <TouchableHighlight style={styles.button} onPress={(event) => this._navigateToMainMenue()}>
-                        <Text style={styles.btnText}> Back </Text>
+                    <TouchableHighlight style={styles.button} onPress={(event) => this._navigateBackToLastScreen()}>
+                        <Text style={styles.btnText}> Zurück </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
 
@@ -179,12 +179,12 @@ class ShowProfileScreen extends Component {
     }
 
     _navigateToCreateProfileScreen() {
-        Alert.alert('Clicked', "es wurde ändern geklickt", [{text: 'ok'}]);
+        Alert.alert('Clicked', "es wurde ändern geklickt " + User.getInstance().tag.profileForShowProfile._id, [{text: 'ok'}]);
     }
 
-    _navigateBackToMessageScreen() {
+    _navigateBackToLastScreen() {
         this.props.navigator.pop({
-            ident: "Message"
+            //ident: "Message"
         })
     }
 
@@ -197,7 +197,7 @@ class ShowProfileScreen extends Component {
     _onActionSelected(position) {
         switch (position) {
             case 0:
-                instance._navigateBackToMessageScreen();
+                instance._navigateBackToLastScreen();
                 break;
             case 1:
                 instance._navigateToMainMenue();
@@ -260,4 +260,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = ShowProfileScreen;
+module.exports = ProfileScreen;

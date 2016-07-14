@@ -31,7 +31,7 @@ class UserClass {
     };
     
     tag = {
-        userid: ''
+        profileForShowProfile: ''
     };
 }
 
