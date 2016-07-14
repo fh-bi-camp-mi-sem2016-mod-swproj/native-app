@@ -12,7 +12,8 @@ import React, {
     Alert,
     Label,
     Image,
-    ScrollView
+    ScrollView,
+    ListView
 } from 'react-native';
 
 import ViewContainer from  '../components/frontend/ViewContainer'
@@ -23,6 +24,10 @@ import User from './../components/backend/User'
 import Database from "./../components/backend/Database"
 
 var instance;
+var data = [];
+var ds = new ListView.DataSource({
+    rowHasChanged: (r1, r2) => r1 != r2
+});
 
 class ProfileScreen extends Component {
 
@@ -31,11 +36,12 @@ class ProfileScreen extends Component {
         instance = this;
 
         instance._loadPictures();
-    }
 
-    state = {
-        avatarSource: {uri: 'http://elbe203.startdedicated.de:15984/findme/ca5c2c9fb2d201991f8b6f06e62231e5/findme_platzhalter.png'}
-    };
+        instance.state = {
+            dataSource: ds.cloneWithRows(data),
+            avatarSource: require('./placeholder.png')
+        };
+    }
 
     render() {
         return (
@@ -48,6 +54,7 @@ class ProfileScreen extends Component {
                             {title: 'Back', iconName:'arrow-left', iconSize: 30,  show: 'always'},
                             {title: 'ChangeProfile', iconName:'edit', iconSize: 30,  show: 'always'},
                             {title: 'Home', iconName:'home', iconSize: 30,  show: 'always'},
+                            {title: 'Refresh', iconName:'refresh', iconSize: 30,  show: 'always'},
                             {title: 'Logout', iconName:'sign-out', iconSize: 30,  show: 'always'}
                         ]}
                         onActionSelected={this._onActionSelected}
@@ -136,30 +143,38 @@ class ProfileScreen extends Component {
                         </Text>
                     </View>
 
-                    <ButtonContainer>
-                        <TouchableHighlight style={styles.button}
-                                            onPress={(event) => this._loadProfilPicture()}>
-                            <Text style={styles.btnText}> Bilder laden </Text>
-                        </TouchableHighlight>
-                    </ButtonContainer>
-
-                    <ButtonContainer>
-                        <TouchableHighlight style={styles.button}
-                                            onPress={(event) => this._navigateToChangeProfileScreen()}>
-                            <Text style={styles.btnText}> Eigenes Profil ändern </Text>
-                        </TouchableHighlight>
-                    </ButtonContainer>
-
-                    <ButtonContainer>
-                        <TouchableHighlight style={styles.button} onPress={(event) => this._navigateBackToLastScreen()}>
-                            <Text style={styles.btnText}> Zurück </Text>
-                        </TouchableHighlight>
-                    </ButtonContainer>
+                    <ViewContainer>
+                        <ListView
+                            style={styles.marginRow}
+                            dataSource={this.state.dataSource}
+                            renderRow={(rowData) => {return this.renderRow(rowData)}}>
+                        </ListView>
+                    </ViewContainer>
 
                 </ScrollView>
             </ViewContainer>
 
         );
+    }
+
+    renderRow(rowData) {
+        return (
+            <View style={styles.pictureRow}>
+                <Image style={styles.thumbnail}
+                       source={{uri: rowData.imgSource}}
+                       style={{width: 300, height: 300}}
+                />
+            </View>
+        )
+    }
+
+    _addListViewRow(pSource) {
+        var ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 != r2
+        });
+
+        data = data.concat([{imgSource: pSource}]);
+        this.setState({dataSource: ds.cloneWithRows(data)});
     }
 
     _parseTimestamp(pTimestamp) {
@@ -194,8 +209,9 @@ class ProfileScreen extends Component {
 
 
     _loadPictures() {
+        data = [];
         instance._loadAvatar();
-        //instance._loadProfilPicture();
+        instance._loadProfilPicture();
     }
 
     _loadAvatar() {
@@ -229,11 +245,12 @@ class ProfileScreen extends Component {
             success: function (data) {
                 console.log(data);
 
+                if (typeof data[0] != 'object') {
+                    for (var i = 0; i < data.length; i++) {
+                        instance._addListViewRow(data[i]);
+                    }
 
-                if (data.length == 1 && typeof data[0] != 'object') {
-                    Alert.alert('data', JSON.stringify(data), [{text: 'ok'}]);
-                    //instance.state.avatarSource = {uri: data[0]};
-                    //instance.forceUpdate();
+                    instance.forceUpdate();
                 }
 
             },
@@ -280,6 +297,9 @@ class ProfileScreen extends Component {
                 instance._navigateToMainMenue();
                 break;
             case 3:
+                instance._loadPictures();
+                break;
+            case 4:
                 User.getInstance(1);
                 Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
                 instance._navigateToLogInScreen();
@@ -315,7 +335,7 @@ const styles = StyleSheet.create({
     },
     toolbarView: {
         height: 50,
-        marginRight: 150
+        marginRight: 100
     },
     inputContainerView: {
         flexDirection: 'row',
@@ -333,7 +353,22 @@ const styles = StyleSheet.create({
     text: {
         flexDirection: 'row',
         padding: 5,
-        height: 20
+        height: 25
+    },
+    marginRow: {
+        marginBottom: 20
+    },
+    listRow: {
+        flexDirection: "row",
+        alignSelf: "flex-start",
+        marginLeft: 50,
+        marginTop: 10,
+        height: 30
+    },
+    pictureRow: {
+        width: 300,
+        height: 300,
+        alignSelf: 'center'
     }
 });
 

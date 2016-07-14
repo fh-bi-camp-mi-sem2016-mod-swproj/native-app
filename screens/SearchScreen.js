@@ -220,10 +220,9 @@ class SearchScreen extends Component {
 
     _viewProfile(pProfile) {
         User.getInstance().tag.profileForShowProfile = pProfile;
-        //Alert.alert("pProfile", JSON.stringify(User.getInstance().tag.profileForShowProfile), [{text: 'ok'}]);
 
         this.props.navigator.push({
-            ident: "ProfileScreen"
+            ident: "Profile"
         })
     }
 
