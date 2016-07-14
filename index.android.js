@@ -79,7 +79,7 @@ class findme extends Component {
                 return [
                     <PictureScreen key="picture" {...globalNavigatorProps} />
                 ];
-            case "ProfileScreen":
+            case "Profile":
                 return [
                     <ProfileScreen key="profile" {...globalNavigatorProps} />
                 ];

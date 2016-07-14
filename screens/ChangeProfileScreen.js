@@ -11,6 +11,7 @@ import Database from './../components/backend/Database'
 import User from './../components/backend/User'
 
 var instance;
+
 class ChangeProfileScreen extends Component {
 
     constructor(props) {
@@ -52,10 +53,12 @@ class ChangeProfileScreen extends Component {
                     style={styles.toolbarView}
                     actions={[
                         {title: 'Back', iconName:'arrow-left', iconSize: 30,  show: 'always'},
+                        {title: 'Home', iconName:'home', iconSize: 30,  show: 'always'},
                         {title: 'Log Out', iconName:'sign-out', iconSize: 30,  show: 'always'}
                     ]}
                     onActionSelected={this._onActionSelected}
                 />
+
             <ScrollView>
                 <View style={styles.titleView}>
                     <Text style={styles.titleText}>
@@ -222,13 +225,21 @@ class ChangeProfileScreen extends Component {
             ident: "Login"
         })
     }
+    _navigateToProfileScreen() {
+        this.props.navigator.pop({
+            ident: "Profile"
+        })
+    }
 
     _onActionSelected(position) {
         switch (position) {
             case 0:
-                instance._navigateToMainMenue();
+                instance._navigateToProfileScreen();
                 break;
             case 1:
+                instance._navigateToMainMenue();
+                break;
+            case 2:
                 Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
                 instance._navigateToLoginScreen();
                 break;
@@ -303,7 +314,7 @@ class ChangeProfileScreen extends Component {
 
 
                         db.profile.update(myprofile, callbacksUpdate);
-                        instance._navigateToMainMenue();
+                        instance._navigateToProfileScreen();
                     }
 
                 }
@@ -427,7 +438,7 @@ const styles = StyleSheet.create({
     },
     toolbarView: {
         height: 50,
-        marginRight: 250
+        marginRight: 200
     }
 });
 

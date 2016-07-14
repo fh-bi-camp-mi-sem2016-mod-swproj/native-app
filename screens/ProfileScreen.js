@@ -14,12 +14,10 @@ import React, {
 } from 'react-native';
 
 import ViewContainer from  '../components/frontend/ViewContainer'
-import StatusBarBackground from  '../components/frontend/StatusBarBackground'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 
 import User from './../components/backend/User'
-import Database from "./../components/backend/Database";
 
 var instance;
 
@@ -38,6 +36,7 @@ class ProfileScreen extends Component {
                     style={styles.toolbarView}
                     actions={[
                         {title: 'Back', iconName:'arrow-left', iconSize: 30,  show: 'always'},
+                        {title: 'ChangeProfile', iconName:'edit', iconSize: 30,  show: 'always'},
                         {title: 'Home', iconName:'home', iconSize: 30,  show: 'always'},
                         {title: 'Logout', iconName:'sign-out', iconSize: 30,  show: 'always'}
                     ]}
@@ -168,7 +167,7 @@ class ProfileScreen extends Component {
             case 0:
                 return "Weiblich";
             case 1:
-                return "Weiblich";
+                return "Männlich";
             default:
                 return "Sonstiges";
         }
@@ -202,9 +201,12 @@ class ProfileScreen extends Component {
                 instance._navigateBackToLastScreen();
                 break;
             case 1:
-                instance._navigateToMainMenue();
+                instance._navigateToChangeProfileScreen();
                 break;
             case 2:
+                instance._navigateToMainMenue();
+                break;
+            case 3:
                 User.getInstance(1);
                 Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
                 instance._navigateToLogInScreen();
@@ -240,7 +242,7 @@ const styles = StyleSheet.create({
     },
     toolbarView: {
         height: 50,
-        marginRight: 200
+        marginRight: 150
     },
     inputContainerView: {
         flexDirection: 'row',
