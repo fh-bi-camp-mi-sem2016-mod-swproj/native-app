@@ -39,7 +39,7 @@ class ProfileScreen extends Component {
 
         instance.state = {
             dataSource: ds.cloneWithRows(data),
-            avatarSource: {uri: 'http://elbe203.startdedicated.de:15984/findme/ca5c2c9fb2d201991f8b6f06e62231e5/findme_platzhalter.png'}
+            avatarSource: require('./placeholder.png')
         };
     }
 
