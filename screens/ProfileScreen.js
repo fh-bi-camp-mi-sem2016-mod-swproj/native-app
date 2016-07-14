@@ -128,7 +128,7 @@ class ProfileScreen extends Component {
 
                 <ButtonContainer>
                     <TouchableHighlight style={styles.button}
-                                        onPress={(event) => this._navigateToCreateProfileScreen()}>
+                                        onPress={(event) => this._navigateToChangeProfileScreen()}>
                         <Text style={styles.btnText}> Eigenes Profil ändern </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
@@ -151,25 +151,32 @@ class ProfileScreen extends Component {
     }
 
     _parseFamilystatus(pStatus) {
-        if (pStatus === 0) {
-            return "Single";
-        } else if (pStatus === 1) {
-            return "Geschieden";
-        } else if (pStatus === 2) {
-            return "Verheiratet";
+        switch (pStatus) {
+            case 0:
+                return "Single";
+                break;
+            case 1:
+                return "Geschieden";
+                break;
+            case 2:
+                return "Verheiratet";
+                break;
+            default:
+                return "It's complicated";
         }
-
-        return "It's complicated";
     }
 
     _parseGender(pGender) {
-        if (pGender === 0) {
-            return "Weiblich";
-        } else if (pGender === 0) {
-            return "Weiblich";
+        switch (pGender) {
+            case 0:
+                return "Weiblich";
+                break;
+            case 1:
+                return "Weiblich";
+                break;
+            default:
+                return "Sonstiges";
         }
-
-        return "Sonstiges";
     }
 
     _navigateToMainMenue() {
@@ -178,14 +185,14 @@ class ProfileScreen extends Component {
         })
     }
 
-    _navigateToCreateProfileScreen() {
-        Alert.alert('Clicked', "es wurde ändern geklickt " + User.getInstance().tag.profileForShowProfile._id, [{text: 'ok'}]);
+    _navigateToChangeProfileScreen() {
+        this.props.navigator.push({
+            ident: "ChangeProfile"
+        })
     }
 
     _navigateBackToLastScreen() {
-        this.props.navigator.pop({
-            //ident: "Message"
-        })
+        this.props.navigator.pop({})
     }
 
     _navigateToLogInScreen() {
