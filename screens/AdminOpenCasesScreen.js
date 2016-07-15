@@ -189,16 +189,13 @@ class AdminOpenCasesScreen extends Component {
     }
 
     _profilLoeschen(pID) {
-        safe = false;    // auf false setzen, damit NICHT gelöscht wird
 
             var callbacks = {
                 success: function (data) {
                     console.log(data);
 
-                    if(safe) {
-                        db.profile.delete(data[0]);
-                    }
-                    Alert.alert('Profil gelöscht', "Das Profil wurde gelöscht: " + safe, [{text: 'Okay'}]);
+                    db.profile.delete(data[0]);
+                    Alert.alert('Profil gelöscht', "Das Profil wurde gelöscht.", [{text: 'Okay'}]);
                 },
                 error: function (error) {
                     console.log(error);
