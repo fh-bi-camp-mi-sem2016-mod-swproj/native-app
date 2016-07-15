@@ -48,7 +48,7 @@ class MessageOutScreen extends Component {
                     style={styles.toolbarView}
                     actions={[
                         {title: 'Back', iconName:'arrow-left', iconSize: 30,  show: 'always'},
-                        {title: 'NewMessage', iconName:'envelope-square', iconSize: 30,  show: 'always'},
+                        //{title: 'NewMessage', iconName:'envelope-square', iconSize: 30,  show: 'always'},
                         {title: 'MessageIn', iconName:'inbox', iconSize: 30,  show: 'always'},
                         {title: 'Log Out', iconName:'sign-out', iconSize: 30,  show: 'always'}
                     ]}
