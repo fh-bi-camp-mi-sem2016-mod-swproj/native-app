@@ -278,7 +278,37 @@ class ChangeProfileScreen extends Component {
                 };
 
                 if(data.length == 0) {
-                    db.profile.create(newProfile, callbacks);
+                    var callbacksProfilCreate = {
+                        success: function (data) {
+                            console.log(data);
+                            Alert.alert('Erfolg', "Profil erfolgreich erstellt.", [{text: 'ok'}]);
+                            User.getInstance().currentUSER.profile = newProfile;
+
+                            var newFriendlist = {
+                                "doctype": "friends",
+                                "profile_id": data.id,
+                                "friends": []
+                            };
+
+                            var callbacksFriend = {
+                                success: function (data) {
+                                    console.log(data);
+                                    Alert.alert('Erfolg', JSON.stringify(newFriendlist), [{text: 'ok'}]);
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                    Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+                                }
+                            };
+
+                            db.friends.create(newFriendlist, callbacksFriend);
+                        },
+                        error: function (error) {
+                            console.log(error);
+                            Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
+                        }
+                    };
+                    db.profile.create(newProfile, callbacksProfilCreate);
                 }
                 else if (data.length == 1) {
                     if(User.getInstance().currentUSER.profile._id) {
@@ -318,16 +348,6 @@ class ChangeProfileScreen extends Component {
                     }
 
                 }
-            },
-            error: function (error) {
-                console.log(error);
-                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'ok'}]);
-            }
-        };
-        var callbacks = {
-            success: function (data) {
-                console.log(data);
-                Alert.alert('Erfolg', "Profil erfolgreich erstellt.", [{text: 'ok'}]);
             },
             error: function (error) {
                 console.log(error);
