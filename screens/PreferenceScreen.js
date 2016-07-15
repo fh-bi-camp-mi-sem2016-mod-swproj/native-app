@@ -1,167 +1,225 @@
-/**
- * Created by Dennis on 18.05.2016.
- */
+import React, {
+    Component,
+    StyleSheet,
+    Text,
+    View,
+    TouchableHighlight,
+    button,
+    TextInput,
+    Alert,
+    Label
+} from 'react-native';
 
-import React, {Component, StyleSheet, Text, View, TouchableHighlight, button, TextInput, Alert} from 'react-native';
 import ViewContainer from  '../components/frontend/ViewContainer'
-import StatusBarBackground from  '../components/frontend/StatusBarBackground'
 import ButtonContainer from '../components/frontend/ButtonContainer'
+import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
+
+import User from './../components/backend/User'
+import Database from "./../components/backend/Database";
+
+var instance;
 
 class PreferenceScreen extends Component {
 
-    state = {
-        //zum Testen
-        age: '18',
-        eyecolor: 'blau',
-        haircolor: 'blond',
-        sex: 'm',
-        bodyheight: '180',
-        figure: 'schlank'
-    };
+    constructor(props) {
+        super(props);
+        instance = this;
+    }
 
     render() {
         return (
             <ViewContainer>
 
-                <ViewContainer>
+                <Icon.ToolbarAndroid
+                    style={styles.toolbarView}
+                    actions={[
+                        {title: 'Back', iconName:'arrow-left', iconSize: 30,  show: 'always'},
+                        {title: 'Home', iconName:'home', iconSize: 30,  show: 'always'},
+                        {title: 'Logout', iconName:'sign-out', iconSize: 30,  show: 'always'}
+                    ]}
+                    onActionSelected={this._onActionSelected}
+                />
 
-                    <View style={styles.titleView}>
-                        <Text style={styles.titleText}>
-                            Praeferenz:
-                        </Text>
-                    </View>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Geschlecht:
+                    </Text>
+                    <Text style={styles.input}>
+                        {User.getInstance().pref.showPreferences.gender}
+                    </Text>
+                </View>
 
-                    <View style={styles.inputContainerView}>
-                        <Text style={styles.text}>
-                            Alter
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={age => this.setState({age})}
-                            placeholder="searched age">
-                        </TextInput>
-                    </View>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Alter von:
+                    </Text>
+                    <Text style={styles.input}>
+                        {User.getInstance().pref.showPreferences.ageFROM}
+                    </Text>
+                </View>
 
-                    <View style={styles.inputContainerView}>
-                        <Text style={styles.text}>
-                            Augenfarbe:
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={eyecolor => this.setState({eyecolor})}
-                            placeholder="searched eyecolor">
-                        </TextInput>
-                    </View>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Alter bis:
+                    </Text>
+                    <Text style={styles.input}>
+                        {User.getInstance().pref.showPreferences.ageTO}
+                    </Text>
+                </View>
 
-                    <View style={styles.inputContainerView}>
-                        <Text style={styles.text}>
-                            Harrfarbe:
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={haircolor => this.setState({haircolor})}
-                            placeholder="searched haircolor">
-                        </TextInput>
-                    </View>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Haarfarbe:
+                    </Text>
+                    <Text style={styles.input}>
+                        {instance._parseHaircolor(User.getInstance().pref.showPreferences.haircolor)}
+                    </Text>
+                </View>
 
-                    <View style={styles.inputContainerView}>
-                        <Text style={styles.text}>
-                            Geschlecht:
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={sex => this.setState({sex})}
-                            placeholder="searched sex">
-                        </TextInput>
-                    </View>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Augenfarbe:
+                    </Text>
+                    <Text style={styles.input}>
+                        {instance._parseEyecolor(User.getInstance().pref.showPreferences.eyecolor)}
+                    </Text>
+                </View>
 
-                    <View style={styles.inputContainerView}>
-                        <Text style={styles.text}>
-                            Körpergröße:
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={bodyheight => this.setState({bodyheight})}
-                            placeholder="searched bodyheight">
-                        </TextInput>
-                    </View>
+                <View style={styles.inputContainerView}>
+                    <Text style={styles.text}>
+                        Figur:
+                    </Text>
+                    <Text style={styles.input}>
+                        {instance._parseFigure(User.getInstance().pref.showPreferences.figure)}
+                    </Text>
+                </View>
 
-                    <View style={styles.inputContainerView}>
-                        <Text style={styles.text}>
-                            Statur:
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={figure => this.setState({figure})}
-                            placeholder="searched figure">
-                        </TextInput>
-                    </View>
 
-                    <ButtonContainer>
-                        <TouchableHighlight onPress={() => this.saveAlert(this.state.age, this.state.eyecolor, this.state.haircolor, this.state.sex, this.state.bodyheight, this.state.figure)}>
-                            <Text style={styles.btnText}>
-                                Speichern
-                            </Text>
-                        </TouchableHighlight>
-                    </ButtonContainer>
+                <ButtonContainer>
+                    <TouchableHighlight style={styles.button}
+                                        onPress={(event) => this._navigateToChangePreferenceScreen()}>
+                        <Text style={styles.btnText}> Eigene Preferencen ändern </Text>
+                    </TouchableHighlight>
+                </ButtonContainer>
 
-                    <ButtonContainer>
-                        <TouchableHighlight onPress={(event) => this._navigateToMainMenue()}>
-                            <Text style={styles.btnText}>
-                             Back
-                            </Text>
-                        </TouchableHighlight>
-                    </ButtonContainer>
-
-                </ViewContainer>
-                    <StatusBarBackground/>
+                <ButtonContainer>
+                    <TouchableHighlight style={styles.button} onPress={(event) => this._navigateBackToLastScreen()}>
+                        <Text style={styles.btnText}> Zurück </Text>
+                    </TouchableHighlight>
+                </ButtonContainer>
 
             </ViewContainer>
 
-
         );
     }
-    
-    _navigateToMainMenue(){
+
+    _parseGender(pGender) {
+        switch (pGender) {
+            case 0:
+                return "weiblich";
+            case 1:
+                return "männlich";
+            default:
+                return "Keine Angabe";
+        }
+    }
+
+    _parseHaircolor(pHair) {
+        switch (pHair) {
+            case 0:
+                return "rot";
+            case 1:
+                return "blond";
+			case 2:
+				return "braun";
+			case 2:
+				return "schwarz";
+            default:
+                return "Egal";
+        }
+    }
+	_parseEyecolor(pEye) {
+        switch (pEye) {
+            case 0:
+                return "blau";
+            case 1:
+                return "grün";
+			case 2:
+				return "braun";
+            default:
+                return "Egal";
+        }
+    }
+	
+	_parseFigure(pFigure){
+		switch (pFigure){
+			case 0:
+                return "slim";
+            case 1:
+                return "regular";
+			case 2:
+				return "plussize";
+			default:
+				return "Egal";
+		}
+	}
+
+    _navigateToMainMenue() {
         this.props.navigator.push({
             ident: "Main"
         })
     }
 
-    saveAlert(pAge, pEyecolor, pHaircolor, pSex, pBodyheight, pFigure){
-        Alert.alert('Praeferenz:', pAge +"\n "+pEyecolor+"\n "+pHaircolor+"\n "+pSex+"\n "+pBodyheight+"\n "+pFigure, [{text: 'saved'}])
+    _navigateToChangePreferenceScreen() {
+        this.props.navigator.push({
+            ident: "ChangePref"
+        })
+    }
+
+    _navigateBackToLastScreen() {
+        this.props.navigator.pop({})
+    }
+
+    _navigateToLogInScreen() {
+        this.props.navigator.push({
+            ident: "Login"
+        })
+    }
+
+    _onActionSelected(position) {
+        switch (position) {
+            case 0:
+                instance._navigateBackToLastScreen();
+                break;
+            case 1:
+                instance._navigateToMainMenue();
+                break;
+            case 2:
+                Alert.alert("", "Sie wurden ausgeloggt", [{text: 'ok'}]);
+                instance._navigateToLogInScreen();
+                break;
+        }
     }
 }
 
 const styles = StyleSheet.create({
 
-    titleView:{
+    titleView: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop:30,
+        paddingTop: 30,
         paddingBottom: 10
+    },
+    thumbnail: {
+        resizeMode: 'contain',
+        marginBottom: 25,
+        width: 300,
+        height: 350
     },
     titleText: {
         flex: 1,
         fontSize: 20,
-        fontWeight:'bold',
-        textAlign: 'center'
-    },
-    inputContainerView: {
-        flexDirection: 'row',
-        marginTop: 5,
-        padding:5
-    },
-    input: {
-        height: 36,
-        padding: 4,
-        marginRight: 50,
-        flex: 4,
-        fontSize: 18,
-        borderWidth: 1,
-        borderColor: '#000000',
-        borderRadius: 4,
-        color: '#000000',
+        fontWeight: 'bold',
         textAlign: 'center'
     },
     btnText: {
@@ -169,11 +227,29 @@ const styles = StyleSheet.create({
         color: '#fff',
         alignSelf: 'center'
     },
+    toolbarView: {
+        height: 50,
+        marginRight: 200
+    },
+    inputContainerView: {
+        flexDirection: 'row',
+        padding: 5
+    },
+    input: {
+        height: 20,
+        padding: 4,
+        marginRight: 50,
+        flex: 4,
+        fontSize: 18,
+        color: '#000000',
+        textAlign: 'center'
+    },
     text: {
+		
+		width : 100,
         flexDirection: 'row',
         padding: 5,
-        height: 20,
-        margin: 10
+        height: 40,
     }
 });
 
