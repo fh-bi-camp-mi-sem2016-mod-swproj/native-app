@@ -277,8 +277,15 @@ class ChangeProfileScreen extends Component {
 
                 };
 
+                var newFriendlist = {
+                    "doctype": "friends",
+                    "profile_id": User.getInstance().currentUSER.user._id,
+                    "friends": []
+                };
+
                 if(data.length == 0) {
                     db.profile.create(newProfile, callbacks);
+                    db.friends.create(newFriendlist, callbacks);
                 }
                 else if (data.length == 1) {
                     if(User.getInstance().currentUSER.profile._id) {
