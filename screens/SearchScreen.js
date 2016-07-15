@@ -227,11 +227,9 @@ class SearchScreen extends Component {
     }
 
     _sendMessage(pProfileId) {
+        User.getInstance().tag.profileForNewMessage = pProfileId;
         this.props.navigator.push({
-            ident: "NewMessage",
-            passProps: {
-                id: pProfileId
-            }
+            ident: "NewMessage"
         })
     }
 

@@ -6,9 +6,7 @@ import ViewContainer from  '../components/frontend/ViewContainer'
 import ButtonContainer from '../components/frontend/ButtonContainer'
 
 import Database from './../components/backend/Database'
-
 import User from './../components/backend/User'
-
 import Icon from '../node_modules/react-native-vector-icons/FontAwesome';
 
 var instance = null;
@@ -20,7 +18,7 @@ class MessageInScreen extends Component {
         super(props);
         instance = this;
 
-        this._showUserMessage(instance, "48cf296b53896d16da217994e001b058");
+        this._showUserMessage(User.getInstance().currentUSER.profile._id);
 
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
@@ -38,7 +36,7 @@ class MessageInScreen extends Component {
                     {rowData.title + " " + rowData.content}
                 </Text>
                 <View style = {styles.Icon}/>
-                <TouchableHighlight onPress={() => this._showUserMessage(this.state.user, this.state.message)}>
+                <TouchableHighlight onPress={() => this._reply(rowData.from)}>
                     <Icon name = "mail-reply"
                           size = {20}
                     />
@@ -98,23 +96,25 @@ class MessageInScreen extends Component {
         })
     }
 
-    _showUserMessage(self, pID){
-        // Alert.alert('Nachricht:',"User: "+ pInputUser + "\nNachricht: " +pInputMessage, [{text: 'gesendet'}])
+    _reply(pFrom) {
+        //Alert.alert('pFrom', pFrom, [{text: 'ok'}]);
+        User.getInstance().tag.profileForNewMessage = pFrom;
+        instance._navigateToNewMessageScreen();
+    }
+
+    _showUserMessage(pID){
+        data = [];
 
         var callbacks = {
             success: function (data) {
                 console.log(data);
 
-                //Alert.alert('Benutzer', JSON.stringify(data), [{text: 'ok'}]);
                 if (data.length == 0) {
-                    // User nicht gefunden
-                    //Alert.alert('Benutzer', "Ein Benutzer mit diesem Namen konnte nicht gefunden werden.", [{text: 'ok'}]);
+                    // Keine Nachrichten
                 } else if (data.length >= 1) {
                     for(var i = 0; i < data.length; i++){
                         console.log(data[i]);
-                        self._addListViewRow("Titel: " + data[i].title,"\n Nachricht: " + data[i].content);
-                        //Alert.alert('msg', JSON.stringify(data[i]), [{text: 'ok'}]);
-
+                        instance._addListViewRow("Titel: " + data[i].title,"\n Nachricht: " + data[i].content, data[i].from);
                     }
                 }
             },
@@ -125,7 +125,7 @@ class MessageInScreen extends Component {
         };
 
         var db = Database.getInstance();
-        db.msg.findByTo(pID, callbacks);
+        db.msg.findAvailableTo(pID, callbacks);
     }
 
 
@@ -148,12 +148,12 @@ class MessageInScreen extends Component {
         }
     }
 
-    _addListViewRow(pTitle, pContent){
+    _addListViewRow(pTitle, pContent, pFrom){
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
         });
 
-        data = data.concat([{title: pTitle, content: pContent}]);
+        data = data.concat([{title: pTitle, content: pContent, from: pFrom}]);
         this.setState({dataSource: ds.cloneWithRows(data)});
     }
 }
