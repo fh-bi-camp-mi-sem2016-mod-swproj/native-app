@@ -71,15 +71,6 @@ class MainScreen extends Component {
                     </TouchableHighlight>
                 </ButtonContainer>
 
-                <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._navigateToShowProfileScreen()}>
-                        <Text style={styles.btnText}> Profil anzeigen </Text>
-                    </TouchableHighlight>
-                </ButtonContainer>
-
-                <ViewContainer>
-
-                </ViewContainer>
             </ViewContainer>
         );
     }
