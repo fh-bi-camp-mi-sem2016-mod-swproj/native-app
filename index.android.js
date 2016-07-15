@@ -16,7 +16,7 @@ import SearchScreen from './screens/SearchScreen'
 import MessageInScreen from './screens/MessageInScreen'
 import NewMessageScreen from './screens/NewMessageScreen'
 import MessageOutScreen from './screens/MessageOutScreen'
-
+import ChangePreferenceScreen from './screens/ChangePreferenceScreen'
 import PictureScreen from './screens/PictureScreen'
 import ProfileScreen from './screens/ProfileScreen'
 
@@ -82,6 +82,10 @@ class findme extends Component {
             case "Profile":
                 return [
                     <ProfileScreen key="profile" {...globalNavigatorProps} />
+                ];
+			case "ChangePref":
+                return [
+                    <ChangePreferenceScreen key="ChangePref" {...globalNavigatorProps} />
                 ];
             //More Cases
             default:
