@@ -184,7 +184,7 @@ class ProfileScreen extends Component {
     }
 
     _parseFamilystatus(pStatus) {
-        switch (pStatus) {
+        switch (parseInt(pStatus)) {
             case 0:
                 return "Single";
             case 1:
@@ -197,7 +197,7 @@ class ProfileScreen extends Component {
     }
 
     _parseGender(pGender) {
-        switch (pGender) {
+        switch (parseInt(pGender)) {
             case 0:
                 return "Weiblich";
             case 1:
