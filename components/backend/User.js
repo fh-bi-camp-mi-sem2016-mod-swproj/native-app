@@ -31,9 +31,12 @@ class UserClass {
     };
     
     tag = {
-        profileForShowProfile: '',
-        profileForNewMessage: ''
+        profileForShowProfile: ''
     };
+	
+	pref = {
+		showPreferences: ''
+	};
 }
 
 module.exports = User, UserClass;
