@@ -20,6 +20,7 @@ import React, {
 } from 'react-native';
 import ViewContainer from  '../components/frontend/ViewContainer'
 import StatusBarBackground from  '../components/frontend/StatusBarBackground'
+import Database from "./../components/backend/Database";
 import ButtonContainer from '../components/frontend/ButtonContainer'
 import _ from 'lodash'
 
@@ -29,8 +30,7 @@ class AdminOpenCasesScreen extends Component {
         super(props);
 
         data = [
-            {User: "Ruben", Info: "beleidigung"},
-            {User: "Bene", Info: "belästigung"},
+          //  {User: "", pID: "", uID: ""},
         ];
 
         var ds = new ListView.DataSource({
@@ -46,20 +46,20 @@ class AdminOpenCasesScreen extends Component {
         return (
             <View style={styles.inputListView}>
                 <Text style={{fontSize:18}}>
-                    {rowData.User + " " + rowData.Info}
+                    {"User: " + rowData.User}
                 </Text>
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._fallAblehnen()}>
+                    <TouchableHighlight onPress={(event) => this._fallAblehnen(rowData.pID)}>
                         <Text style={styles.btnText}> Fall ablehnen </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._profilVerwarnen()}>
+                    <TouchableHighlight onPress={(event) => this._profilVerwarnen(rowData.pID)}>
                         <Text style={styles.btnText}> Profil verwarnen </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
                 <ButtonContainer>
-                    <TouchableHighlight onPress={(event) => this._profilLoeschen()}>
+                    <TouchableHighlight onPress={(event) => this._profilLoeschen(rowData.pID)}>
                         <Text style={styles.btnText}> Profil löschen </Text>
                     </TouchableHighlight>
                 </ButtonContainer>
@@ -82,6 +82,12 @@ class AdminOpenCasesScreen extends Component {
                 </ListView>
 
                 <ButtonContainer>
+                    <TouchableHighlight onPress={(event) => this._refresh(this)}>
+                        <Text style={styles.btnText}> Aktualisieren </Text>
+                    </TouchableHighlight>
+                </ButtonContainer>
+
+                <ButtonContainer>
                     <TouchableHighlight onPress={(event) => this._navigateToAdminMenue()}>
                         <Text style={styles.btnText}> Zurück </Text>
                     </TouchableHighlight>
@@ -91,38 +97,117 @@ class AdminOpenCasesScreen extends Component {
             </ViewContainer>
         );
     }
+	
+    _refresh(self) {
+        var callbacks = {
+            success: function (data) {
+                console.log(data);
 
-    _add() {
+                if (data.length > 0) {
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        //var reported = data[i].reported.toString();
+						var reported = data[i].reported;
+						
+                        if(reported === "true") {
+                            var newReportedUser = data[i].firstname + " " + data[i].lastname;
+                           // self._add(newReportedUser, data[i]);
+                            self._add(newReportedUser, data[i]._id, data[i].user_id);
+                        }
+                    }
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'Eh nicht!?'}]);
+
+                /*
+                Manchmal tritt der Fehler auf, manchmal nicht. ARRHGHGH!?
+                Aber es funktioniert. So what?
+                 */
+            }
+        };
+
+        var db = Database.getInstance();
+        db.profile.findAll(callbacks);
+    }
+
+    _add(user, pID, uID) {
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
-        });
+        })
 
-        //data.push({User: "Test", Info: "Bla"});
-        data = data.concat([{User: "Test2", Info: "Blup"}]);
+        data = data.concat([{User: user, pID: pID, uID: uID}]);
         this.setState({dataSource: ds.cloneWithRows(data)});
-        //concat bei Liste
-        //Alert.alert('Test', data[5].User+" "+data[5].Info, [{text: 'ok'}]);
-        //Alert.alert('Test', data[6].User+" "+data[6].Info, [{text: 'ok'}]);
     }
 
-    showAlert() {
-        Alert.alert('Awesome', 'Hier sollte was sinnvolles kommen!', [{text: 'ok'}])
+    _fallAblehnen(pID) {
+        // Reported-Flag des Users in der Datenbank auf false setzen
+
+        var callbacks = {
+            success: function (data) {
+                console.log(data);
+
+                data[0].reported = false;
+
+                db.profile.update(data[0]);
+				//_refresh();
+                Alert.alert('Fall ablehnen', "Der Fall wurde abgelehnt.", [{text: 'Okay'}]);
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'Eh nicht!?'}]);
+            }
+        };
+
+        var db = Database.getInstance();
+        db.profile.findById(pID, callbacks);
     }
 
-    showAlertBenutzer() {
-        Alert.alert('Gemeldeter Benutzer: ', 'hier steht der gemeldete Benutzer', [{text: 'ok'}])
+    _profilVerwarnen(pID) {
+        // Verwarnung-Flag des Users in der Datenbank auf true setzen
+        // Reported-Flag des Users in der Datenbank auf false setzen
+
+        var callbacks = {
+            success: function (data) {
+                console.log(data);
+
+				// An dieser Stelle: Verwarnen -> Eine Nachricht an den User schicken
+
+                db.profile.update(data[0]);
+                Alert.alert('Profil verwarnt', "Das Profil wurde verwarnt.", [{text: 'Okay'}]);
+            },
+            error: function (error) {
+                console.log(error);
+                Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'Eh nicht!?'}]);
+            }
+        };
+
+        var db = Database.getInstance();
+        db.profile.findById(pID, callbacks);
     }
 
-    _fallAblehnen() {
+    _profilLoeschen(pID) {
+        safe = false;    // auf false setzen, damit NICHT gelöscht wird
 
-    }
+            var callbacks = {
+                success: function (data) {
+                    console.log(data);
 
-    _profilVerwarnen() {
+                    if(safe) {
+                        db.profile.delete(data[0]);
+                    }
+                    Alert.alert('Profil gelöscht', "Das Profil wurde gelöscht: " + safe, [{text: 'Okay'}]);
+                },
+                error: function (error) {
+                    console.log(error);
+                    Alert.alert('Fehler', "Es gab einen Fehler bei der Datenbankanfrage.", [{text: 'Eh nicht!?'}]);
+                }
+            };
 
-    }
-
-    _profilLoeschen() {
-
+        var db = Database.getInstance();
+        db.profile.findById(pID, callbacks);
     }
 
     _navigateToAdminMenue() {
