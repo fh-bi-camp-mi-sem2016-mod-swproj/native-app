@@ -45,7 +45,7 @@ class PreferenceScreen extends Component {
                         Geschlecht:
                     </Text>
                     <Text style={styles.input}>
-                        {User.getInstance().pref.showPreferences.gender}
+                        {instance._parseGender(User.getInstance().pref.showPreferences.gender)}
                     </Text>
                 </View>
 
@@ -115,9 +115,9 @@ class PreferenceScreen extends Component {
 
     _parseGender(pGender) {
         switch (pGender) {
-            case 0:
+            case "0":
                 return "weiblich";
-            case 1:
+            case "1":
                 return "männlich";
             default:
                 return "Keine Angabe";
@@ -126,9 +126,9 @@ class PreferenceScreen extends Component {
 
     _parseHaircolor(pHair) {
         switch (pHair) {
-            case 0:
+            case "0":
                 return "rot";
-            case 1:
+            case "1":
                 return "blond";
 			case 2:
 				return "braun";
@@ -140,11 +140,11 @@ class PreferenceScreen extends Component {
     }
 	_parseEyecolor(pEye) {
         switch (pEye) {
-            case 0:
+            case "0":
                 return "blau";
-            case 1:
+            case "1":
                 return "grün";
-			case 2:
+			case "2":
 				return "braun";
             default:
                 return "Egal";
@@ -153,11 +153,11 @@ class PreferenceScreen extends Component {
 	
 	_parseFigure(pFigure){
 		switch (pFigure){
-			case 0:
+			case "0":
                 return "slim";
-            case 1:
+            case "1":
                 return "regular";
-			case 2:
+			case "2":
 				return "plussize";
 			default:
 				return "Egal";
