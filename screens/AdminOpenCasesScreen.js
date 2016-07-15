@@ -110,7 +110,7 @@ class AdminOpenCasesScreen extends Component {
                         //var reported = data[i].reported.toString();
 						var reported = data[i].reported;
 						
-                        if(reported === "true") {
+                        if(reported === true) {
                             var newReportedUser = data[i].firstname + " " + data[i].lastname;
                            // self._add(newReportedUser, data[i]);
                             self._add(newReportedUser, data[i]._id, data[i].user_id);
